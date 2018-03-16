@@ -1,12 +1,23 @@
 package academia.hello;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.Collection;
 
 @Entity // This tells Hibernate to make a table out of this class
-public class User {
+public class Account extends User implements UserDetails {
+    public Account(String username, String password, Collection<? extends GrantedAuthority> authorities) {
+        super(username, password, authorities);
+
+        this.name = username;
+    }
+
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
@@ -38,6 +49,5 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
-
 
 }

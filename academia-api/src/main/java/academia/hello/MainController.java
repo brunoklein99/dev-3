@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
+
 @Controller    // This means that this class is a Controller
 @RequestMapping(path="/demo") // This means URL's start with /demo (after Application path)
 public class MainController {
@@ -20,15 +22,16 @@ public class MainController {
         // @ResponseBody means the returned String is the response, not a view name
         // @RequestParam means it is a parameter from the GET or POST request
 
-        User n = new User();
-        n.setName(name);
-        n.setEmail(email);
+
+        Account n = new Account(name, email, new ArrayList<>());
+//        n.setName(name);
+//        n.setEmail(email);
         userRepository.save(n);
         return "Saved";
     }
 
     @GetMapping(path="/all")
-    public @ResponseBody Iterable<User> getAllUsers() {
+    public @ResponseBody Iterable<Account> getAllUsers() {
         // This returns a JSON or XML with the users
         return userRepository.findAll();
     }
