@@ -22,7 +22,12 @@ class LoginService {
   }
 
   logout() {
-    isAuthenticated = false
+    return apiService.get('/logout')
+      .then(({ data }) => {
+        console.log('####### data', data)
+        isAuthenticated = false
+        return data
+      })
   }
 }
 

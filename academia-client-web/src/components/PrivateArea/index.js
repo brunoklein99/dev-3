@@ -18,7 +18,10 @@ export default class PrivateArea extends Component {
 
   logout = () => {
     loginService.logout()
-    this.setState({ logout: true })
+      .then(() => {
+        this.setState({ logout: true })
+      })
+      .catch((err) => console.log('### catch', err))
   }
 
   render() {
