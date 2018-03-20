@@ -1,0 +1,65 @@
+package academia.security;
+
+import academia.business.account.AccountRepository;
+import academia.model.Account;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Created by rafael on 3/17/18.
+ */
+@Service
+public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private AccountRepository accountRepository;
+
+    @Override
+    protected void additionalAuthenticationChecks(UserDetails userDetails, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
+        // noop
+    }
+
+    @Override
+    protected UserDetails retrieveUser(String username, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
+        Account account = accountRepository.findByUsername(username);
+
+        if (account == null) {
+            throw new BadCredentialsException(messages.getMessage(
+                    "AbstractUserDetailsAuthenticationProvider.badCredentials",
+                    "Bad credentials"));
+        }
+
+        String presentedPassword = authentication.getCredentials().toString();
+
+        if (!passwordEncoder.matches(presentedPassword, account.getPassword())) {
+            logger.debug("Authentication failed: password does not match stored value");
+
+            throw new BadCredentialsException(messages.getMessage(
+                    "AbstractUserDetailsAuthenticationProvider.badCredentials",
+                    "Bad credentials"));
+        }
+
+        List<GrantedAuthority> authorities = new ArrayList<>();
+
+        if (account.getAdmin()) {
+            authorities.add(new SimpleGrantedAuthority("ADMIN"));
+        } else {
+            authorities.add(new SimpleGrantedAuthority("USER"));
+        }
+
+        return new LoggedUser(account.getUsername(), account.getPassword(), authorities);
+    }
+}

@@ -1,13 +1,24 @@
+import apiService from './apiService'
+
 let isAuthenticated = false
 
 class LoginService {
   isAuthenticated() {
-    console.log('#### isAuthenticated', isAuthenticated)
     return isAuthenticated
   }
 
   login() {
-    isAuthenticated = true
+    const auth = {
+      username: 'user',
+      password: 'user',
+    }
+
+    return apiService.get('/login', { auth })
+      .then(({ data }) => {
+        console.log('### then')
+        isAuthenticated = true
+        return data
+      })
   }
 
   logout() {

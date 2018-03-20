@@ -10,7 +10,13 @@ export default class Login extends Component {
 
   login = () => {
     loginService.login()
-    this.setState({ redirect: true })
+      .then((data) => {
+        console.log('### then', data)
+        this.setState({ redirect: true })
+      })
+      .catch((err) => {
+        console.log('########## error', err)
+      })
   }
 
   render() {

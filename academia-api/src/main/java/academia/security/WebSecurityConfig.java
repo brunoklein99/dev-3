@@ -1,11 +1,14 @@
-package academia.hello;
+package academia.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -13,6 +16,9 @@ import org.springframework.web.filter.CorsFilter;
 @EnableWebSecurity
 @Configuration
 class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -23,9 +29,9 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
             .httpBasic()
             .and()
-            .csrf()
-            .disable()
-
+                .csrf().disable()
+//                .exceptionHandling()
+//                .authenticationEntryPoint(restAuthenticationEntryPoint)
         ;
     }
 
@@ -44,4 +50,9 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return bean;
     }
 
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }

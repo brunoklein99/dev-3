@@ -1,12 +1,13 @@
-package academia.hello;
+package academia.business.account;
 
+import academia.model.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 // This will be AUTO IMPLEMENTED by Spring into a Bean called userRepository
 // CRUD refers Create, Read, Update, Delete
 
-public interface UserRepository extends JpaRepository<Account, Long> {
+public interface AccountRepository extends JpaRepository<Account, Long> {
 
-    Account findByName(String name);
+    Account findByUsername(String username);
 
 }

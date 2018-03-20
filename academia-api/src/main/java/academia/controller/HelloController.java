@@ -11,11 +11,6 @@ public class HelloController {
         return "Greetings from Spring Boot!";
     }
 
-    @RequestMapping("/login")
-    public String login() {
-        return "login action";
-    }
-
     @RequestMapping("/api/any")
     public String any() {
         return "any action";

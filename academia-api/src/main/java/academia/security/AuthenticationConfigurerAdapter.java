@@ -1,8 +1,7 @@
-package academia;
+package academia.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.GlobalAuthenticationConfigurerAdapter;
 
@@ -16,12 +15,11 @@ public class AuthenticationConfigurerAdapter extends GlobalAuthenticationConfigu
 //    AccountRepository accountRepository;
 
     @Autowired
-    private AuthenticationProvider authenticationProvider;
+    private CustomAuthenticationProvider authenticationProvider;
 
     @Override
     public void init(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(authenticationProvider);
-
 //        auth.userDetailsService(userDetailsService());
     }
 
