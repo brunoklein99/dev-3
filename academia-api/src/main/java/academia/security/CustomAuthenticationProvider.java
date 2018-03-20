@@ -9,6 +9,7 @@ import org.springframework.security.authentication.dao.AbstractUserDetailsAuthen
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import java.util.List;
  */
 @Service
 public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -60,6 +62,6 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
             authorities.add(new SimpleGrantedAuthority("USER"));
         }
 
-        return new LoggedUser(account.getUsername(), account.getPassword(), authorities);
+        return new User(account.getUsername(), account.getPassword(), authorities);
     }
 }
