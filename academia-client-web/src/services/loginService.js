@@ -15,7 +15,6 @@ class LoginService {
 
     return apiService.get('/login', { auth })
       .then(({ data }) => {
-        console.log('### then')
         isAuthenticated = true
         return data
       })
@@ -24,7 +23,6 @@ class LoginService {
   logout() {
     return apiService.get('/logout')
       .then(({ data }) => {
-        console.log('####### data', data)
         isAuthenticated = false
         return data
       })
