@@ -7,12 +7,14 @@ class LoginService {
     return isAuthenticated
   }
 
-  login() {
-    const auth = {
-      username: 'user',
-      password: 'user',
+  /*
+    auth:
+    {
+      username: '',
+      password: '',
     }
-
+  */
+  login(auth) {
     return apiService.get('/login', { auth })
       .then(({ data }) => {
         isAuthenticated = true

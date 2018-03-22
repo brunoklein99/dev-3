@@ -9,7 +9,6 @@ const RedirectToLogin = () => (
 
 export default ({ match }) => (
   <div>
-    <h2>PublicArea</h2>
     <Route exact path="/" component={RedirectToLogin}></Route>
     <Route path={`${match.url}`} component={Login}/>
   </div>

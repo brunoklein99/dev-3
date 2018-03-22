@@ -13,6 +13,9 @@ public class LoginController {
     @RequestMapping("/login")
     public User login(Principal principal) {
         UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) principal;
+        if (token == null) {
+            return null;
+        }
         return (User) token.getPrincipal();
     }
 }
