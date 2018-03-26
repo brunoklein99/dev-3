@@ -12,15 +12,13 @@ class LoginService {
     return user
   }
 
-  // TODO
-  // checkAuthentication() {
-  //   return apiService.get('/login')
-  //     .then(({ data }) => {
-  //       console.log('### checkAuthentication data', data)
-  //       user = data
-  //       isAuthenticated = true
-  //     })
-  // }
+  checkAuthentication() {
+    return apiService.get('/api/check')
+      .then(({ data }) => {
+        user = data
+        isAuthenticated = true
+      })
+  }
 
   /*
     auth:
@@ -30,7 +28,16 @@ class LoginService {
     }
   */
   login(auth) {
-    return apiService.get('/login', { auth })
+    let options = {}
+
+    if (auth) {
+      options = {
+        ...options,
+        auth,
+      }
+    }
+
+    return apiService.get('/login', options)
       .then(({ data }) => {
         user = data
         isAuthenticated = true

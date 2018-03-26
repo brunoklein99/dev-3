@@ -16,27 +16,22 @@ export default class Login extends Component {
     redirect: false,
   }
 
-  // TODO
-  // componentDidMount() {
-  //   this.checkAuthentication()
-  // }
-  //
-  // checkAuthentication() {
-  //   loginService.checkAuthentication()
-  //     .then(() => {
-  //       console.log('### Login checkAuthentication then')
-  //       this.setState({ redirect: true })
-  //     })
-  //     .catch(() => { /* noop */ })
-  // }
+  componentDidMount() {
+    this.checkAuthentication()
+  }
+
+  checkAuthentication() {
+    loginService.checkAuthentication()
+      .then(() => loginService.login())
+      .then(() => this.setState({ redirect: true }))
+      .catch(() => { /* noop */ })
+  }
 
   handleLoginSubmit = (e) => {
     e.preventDefault()
     const { username, password } = this.state
     loginService.login({ username, password })
-      .then(() => {
-        this.setState({ redirect: true })
-      })
+      .then(() => this.setState({ redirect: true }))
       .catch((err) => {
         console.log('########## error', err)
       })
@@ -103,6 +98,7 @@ export default class Login extends Component {
             <Paper style={styles.paper}>
               <form onSubmit={this.handleLoginSubmit}>
                 <TextField
+                  autoFocus
                   hintText="Nome de usuário"
                   floatingLabelText="Nome de usuário"
                   fullWidth={true}

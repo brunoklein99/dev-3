@@ -18,4 +18,9 @@ public class LoginController {
         }
         return (User) token.getPrincipal();
     }
+
+    @RequestMapping("/api/check")
+    public User check() {
+        return null;
+    }
 }
