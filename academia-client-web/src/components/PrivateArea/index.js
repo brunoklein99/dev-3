@@ -7,7 +7,7 @@ import AccountList from './pages/AccountList'
 import AccountForm from './pages/AccountForm'
 
 import {
-  HOME,
+  DASHBOARD,
   ACCOUNT_LIST,
   ACCOUNT_FORM,
 } from '../../config/routes'
@@ -17,9 +17,9 @@ export default class PrivateArea extends Component {
     return (
       <div>
         <App>
-          <Route exact path={HOME} component={Dashboard}/>
-          <Route exact path={ACCOUNT_LIST} component={AccountList}/>
-          <Route exact path={ACCOUNT_FORM} component={AccountForm}/>
+          <Route exact path={DASHBOARD} component={Dashboard}/>
+          <Route exact strict path={ACCOUNT_LIST} component={AccountList}/>
+          <Route exact strict path={`${ACCOUNT_FORM}/:id?`} component={AccountForm}/>
         </App>
       </div>
     )

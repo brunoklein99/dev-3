@@ -4,6 +4,7 @@ import academia.model.Account;
 
 public interface AccountService {
 
-    Account save(Account account);
+    Account create(Account account);
 
+    Account update(Account account);
 }

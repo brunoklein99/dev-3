@@ -9,6 +9,10 @@ import {pink500, grey200, grey500} from 'material-ui/styles/colors';
 import PageBase from '../common/PageBase';
 import accountService from '../../../../services/accountService'
 
+import {
+  ACCOUNT_FORM
+} from '../../../../config/routes'
+
 class AccountList extends Component {
   state = {
     accounts: []
@@ -16,7 +20,7 @@ class AccountList extends Component {
 
   componentDidMount() {
     accountService.all()
-      .then(({ data }) => this.setState({ accounts: data }))
+      .then(data => this.setState({ accounts: data }))
       .catch((err) => console.log(err))
   }
 
@@ -57,11 +61,10 @@ class AccountList extends Component {
 
     return (
       <PageBase
-        title="Table Page"
-        navigation="Application / Table Page"
+        title="Usuários"
       >
         <div>
-          <Link to="/form" >
+          <Link to={ACCOUNT_FORM} >
             <FloatingActionButton style={styles.floatingActionButton} backgroundColor={pink500}>
               <ContentAdd />
             </FloatingActionButton>
@@ -73,7 +76,7 @@ class AccountList extends Component {
                 <TableHeaderColumn style={styles.columns.name}>Nome</TableHeaderColumn>
                 <TableHeaderColumn style={styles.columns.username}>Nome de usuário</TableHeaderColumn>
                 <TableHeaderColumn style={styles.columns.type}>Tipo</TableHeaderColumn>
-                <TableHeaderColumn style={styles.columns.edit}>Edit</TableHeaderColumn>
+                <TableHeaderColumn style={styles.columns.edit}>Editar</TableHeaderColumn>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -85,7 +88,7 @@ class AccountList extends Component {
                   <TableRowColumn style={styles.columns.edit}>
                     <Link
                       className="button"
-                      to="/account"
+                      to={`${ACCOUNT_FORM}/${item.id}`}
                     >
                       <FloatingActionButton
                         zDepth={0}
