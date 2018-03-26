@@ -1,5 +1,7 @@
 package academia.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,11 +13,12 @@ public class Account {
         // hibernate needs the default constructor
     }
 
-    public Account(String username, String password) {
-        this(username, password, false);
+    public Account(String name, String username, String password) {
+        this(name, username, password, false);
     }
 
-    public Account(String username, String password, Boolean isAdmin) {
+    public Account(String name, String username, String password, Boolean isAdmin) {
+        this.name = name;
         this.username = username;
         this.password = password;
         this.isAdmin = isAdmin;
@@ -25,8 +28,11 @@ public class Account {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
 
+    private String name;
+
     private String username;
 
+    @JsonIgnore
     private String password;
 
     private Boolean isAdmin;
@@ -61,5 +67,13 @@ public class Account {
 
     public void setAdmin(Boolean admin) {
         isAdmin = admin;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

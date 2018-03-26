@@ -2,7 +2,7 @@ import apiService from './apiService'
 
 class AccountService {
   all() {
-    return apiService.get('/api/account/')
+    return apiService.get('/api/accounts')
   }
 }
 

@@ -53,7 +53,7 @@ const LeftDrawer = (props) => {
           ABC Academia
         </div>
         <div style={styles.avatar.div}>
-          <span style={styles.avatar.span}>{props.username}</span>
+          <span style={styles.avatar.span}>{props.user.name}</span>
         </div>
         <div>
           {props.menus.map((menu, index) =>
@@ -73,7 +73,7 @@ const LeftDrawer = (props) => {
 LeftDrawer.propTypes = {
   navDrawerOpen: PropTypes.bool,
   menus: PropTypes.array,
-  username: PropTypes.string,
+  user: PropTypes.object,
 };
 
 export default LeftDrawer;

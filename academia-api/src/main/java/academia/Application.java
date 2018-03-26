@@ -18,8 +18,8 @@ public class Application {
     @Bean
     public CommandLineRunner demo(AccountService accountService) {
         return (args) -> {
-            accountService.save(new Account("admin", "admin", true));
-            accountService.save(new Account("user", "user", false));
+            accountService.save(new Account("Administrador da Academia", "admin", "admin", true));
+            accountService.save(new Account("Usuário da Silva", "user", "user", false));
         };
     }
 }

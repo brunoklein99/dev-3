@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import Header from '../common/Header';
-import LeftDrawer from '../common/LeftDrawer';
+import Header from './Header';
+import LeftDrawer from './LeftDrawer';
 import withWidth, {LARGE, SMALL} from 'material-ui/utils/withWidth';
 import ThemeDefault from '../../../theme-default';
-import Data from '../../../data';
+
+import menus from '../../../config/menus'
 
 import loginService from '../../../services/loginService'
 
@@ -52,8 +53,8 @@ class App extends Component {
           />
             <LeftDrawer
               navDrawerOpen={navDrawerOpen}
-              menus={Data.menus}
-              username={loginService.getUser().username}
+              menus={menus}
+              user={loginService.getUser()}
             />
             <div style={styles.container}>
               {this.props.children}

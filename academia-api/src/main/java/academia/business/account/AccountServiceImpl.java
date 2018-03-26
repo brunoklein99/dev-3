@@ -17,8 +17,8 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account save(Account account) {
         // TODO validar se username já existe
-        // TODO tracar casos em que não queremos atualizar o password
-        Account toSave = new Account(account.getUsername(), passwordEncoder.encode(account.getPassword()), account.getAdmin());
+        // TODO tratar casos em que não queremos atualizar o password
+        Account toSave = new Account(account.getName(), account.getUsername(), passwordEncoder.encode(account.getPassword()), account.getAdmin());
 
         return accountRepository.save(toSave);
     }

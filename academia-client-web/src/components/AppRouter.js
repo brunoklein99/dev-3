@@ -1,10 +1,10 @@
 import React from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 
-import PrivateArea from './components/PrivateArea'
-import PublicArea from './components/PublicArea'
+import PrivateArea from './PrivateArea'
+import PublicArea from './PublicArea'
 
-import loginService from './services/loginService'
+import loginService from '../services/loginService'
 
 export default () => (
   <BrowserRouter>

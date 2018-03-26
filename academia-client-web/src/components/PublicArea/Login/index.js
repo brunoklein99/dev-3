@@ -33,7 +33,7 @@ export default class Login extends Component {
     loginService.login({ username, password })
       .then(() => this.setState({ redirect: true }))
       .catch((err) => {
-        console.log('########## error', err)
+        console.log(err)
       })
   }
 
@@ -85,9 +85,10 @@ export default class Login extends Component {
 
     const { redirect } = this.state
     if (redirect) {
-      const { from } = this.props.location.state || { from: { pathname: "/" } };
+      // TODO o referrer não está funcionando corretamente, conferir
+      const { referrer } = this.props.location.state || { referrer: { pathname: "/" } };
       return (
-        <Redirect to={from} />
+        <Redirect to={referrer} />
       )
     }
 

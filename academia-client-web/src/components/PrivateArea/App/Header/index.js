@@ -9,7 +9,11 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import Menu from 'material-ui/svg-icons/navigation/menu';
 import {white} from 'material-ui/styles/colors';
 
-import loginService from '../../../services/loginService'
+import loginService from '../../../../services/loginService'
+
+import {
+  LOGIN,
+} from '../../../../config/routes'
 
 class Header extends Component {
   state = {
@@ -21,7 +25,7 @@ class Header extends Component {
       .then(() => {
         this.setState({ logout: true })
       })
-      .catch((err) => console.log('### catch', err))
+      .catch((err) => console.log(err))
   }
 
   render() {
@@ -46,7 +50,7 @@ class Header extends Component {
 
     if (logout) {
       return (
-        <Redirect to="/login" />
+        <Redirect to={LOGIN} />
       )
     }
 

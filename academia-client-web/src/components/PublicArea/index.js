@@ -3,13 +3,19 @@ import { Route, Redirect } from 'react-router-dom';
 
 import Login from './Login'
 
+import {
+  LOGIN,
+} from '../../config/routes'
+
 const RedirectToLogin = () => (
-  <Redirect to="/login" />
+  <Redirect
+    to={LOGIN}
+  />
 )
 
-export default ({ match }) => (
+export default (props) => (
   <div>
     <Route exact path="/" component={RedirectToLogin}></Route>
-    <Route path={`${match.url}`} component={Login}/>
+    <Route path={`${props.match.url}`} component={Login}/>
   </div>
 )
