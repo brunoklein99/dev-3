@@ -20,4 +20,5 @@ Comandos úteis no client de MySQL:
 show databases;
 use academia; -- seleciona a database que vamos usar na sessão do client
 show tables;
+select * from account;
 ```

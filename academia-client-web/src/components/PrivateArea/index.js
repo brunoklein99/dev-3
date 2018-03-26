@@ -1,42 +1,27 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Route } from 'react-router-dom';
+
+import App from './App'
+import Dashboard from './Dashboard'
+import TablePage from './TablePage'
 
 import accountService from '../../services/accountService'
 
-import loginService from '../../services/loginService'
-
 export default class PrivateArea extends Component {
-  state = {
-    logout: false,
-  }
-
   componentDidMount() {
     accountService.all()
       .then(({ data }) => console.log('### then', data))
       .catch((err) => console.log('### catch', err))
   }
 
-  logout = () => {
-    loginService.logout()
-      .then(() => {
-        this.setState({ logout: true })
-      })
-      .catch((err) => console.log('### catch', err))
-  }
-
   render() {
-    const { logout } = this.state
-
-    if (logout) {
-      return (
-        <Redirect to="/login" />
-      )
-    }
-
     return (
       <div>
-        <h2>PrivateArea</h2>
-        <button onClick={this.logout}>Logout</button>
+        <App>
+          <Route exact path="/" component={Dashboard}/>
+          <Route exact path="/dashboard" component={Dashboard}/>
+          <Route exact path="/table" component={TablePage}/>
+        </App>
       </div>
     )
   }

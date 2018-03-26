@@ -16,10 +16,25 @@ export default class Login extends Component {
     redirect: false,
   }
 
-  login = () => {
+  // TODO
+  // componentDidMount() {
+  //   this.checkAuthentication()
+  // }
+  //
+  // checkAuthentication() {
+  //   loginService.checkAuthentication()
+  //     .then(() => {
+  //       console.log('### Login checkAuthentication then')
+  //       this.setState({ redirect: true })
+  //     })
+  //     .catch(() => { /* noop */ })
+  // }
+
+  handleLoginSubmit = (e) => {
+    e.preventDefault()
     const { username, password } = this.state
     loginService.login({ username, password })
-      .then((data) => {
+      .then(() => {
         this.setState({ redirect: true })
       })
       .catch((err) => {
@@ -85,10 +100,8 @@ export default class Login extends Component {
       <MuiThemeProvider muiTheme={ThemeDefault}>
         <div>
           <div style={styles.loginContainer}>
-
             <Paper style={styles.paper}>
-
-              <form>
+              <form onSubmit={this.handleLoginSubmit}>
                 <TextField
                   hintText="Nome de usuário"
                   floatingLabelText="Nome de usuário"
@@ -106,9 +119,9 @@ export default class Login extends Component {
                 />
                 <RaisedButton
                   label="Login"
-                  onClick={this.login}
                   primary={true}
                   style={styles.loginBtn}
+                  type="submit"
                 />
               </form>
             </Paper>
