@@ -9,14 +9,22 @@ import TextField from 'material-ui/TextField';
 import ThemeDefault from '../../../theme-default';
 import loginService from '../../../services/loginService'
 
+import { LOGIN } from '../../../config/routes'
+
 export default class Login extends Component {
   state = {
     username: '',
     password: '',
     redirect: false,
+    referrer: null,
   }
 
   componentDidMount() {
+    const referrer = this.props.location.pathname
+    if (referrer !== LOGIN) {
+      this.setState({ referrer })
+    }
+
     this.checkAuthentication()
   }
 
@@ -85,8 +93,9 @@ export default class Login extends Component {
 
     const { redirect } = this.state
     if (redirect) {
-      // TODO o referrer não está funcionando corretamente, conferir
-      const { referrer } = this.props.location.state || { referrer: { pathname: "/" } };
+      const referrer = this.state.referrer || '/'
+      // const { referrer } = this.props.location.pathname || { referrer: { pathname: "/" } };
+      // const { referrer } = this.props.location.pathname || { referrer: { pathname: "/" } };
       return (
         <Redirect to={referrer} />
       )
