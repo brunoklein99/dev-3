@@ -33,7 +33,6 @@ export default class Login extends Component {
 
   checkAuthentication() {
     loginService.checkAuthentication()
-      .then(() => loginService.login())
       .then(() => this.setState({ didCheckAuthentication: true, isAuthenticated: true }))
       .catch(() => this.setState({ didCheckAuthentication: true }))
   }

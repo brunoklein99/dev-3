@@ -12,10 +12,13 @@ class LoginService {
     return user
   }
 
+  isAdmin() {
+    return user.authorities[0].authority === 'ADMIN'
+  }
+
   checkAuthentication() {
     return apiService.get('/api/check')
       .then(({ data }) => {
-        // TODO esse data está vindo vazio, queria trazer os dados do usuário aqui
         user = data
         isAuthenticated = true
       })

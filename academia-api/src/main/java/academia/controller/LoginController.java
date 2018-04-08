@@ -20,7 +20,11 @@ public class LoginController {
     }
 
     @RequestMapping("/api/check")
-    public User check() {
-        return null;
+    public User check(Principal principal) {
+        UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) principal;
+        if (token == null) {
+            return null;
+        }
+        return (User) token.getPrincipal();
     }
 }
