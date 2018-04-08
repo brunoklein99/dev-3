@@ -15,6 +15,7 @@ class LoginService {
   checkAuthentication() {
     return apiService.get('/api/check')
       .then(({ data }) => {
+        // TODO esse data está vindo vazio, queria trazer os dados do usuário aqui
         user = data
         isAuthenticated = true
       })

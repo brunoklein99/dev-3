@@ -6,6 +6,8 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { white } from 'material-ui/styles/colors';
 import TextField from 'material-ui/TextField';
 
+import Loader from 'react-loader';
+
 import ThemeDefault from '../../../theme-default';
 import loginService from '../../../services/loginService'
 
@@ -13,9 +15,10 @@ import { LOGIN } from '../../../config/routes'
 
 export default class Login extends Component {
   state = {
+    didCheckAuthentication: false,
     username: '',
     password: '',
-    redirect: false,
+    isAuthenticated: false,
     referrer: null,
   }
 
@@ -31,15 +34,15 @@ export default class Login extends Component {
   checkAuthentication() {
     loginService.checkAuthentication()
       .then(() => loginService.login())
-      .then(() => this.setState({ redirect: true }))
-      .catch(() => { /* noop */ })
+      .then(() => this.setState({ didCheckAuthentication: true, isAuthenticated: true }))
+      .catch(() => this.setState({ didCheckAuthentication: true }))
   }
 
   handleLoginSubmit = (e) => {
     e.preventDefault()
     const { username, password } = this.state
     loginService.login({ username, password })
-      .then(() => this.setState({ redirect: true }))
+      .then(() => this.setState({ isAuthenticated: true }))
       .catch((err) => {
         console.log(err)
       })
@@ -53,7 +56,7 @@ export default class Login extends Component {
     this.setState({ password: event.target.value })
   }
 
-  render() {
+  renderLoginForm() {
     const styles = {
       loginContainer: {
         minWidth: 320,
@@ -91,16 +94,6 @@ export default class Login extends Component {
       },
     };
 
-    const { redirect } = this.state
-    if (redirect) {
-      const referrer = this.state.referrer || '/'
-      // const { referrer } = this.props.location.pathname || { referrer: { pathname: "/" } };
-      // const { referrer } = this.props.location.pathname || { referrer: { pathname: "/" } };
-      return (
-        <Redirect to={referrer} />
-      )
-    }
-
     return (
       <MuiThemeProvider muiTheme={ThemeDefault}>
         <div>
@@ -134,6 +127,28 @@ export default class Login extends Component {
           </div>
         </div>
       </MuiThemeProvider>
+    )
+  }
+
+  renderFormOrRedirect() {
+    const { isAuthenticated } = this.state
+    if (isAuthenticated) {
+      const referrer = this.state.referrer || '/'
+      return (
+        <Redirect to={referrer} />
+      )
+    }
+
+    return this.renderLoginForm()
+  }
+
+  render() {
+    const { didCheckAuthentication } = this.state
+
+    return (
+      <Loader loaded={didCheckAuthentication}>
+        {this.renderFormOrRedirect()}
+      </Loader>
     )
   }
 }
