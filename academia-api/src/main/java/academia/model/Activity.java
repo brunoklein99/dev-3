@@ -1,6 +1,7 @@
 package academia.model;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -29,6 +30,10 @@ public class Activity {
 
     @OneToMany
     private List<Account> users;
+
+    private Date beginDate;
+
+    private Date endDate;
 
     public Account getTrainer() {
         return trainer;
@@ -68,5 +73,21 @@ public class Activity {
 
     public void setUsers(List<Account> users) {
         this.users = users;
+    }
+
+    public Date getBeginDate() {
+        return beginDate;
+    }
+
+    public void setBeginDate(Date beginDate) {
+        this.beginDate = beginDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 }
