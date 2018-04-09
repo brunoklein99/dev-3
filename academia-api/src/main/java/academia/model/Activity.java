@@ -1,6 +1,7 @@
 package academia.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Activity {
@@ -25,6 +26,9 @@ public class Activity {
 
     @ManyToOne
     private Account trainer;
+
+    @OneToMany
+    private List<Account> users;
 
     public Account getTrainer() {
         return trainer;
@@ -56,5 +60,13 @@ public class Activity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<Account> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<Account> users) {
+        this.users = users;
     }
 }
