@@ -45,6 +45,7 @@ public class AccountServiceImpl implements AccountService {
             throw new ValidationException("Senha deve ser preenchida");
         }
 
+        // TODO não permitir alterar username
         // TODO verificar uniqueness do username
         Account toSave = new Account(account.getName(), account.getUsername(), passwordEncoder.encode(account.getPassword()), account.getAdmin());
         return accountRepository.save(toSave);
