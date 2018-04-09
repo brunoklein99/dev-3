@@ -3,5 +3,5 @@
 build:
 	mvn clean install
 
-run:
+run: build
 	java -jar target/academia-api-1.0-SNAPSHOT.jar
