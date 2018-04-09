@@ -14,6 +14,23 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public Activity create(Activity activity) {
+        validate(activity);
+
+        Activity toSave = new Activity(activity.getName(), activity.getDescription(), activity.getTrainer());
+
+        return activityRepository.save(toSave);
+    }
+
+    @Override
+    public Activity update(Activity activity) {
+        validate(activity);
+
+        Activity toSave = new Activity(activity.getName(), activity.getDescription(), activity.getTrainer());
+
+        return activityRepository.save(toSave);
+    }
+
+    private static void validate(Activity activity){
         String name = activity.getName();
         if (name == null || name.isEmpty()) {
             throw new ValidationException("Atividade deve ter um nome");
@@ -22,9 +39,12 @@ public class ActivityServiceImpl implements ActivityService {
         if (description == null || description.isEmpty()) {
             throw new ValidationException("Atividade deve ter uma descrição");
         }
-
-        Activity toSave = new Activity(activity.getName(), activity.getDescription(), activity.getTrainer());
-
-        return activityRepository.save(toSave);
+        if (activity.getTrainer() == null) {
+            throw new ValidationException("Atividade deve ter um treinador");
+        }
+        if (!activity.getTrainer().isTrainer()){
+            throw new ValidationException("Usuário atrelado a atividade deve ser um treinador");
+        }
     }
+
 }

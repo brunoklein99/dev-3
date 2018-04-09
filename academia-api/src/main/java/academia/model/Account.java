@@ -71,7 +71,7 @@ public class Account {
         isAdmin = admin;
     }
 
-    public Boolean getTrainer() {
+    public Boolean isTrainer() {
         return isTrainer;
     }
 
