@@ -28,6 +28,7 @@ public class AccountServiceImpl implements AccountService {
 
         // TODO verificar uniqueness do username
         Account toSave = new Account(account.getName(), account.getUsername(), passwordEncoder.encode(account.getPassword()), account.getAdmin());
+        toSave.setTrainer(account.getTrainer());
 
         return accountRepository.save(toSave);
     }

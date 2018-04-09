@@ -30,6 +30,14 @@ public class Application {
             if (user == null) {
                 accountService.create(new Account("Usuário da Silva", userUsernameAndPassword, userUsernameAndPassword, false));
             }
+
+            String trainerUsernameAndPassword = "trainer";
+            Account trainer = accountRepository.findByUsername(trainerUsernameAndPassword);
+            if (trainer == null) {
+                Account account = new Account("Treinador 1", trainerUsernameAndPassword, trainerUsernameAndPassword, false);
+                account.setTrainer(true);
+                accountService.create(account);
+            }
         };
     }
 }
