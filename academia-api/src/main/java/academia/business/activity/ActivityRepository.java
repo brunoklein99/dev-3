@@ -1,4 +1,4 @@
-package academia.business.account;
+package academia.business.activity;
 
 import academia.model.Activity;
 import org.springframework.data.jpa.repository.JpaRepository;

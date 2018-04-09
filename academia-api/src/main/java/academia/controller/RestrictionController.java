@@ -1,7 +1,7 @@
 package academia.controller;
 
-import academia.business.account.RestrictionRepository;
-import academia.business.account.RestrictionService;
+import academia.business.restriction.RestrictionRepository;
+import academia.business.restriction.RestrictionService;
 import academia.model.Restriction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

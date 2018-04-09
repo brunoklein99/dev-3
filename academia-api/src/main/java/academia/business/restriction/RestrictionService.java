@@ -1,4 +1,4 @@
-package academia.business.account;
+package academia.business.restriction;
 
 import academia.model.Restriction;
 

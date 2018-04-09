@@ -1,7 +1,7 @@
 package academia.controller;
 
-import academia.business.account.ActivityRepository;
-import academia.business.account.ActivityService;
+import academia.business.activity.ActivityRepository;
+import academia.business.activity.ActivityService;
 import academia.model.Activity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

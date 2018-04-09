@@ -1,4 +1,4 @@
-package academia.business.account;
+package academia.business.activity;
 
 import academia.model.Account;
 import academia.model.Activity;
