@@ -10,21 +10,21 @@ import java.security.Principal;
 @RestController
 public class LoginController {
 
-    @RequestMapping("/login")
-    public User login(Principal principal) {
-        UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) principal;
+    private User getUser(UsernamePasswordAuthenticationToken principal) {
+        UsernamePasswordAuthenticationToken token = principal;
         if (token == null) {
             return null;
         }
         return (User) token.getPrincipal();
     }
 
+    @RequestMapping("/login")
+    public User login(Principal principal) {
+        return getUser((UsernamePasswordAuthenticationToken) principal);
+    }
+
     @RequestMapping("/api/check")
     public User check(Principal principal) {
-        UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) principal;
-        if (token == null) {
-            return null;
-        }
-        return (User) token.getPrincipal();
+        return getUser((UsernamePasswordAuthenticationToken) principal);
     }
 }
