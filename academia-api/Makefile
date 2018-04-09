@@ -1,7 +1,7 @@
-.PHONY: build
+.PHONY: build run
 
 build:
 	mvn clean install
 
-run: build
+run:
 	java -jar target/academia-api-1.0-SNAPSHOT.jar
