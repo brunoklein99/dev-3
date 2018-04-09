@@ -1,0 +1,15 @@
+FROM node:8.11.1-alpine
+
+WORKDIR /app
+
+# copia definições de dependências
+COPY package*.json ./
+COPY yarn.lock ./
+
+# instala dependências
+RUN yarn
+
+COPY . .
+
+EXPOSE 3000
+CMD [ "yarn", "start" ]
