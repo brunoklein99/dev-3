@@ -3,10 +3,12 @@ package academia.business.restriction;
 import academia.model.Activity;
 import academia.model.Restriction;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.validation.ValidationException;
 import java.util.List;
 
+@Service
 public class RestrictionServiceImpl implements RestrictionService {
 
     @Autowired
