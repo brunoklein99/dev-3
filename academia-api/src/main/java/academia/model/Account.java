@@ -37,6 +37,8 @@ public class Account {
 
     private Boolean isAdmin;
 
+    private Boolean isTrainer;
+
     public Long getId() {
         return id;
     }
@@ -67,6 +69,14 @@ public class Account {
 
     public void setAdmin(Boolean admin) {
         isAdmin = admin;
+    }
+
+    public Boolean getTrainer() {
+        return isTrainer;
+    }
+
+    public void setTrainer(Boolean trainer) {
+        isTrainer = trainer;
     }
 
     public String getName() {
