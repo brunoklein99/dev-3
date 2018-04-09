@@ -1,14 +1,15 @@
-import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import Paper from 'material-ui/Paper';
-import RaisedButton from 'material-ui/RaisedButton';
-import { white } from 'material-ui/styles/colors';
-import TextField from 'material-ui/TextField';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { Redirect } from 'react-router-dom'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import Paper from 'material-ui/Paper'
+import RaisedButton from 'material-ui/RaisedButton'
+import { white } from 'material-ui/styles/colors'
+import TextField from 'material-ui/TextField'
 
-import Loader from 'react-loader';
+import Loader from 'react-loader'
 
-import ThemeDefault from '../../../theme-default';
+import ThemeDefault from '../../../theme-default'
 import loginService from '../../../services/loginService'
 
 import { LOGIN } from '../../../config/routes'
@@ -43,6 +44,7 @@ export default class Login extends Component {
     loginService.login({ username, password })
       .then(() => this.setState({ isAuthenticated: true }))
       .catch((err) => {
+        // TODO tratar falha
         console.log(err)
       })
   }
@@ -65,14 +67,14 @@ export default class Login extends Component {
         top: '20%',
         left: 0,
         right: 0,
-        margin: 'auto'
+        margin: 'auto',
       },
       paper: {
         padding: 20,
-        overflow: 'auto'
+        overflow: 'auto',
       },
       loginBtn: {
-        float: 'right'
+        float: 'right',
       },
       btn: {
         background: '#4f81e9',
@@ -80,18 +82,18 @@ export default class Login extends Component {
         padding: 7,
         borderRadius: 2,
         margin: 2,
-        fontSize: 13
+        fontSize: 13,
       },
       btnFacebook: {
-        background: '#4f81e9'
+        background: '#4f81e9',
       },
       btnGoogle: {
-        background: '#e14441'
+        background: '#e14441',
       },
       btnSpan: {
-        marginLeft: 5
+        marginLeft: 5,
       },
-    };
+    }
 
     return (
       <MuiThemeProvider muiTheme={ThemeDefault}>
@@ -103,21 +105,21 @@ export default class Login extends Component {
                   autoFocus
                   hintText="Nome de usuário"
                   floatingLabelText="Nome de usuário"
-                  fullWidth={true}
+                  fullWidth
                   onChange={this.handleChangeUsername}
                   value={this.state.username}
                 />
                 <TextField
                   hintText="Senha"
                   floatingLabelText="Senha"
-                  fullWidth={true}
+                  fullWidth
                   type="password"
                   onChange={this.handleChangePassword}
                   value={this.state.password}
                 />
                 <RaisedButton
                   label="Login"
-                  primary={true}
+                  primary
                   style={styles.loginBtn}
                   type="submit"
                 />
@@ -150,4 +152,10 @@ export default class Login extends Component {
       </Loader>
     )
   }
+}
+
+Login.propTypes = {
+  location: PropTypes.shape({
+    pathname: PropTypes.string,
+  }).isRequired,
 }

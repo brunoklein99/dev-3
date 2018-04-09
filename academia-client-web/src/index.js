@@ -1,11 +1,13 @@
-import React from 'react';
-import { render } from 'react-dom';
-import AppRouter from './components/AppRouter';
-import injectTapEventPlugin from 'react-tap-event-plugin';
-import './index.css';
-import 'font-awesome/css/font-awesome.css';
-import 'flexboxgrid/css/flexboxgrid.css';
+import React from 'react'
+import { render } from 'react-dom'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 
-injectTapEventPlugin();
+import 'font-awesome/css/font-awesome.css'
+import 'flexboxgrid/css/flexboxgrid.css'
 
-render(<AppRouter />, document.getElementById('root'));
+import AppRouter from './components/AppRouter'
+import './index.css'
+
+injectTapEventPlugin()
+
+render(<AppRouter />, global.document.getElementById('root'))

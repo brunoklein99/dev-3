@@ -50,7 +50,7 @@ class LoginService {
 
   logout() {
     return apiService.get('/logout')
-      .then(({ data }) => {
+      .then(() => {
         user = null
         isAuthenticated = false
       })

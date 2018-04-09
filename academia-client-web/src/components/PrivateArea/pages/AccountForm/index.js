@@ -1,15 +1,11 @@
-import React, { Component } from 'react';
-import {Link} from 'react-router-dom';
-import RaisedButton from 'material-ui/RaisedButton';
-import MenuItem from 'material-ui/MenuItem';
-import TextField from 'material-ui/TextField';
-import SelectField from 'material-ui/SelectField';
-import Toggle from 'material-ui/Toggle';
-import DatePicker from 'material-ui/DatePicker';
-import {grey400} from 'material-ui/styles/colors';
-import Divider from 'material-ui/Divider';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import RaisedButton from 'material-ui/RaisedButton'
+import TextField from 'material-ui/TextField'
+import Toggle from 'material-ui/Toggle'
+import { grey400 } from 'material-ui/styles/colors'
 
-import PageBase from '../common/PageBase';
+import PageBase from '../common/PageBase'
 
 import accountService from '../../../../services/accountService'
 
@@ -27,7 +23,12 @@ class AccountForm extends Component {
     const { id } = this.props.match.params
     if (id) {
       accountService.get(id)
-        .then(({ name, username, admin }) => this.setState({ didLoad: true, name, username, admin }))
+        .then(({ name, username, admin }) => this.setState({
+          didLoad: true,
+          name,
+          username,
+          admin,
+        }))
     } else {
       this.setState({ didLoad: true })
     }
@@ -36,7 +37,9 @@ class AccountForm extends Component {
   handleSaveClick = (e) => {
     e.preventDefault()
 
-    const { name, username, admin, password } = this.state
+    const {
+      name, username, admin, password,
+    } = this.state
 
     const data = {
       admin,
@@ -48,36 +51,41 @@ class AccountForm extends Component {
     const { id } = this.props.match.params
     if (id) {
       accountService.update(id, data)
+        // TODO mensagem de sucesso e falha
         .then(() => console.log('### did update'))
     } else {
       accountService.create(data)
+        // TODO mensagem de sucesso e falha
         .then(() => console.log('### did create'))
     }
   }
 
-  handleInputChange = (property, e, value) => {
-    this.setState({ [property]: value})
-  }
+  handleInputChange = (property, value) => this.setState({ [property]: value })
+
+  handleNameChange = (e, value) => this.handleInputChange('name', value)
+  handleUsernameChange = (e, value) => this.handleInputChange('username', value)
+  handlePasswordChange = (e, value) => this.handleInputChange('password', value)
+  handleAdminChange = (e, value) => this.handleInputChange('admin', value)
 
   render() {
     const styles = {
       toggleDiv: {
         maxWidth: 300,
         marginTop: 40,
-        marginBottom: 5
+        marginBottom: 5,
       },
       toggleLabel: {
         color: grey400,
-        fontWeight: 100
+        fontWeight: 100,
       },
       buttons: {
         marginTop: 30,
-        float: 'right'
+        float: 'right',
       },
       saveButton: {
-        marginLeft: 5
-      }
-    };
+        marginLeft: 5,
+      },
+    }
 
     let form = null
 
@@ -87,8 +95,8 @@ class AccountForm extends Component {
           <TextField
             hintText="Nome"
             floatingLabelText="Nome"
-            fullWidth={true}
-            onChange={this.handleInputChange.bind(this, 'name')}
+            fullWidth
+            onChange={this.handleNameChange}
             value={this.state.name}
           />
 
@@ -96,7 +104,7 @@ class AccountForm extends Component {
             <TextField
               hintText="Nome de usuário"
               floatingLabelText="Nome de usuário"
-              onChange={this.handleInputChange.bind(this, 'username')}
+              onChange={this.handleUsernameChange}
               value={this.state.username}
             />
           </div>
@@ -106,7 +114,7 @@ class AccountForm extends Component {
               hintText="Senha"
               floatingLabelText="Senha"
               type="password"
-              onChange={this.handleInputChange.bind(this, 'password')}
+              onChange={this.handlePasswordChange}
               value={this.state.password}
             />
           </div>
@@ -115,7 +123,7 @@ class AccountForm extends Component {
             <Toggle
               label="Administrador"
               labelStyle={styles.toggleLabel}
-              onToggle={this.handleInputChange.bind(this, 'admin')}
+              onToggle={this.handleAdminChange}
               toggled={this.state.admin}
             />
           </div>
@@ -126,7 +134,7 @@ class AccountForm extends Component {
               label="Salvar"
               style={styles.saveButton}
               type="submit"
-              primary={true}
+              primary
             />
           </div>
         </form>
@@ -139,8 +147,16 @@ class AccountForm extends Component {
       >
         {form}
       </PageBase>
-    );
+    )
   }
 }
 
-export default AccountForm;
+AccountForm.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string,
+    }),
+  }).isRequired,
+}
+
+export default AccountForm

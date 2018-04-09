@@ -1,11 +1,10 @@
-import React from 'react';
-import { Route, Redirect } from 'react-router-dom';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { Route, Redirect } from 'react-router-dom'
 
 import Login from './Login'
 
-import {
-  LOGIN,
-} from '../../config/routes'
+import { LOGIN } from '../../config/routes'
 
 const RedirectToLogin = () => (
   <Redirect
@@ -13,9 +12,17 @@ const RedirectToLogin = () => (
   />
 )
 
-export default (props) => (
+const PublicArea = props => (
   <div>
-    <Route exact path="/" component={RedirectToLogin}></Route>
-    <Route path={`${props.match.url}`} component={Login}/>
+    <Route exact path="/" component={RedirectToLogin} />
+    <Route path={`${props.match.url}`} component={Login} />
   </div>
 )
+
+PublicArea.propTypes = {
+  match: PropTypes.shape({
+    url: PropTypes.string,
+  }).isRequired,
+}
+
+export default PublicArea
