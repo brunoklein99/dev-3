@@ -76,8 +76,8 @@ public class Account {
         return isTrainer;
     }
 
-    public void setTrainer(Boolean trainer) {
-        isTrainer = trainer;
+    public void isTrainer(Boolean isTrainer) {
+        this.isTrainer = isTrainer;
     }
 
     public String getName() {

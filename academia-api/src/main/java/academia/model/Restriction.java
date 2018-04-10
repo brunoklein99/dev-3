@@ -1,13 +1,14 @@
 package academia.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 public class Restriction {
 
     public Restriction(){
-
+        this.activities = new ArrayList<>();
     }
 
     @Id

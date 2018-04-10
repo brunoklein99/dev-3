@@ -16,7 +16,7 @@ public class ActivityServiceImpl implements ActivityService {
     public Activity create(Activity activity) {
         validate(activity);
 
-        Activity toSave = new Activity(activity.getName(), activity.getDescription(), activity.getTrainer());
+        Activity toSave = copyActivity(activity);
 
         return activityRepository.save(toSave);
     }
@@ -25,7 +25,7 @@ public class ActivityServiceImpl implements ActivityService {
     public Activity update(Activity activity) {
         validate(activity);
 
-        Activity toSave = new Activity(activity.getName(), activity.getDescription(), activity.getTrainer());
+        Activity toSave = copyActivity(activity);
 
         return activityRepository.save(toSave);
     }
@@ -45,6 +45,13 @@ public class ActivityServiceImpl implements ActivityService {
         if (!activity.getTrainer().isTrainer()){
             throw new ValidationException("Usuário atrelado a atividade deve ser um treinador");
         }
+    }
+
+    private static Activity copyActivity(Activity activity){
+        Activity toSave = new Activity(activity.getName(), activity.getDescription(), activity.getTrainer());
+        toSave.setBeginDate(activity.getBeginDate());
+        toSave.setEndDate(activity.getEndDate());
+        return toSave;
     }
 
 }
