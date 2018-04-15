@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/activities")
+@RequestMapping("/api/private/activities")
 public class ActivityController {
 
     @Autowired

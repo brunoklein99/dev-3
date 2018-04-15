@@ -18,12 +18,12 @@ public class LoginController {
         return (User) token.getPrincipal();
     }
 
-    @RequestMapping("/login")
+    @RequestMapping("/api/public/login")
     public User login(Principal principal) {
         return getUser((UsernamePasswordAuthenticationToken) principal);
     }
 
-    @RequestMapping("/api/check")
+    @RequestMapping("/api/private/check")
     public User check(Principal principal) {
         return getUser((UsernamePasswordAuthenticationToken) principal);
     }

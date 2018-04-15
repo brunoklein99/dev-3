@@ -17,7 +17,7 @@ class LoginService {
   }
 
   checkAuthentication() {
-    return apiService.get('/api/check')
+    return apiService.get('/api/private/check')
       .then(({ data }) => {
         user = data
         isAuthenticated = true
@@ -41,7 +41,7 @@ class LoginService {
       }
     }
 
-    return apiService.get('/login', options)
+    return apiService.get('/api/public/login', options)
       .then(({ data }) => {
         user = data
         isAuthenticated = true
@@ -49,7 +49,7 @@ class LoginService {
   }
 
   logout() {
-    return apiService.get('/logout')
+    return apiService.get('/api/private/logout')
       .then(() => {
         user = null
         isAuthenticated = false

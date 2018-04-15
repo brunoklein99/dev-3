@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/restrictions")
+@RequestMapping("/api/private/restrictions")
 public class RestrictionController {
 
     @Autowired
