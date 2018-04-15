@@ -54,3 +54,10 @@ Rode o script (a partir da raíz do projeto `academia-api`):
 ```
 
 A aplicação irá subir no endereço [http://localhost:8080]()
+
+
+## usando `curl` para chamar a API
+
+```bash
+curl -u <usuário>:<senha> localhost:8080/api/accounts
+```
