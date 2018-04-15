@@ -2,6 +2,7 @@
   "name": "academia-client-web",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:8080",
   "dependencies": {
     "axios": "0.18.0",
     "flexboxgrid": "6.3.1",

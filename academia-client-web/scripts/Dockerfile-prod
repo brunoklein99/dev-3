@@ -1,0 +1,5 @@
+FROM nginx:1.11.10-alpine
+
+COPY build /usr/share/nginx/html
+COPY scripts/nginx/nginx.conf /etc/nginx/
+COPY scripts/nginx/default.conf /etc/nginx/conf.d

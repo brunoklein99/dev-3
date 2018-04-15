@@ -11,7 +11,7 @@ Rode o script (a partir da raíz do projeto `academia-client-web`):
 
 ```
 # se o script for incompatível com seu SO, copie os comandos do script e os execute diretamente
-./scripts/docker-run.sh
+./scripts/docker-run-dev.sh
 ```
 
 A aplicação irá subir no endereço [http://localhost:3000]()
