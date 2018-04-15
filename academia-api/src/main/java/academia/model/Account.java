@@ -2,10 +2,8 @@ package academia.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity // This tells Hibernate to make a table out of this class
 public class Account {
@@ -36,6 +34,11 @@ public class Account {
     private String password;
 
     private Boolean isAdmin;
+
+    private Boolean isTrainer;
+
+    @OneToMany
+    private List<Restriction> restrictions;
 
     public Long getId() {
         return id;
@@ -69,11 +72,27 @@ public class Account {
         isAdmin = admin;
     }
 
+    public Boolean isTrainer() {
+        return isTrainer;
+    }
+
+    public void isTrainer(Boolean isTrainer) {
+        this.isTrainer = isTrainer;
+    }
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<Restriction> getRestrictions() {
+        return restrictions;
+    }
+
+    public void setRestrictions(List<Restriction> restrictions) {
+        this.restrictions = restrictions;
     }
 }
