@@ -2,6 +2,16 @@
 
 ## rodando docker
 
+### docker compose
+
+A forma mais simples de rodar é com docker-compose, rodando:
+
+```shell
+./scripts/docker-compose-build.sh # apenas uma vez, ou quando houver alteração
+./scripts/docker-compose-up.sh
+```
+
+### docker puro
 Se você for rodar o sistema com Docker, é necessário primeiro criar a rede virtual do Docker, rodando o script:
 
 ```shell
