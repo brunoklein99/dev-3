@@ -4,4 +4,5 @@
 docker rm -f academia-mysql-client
 
 # usuário e senha são "academia"
-docker run -it --rm --link academia-mysql:academia-mysql --name academia-mysql-client mysql:5.7.21 mysql -hacademia-mysql -uacademia -p
+# nas opções abaixo, -hacademia-mysql seta o host do server como academia-mysql, e -uacademia seta o usuário como academia
+docker run -it --rm --network=academia --name academia-mysql-client mysql:5.7.21 mysql -hacademia-mysql -uacademia -p

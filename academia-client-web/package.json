@@ -2,6 +2,7 @@
   "name": "academia-client-web",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:8080",
   "dependencies": {
     "axios": "0.18.0",
     "flexboxgrid": "6.3.1",
@@ -22,7 +23,8 @@
     "eject": "react-scripts eject",
     "lint": "eslint ./src",
     "lint:fix": "eslint ./src --fix",
-    "lint:watch": "esw ./src --watch"
+    "lint:watch": "esw ./src --watch",
+    "set-docker-proxy": "node ./scripts/set-docker-proxy.js"
   },
   "devDependencies": {
     "eslint": "4.19.1",

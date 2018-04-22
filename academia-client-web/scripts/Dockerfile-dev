@@ -11,5 +11,7 @@ RUN yarn
 
 COPY . .
 
+RUN yarn set-docker-proxy
+
 EXPOSE 3000
 CMD [ "yarn", "start" ]
