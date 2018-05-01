@@ -55,7 +55,7 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
 
         List<GrantedAuthority> authorities = new ArrayList<>();
 
-        if (account.getAdmin()) {
+        if (account.getType() == Account.AccountType.ADMIN) {
             authorities.add(new SimpleGrantedAuthority("ADMIN"));
         } else {
             authorities.add(new SimpleGrantedAuthority("USER"));
