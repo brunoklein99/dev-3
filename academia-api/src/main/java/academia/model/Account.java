@@ -12,14 +12,9 @@ public class Account {
     }
 
     public Account(String name, String username, String password) {
-        this(name, username, password, false);
-    }
-
-    public Account(String name, String username, String password, Boolean isAdmin) {
         this.name = name;
         this.username = username;
         this.password = password;
-        this.isAdmin = isAdmin;
     }
 
     @Id
@@ -32,10 +27,6 @@ public class Account {
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
-
-    private Boolean isAdmin;
-
-    private Boolean isTrainer;
 
     @OneToMany
     private List<Restriction> restrictions;
@@ -62,22 +53,6 @@ public class Account {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public Boolean getAdmin() {
-        return isAdmin;
-    }
-
-    public void setAdmin(Boolean admin) {
-        isAdmin = admin;
-    }
-
-    public Boolean isTrainer() {
-        return isTrainer;
-    }
-
-    public void isTrainer(Boolean isTrainer) {
-        this.isTrainer = isTrainer;
     }
 
     public String getName() {
