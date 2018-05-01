@@ -10,6 +10,6 @@ public interface RestrictionRepository extends JpaRepository<Restriction, Long> 
 
     Restriction findByName(String name);
 
-    List<Restriction> findByActivity(Activity activity);
+    //List<Restriction> findByActivity(Activity activity);
 
 }

@@ -7,14 +7,11 @@ import academia.model.Account;
 import academia.model.Activity;
 import academia.model.Restriction;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Validation;
 import javax.xml.bind.ValidationException;
 import java.util.Date;
 import java.util.List;
@@ -32,27 +29,29 @@ public class ScheduleActivityController {
     @Autowired
     private RestrictionRepository restrictionRepository;
 
-    @RequestMapping(method = RequestMethod.POST, path = "")
-    public boolean create(@RequestBody ActivitySchedule schedule) throws ValidationException {
+//    @RequestMapping(method = RequestMethod.POST, path = "")
+//    public boolean create(@RequestBody ActivitySchedule schedule) throws ValidationException {
+//
+//        validateRestrictions(schedule.getAccount(), schedule.getActivity());
+//
+//
+//
+//        return true;
+//    }
 
-        validateRestrictions(schedule.getAccount(), schedule.getActivity());
-
-        return true;
-    }
-
-    private void validateRestrictions(Account account, Activity activity) throws ValidationException {
-        List<Restriction> accountRestrictions = account.getRestrictions();
-
-        List<Restriction> activityRestrictions = restrictionRepository.findByActivity(activity);
-
-        for (Restriction accountRestriction : accountRestrictions) {
-            for (Restriction activityRestriction : activityRestrictions) {
-                if (accountRestriction.getId().equals(activityRestriction.getId())) {
-                    throw new ValidationException("Usuário possui restrição " + accountRestriction.getName());
-                }
-            }
-        }
-    }
+//    private void validateRestrictions(Account account, Activity activity) throws ValidationException {
+//        List<Restriction> accountRestrictions = account.getRestrictions();
+//
+//        List<Restriction> activityRestrictions = restrictionRepository.findByActivity(activity);
+//
+//        for (Restriction accountRestriction : accountRestrictions) {
+//            for (Restriction activityRestriction : activityRestrictions) {
+//                if (accountRestriction.getId().equals(activityRestriction.getId())) {
+//                    throw new ValidationException("Usuário possui restrição " + accountRestriction.getName());
+//                }
+//            }
+//        }
+//    }
 
     public class ActivitySchedule {
         private Activity activity;

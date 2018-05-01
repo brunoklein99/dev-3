@@ -4,10 +4,12 @@ import academia.business.account.AccountRepository;
 import academia.business.account.AccountService;
 import academia.business.activity.ActivityRepository;
 import academia.business.activity.ActivityService;
+import academia.business.appointment.AppointmentService;
 import academia.business.restriction.RestrictionRepository;
 import academia.business.restriction.RestrictionService;
 import academia.model.Account;
 import academia.model.Activity;
+import academia.model.Appointment;
 import academia.model.Restriction;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -32,7 +34,8 @@ public class Application {
             ActivityService activityService,
             ActivityRepository activityRepository,
             RestrictionService restrictionService,
-            RestrictionRepository restrictionRepository) {
+            RestrictionRepository restrictionRepository,
+            AppointmentService appointmentService) {
         return (args) -> {
             String adminUsernameAndPassword = "admin";
             Account admin = accountRepository.findByUsername(adminUsernameAndPassword);
@@ -72,6 +75,12 @@ public class Application {
                 restriction.getActivities().add(activity);
                 restriction = restrictionService.create(restriction);
             }
+
+            Appointment appointment = new Appointment();
+            appointment.setActivity(activity);
+            appointment.setDate(new Date(2018, 1, 1));
+            appointment.setVagas(10);
+            appointmentService.create(appointment);
         };
     }
 }
