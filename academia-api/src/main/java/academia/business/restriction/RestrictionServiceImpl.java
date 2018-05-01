@@ -21,7 +21,6 @@ public class RestrictionServiceImpl implements RestrictionService {
         Restriction toSave = new Restriction();
         toSave.setId(restriction.getId());
         toSave.setName(restriction.getName());
-        toSave.getActivities().addAll(restriction.getActivities());
 
         return restrictionRepository.save(toSave);
     }
@@ -33,7 +32,6 @@ public class RestrictionServiceImpl implements RestrictionService {
         Restriction toSave = new Restriction();
         toSave.setId(restriction.getId());
         toSave.setName(restriction.getName());
-        toSave.getActivities().addAll(restriction.getActivities());
 
         return restrictionRepository.save(toSave);
     }
@@ -42,10 +40,6 @@ public class RestrictionServiceImpl implements RestrictionService {
         String name = restriction.getName();
         if (name == null || name.isEmpty()) {
             throw new ValidationException("Restrição deve ter nome");
-        }
-        List<Activity> activities = restriction.getActivities();
-        if (activities == null || activities.size() == 0) {
-            throw new ValidationException("Restrição deve ter pelo menos uma atividade");
         }
     }
 }

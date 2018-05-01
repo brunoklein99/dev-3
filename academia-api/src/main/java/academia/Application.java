@@ -18,6 +18,7 @@ import org.springframework.context.annotation.Bean;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @SpringBootApplication
 public class Application {
@@ -62,18 +63,18 @@ public class Application {
                 activity = new Activity("exercicio1", "exercicio1descr", trainer);
                 activity.setBeginDate(new Date(2018, 1, 1));
                 activity.setEndDate(new Date(2018, 12, 31));
-                activity = activityService.create(activity);
-            }
 
-            Restriction restriction = restrictionRepository.findByName("restriction1");
-            if (restriction == null) {
-                restriction = new Restriction();
+                Restriction restriction = new Restriction();
                 restriction.setName("restriction1");
-                if (restriction.getActivities() == null) {
-                    restriction.setActivities(new ArrayList<>());
-                }
-                restriction.getActivities().add(activity);
                 restriction = restrictionService.create(restriction);
+
+                List<Restriction> restrictions = new ArrayList<>();
+
+                restrictions.add(restriction);
+
+                activity.setRestrictions(restrictions);
+                activity = activityService.create(activity);
+
             }
 
             Appointment appointment = new Appointment();
