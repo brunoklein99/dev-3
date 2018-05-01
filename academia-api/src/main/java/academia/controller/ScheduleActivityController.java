@@ -2,9 +2,11 @@ package academia.controller;
 
 import academia.business.account.AccountRepository;
 import academia.business.account.AccountService;
+import academia.business.appointment.AppointmentRepository;
 import academia.business.restriction.RestrictionRepository;
 import academia.model.Account;
 import academia.model.Activity;
+import academia.model.Appointment;
 import academia.model.Restriction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,31 +29,43 @@ public class ScheduleActivityController {
     private AccountService accountService;
 
     @Autowired
-    private RestrictionRepository restrictionRepository;
+    private AppointmentRepository appointmentRepository;
 
-//    @RequestMapping(method = RequestMethod.POST, path = "")
-//    public boolean create(@RequestBody ActivitySchedule schedule) throws ValidationException {
-//
-//        validateRestrictions(schedule.getAccount(), schedule.getActivity());
-//
-//
-//
-//        return true;
-//    }
+    @RequestMapping(method = RequestMethod.POST, path = "")
+    public boolean create(@RequestBody ActivitySchedule schedule) throws ValidationException {
 
-//    private void validateRestrictions(Account account, Activity activity) throws ValidationException {
-//        List<Restriction> accountRestrictions = account.getRestrictions();
-//
-//        List<Restriction> activityRestrictions = restrictionRepository.findByActivity(activity);
-//
-//        for (Restriction accountRestriction : accountRestrictions) {
-//            for (Restriction activityRestriction : activityRestrictions) {
-//                if (accountRestriction.getId().equals(activityRestriction.getId())) {
-//                    throw new ValidationException("Usuário possui restrição " + accountRestriction.getName());
-//                }
-//            }
-//        }
-//    }
+        validateRestrictions(schedule.getAccount(), schedule.getActivity());
+
+        Appointment appointment = appointmentRepository.findByDateAndActivity(schedule.getActivity(), schedule.getDate());
+
+        if (appointment == null) {
+            throw new ValidationException("Não existe nada na agenda para a data requisitada");
+        }
+
+        if (appointment.getVagas() == 0) {
+            throw new ValidationException("Não existem mais vagas disponíveis para a atividade");
+        }
+
+        appointment.setVagas(appointment.getVagas() - 1);
+
+        appointmentRepository.save(appointment);
+
+        return true;
+    }
+
+    private void validateRestrictions(Account account, Activity activity) throws ValidationException {
+        List<Restriction> accountRestrictions = account.getRestrictions();
+
+        List<Restriction> activityRestrictions = activity.getRestrictions();
+
+        for (Restriction accountRestriction : accountRestrictions) {
+            for (Restriction activityRestriction : activityRestrictions) {
+                if (accountRestriction.getId().equals(activityRestriction.getId())) {
+                    throw new ValidationException("Usuário possui restrição " + accountRestriction.getName());
+                }
+            }
+        }
+    }
 
     public class ActivitySchedule {
         private Activity activity;
