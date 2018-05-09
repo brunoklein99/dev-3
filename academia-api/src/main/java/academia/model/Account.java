@@ -11,15 +11,15 @@ public class Account {
         // hibernate needs the default constructor
     }
 
-    public Account(String name, String username, String password) {
-        this(name, username, password, false);
-    }
-
-    public Account(String name, String username, String password, Boolean isAdmin) {
+    public Account(String name, String username, String password, AccountType type) {
         this.name = name;
         this.username = username;
         this.password = password;
-        this.isAdmin = isAdmin;
+        this.type = type;
+    }
+
+    public Account(String name, String username, String password)  {
+        this(name, username, password, AccountType.NORMAL);
     }
 
     @Id
@@ -32,10 +32,7 @@ public class Account {
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
-
-    private Boolean isAdmin;
-
-    private Boolean isTrainer;
+    private AccountType type;
 
     @OneToMany
     private List<Restriction> restrictions;
@@ -64,24 +61,16 @@ public class Account {
         this.password = password;
     }
 
-    public Boolean getAdmin() {
-        return isAdmin;
-    }
-
-    public void setAdmin(Boolean admin) {
-        isAdmin = admin;
-    }
-
-    public Boolean isTrainer() {
-        return isTrainer;
-    }
-
-    public void isTrainer(Boolean isTrainer) {
-        this.isTrainer = isTrainer;
-    }
-
     public String getName() {
         return name;
+    }
+
+    public AccountType getType() {
+        return type;
+    }
+
+    public void setType(AccountType type) {
+        this.type = type;
     }
 
     public void setName(String name) {
@@ -94,5 +83,9 @@ public class Account {
 
     public void setRestrictions(List<Restriction> restrictions) {
         this.restrictions = restrictions;
+    }
+
+    public enum AccountType {
+        NORMAL, ADMIN, TRAINER
     }
 }
