@@ -57,6 +57,8 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
 
         if (account.getType() == Account.AccountType.ADMIN) {
             authorities.add(new SimpleGrantedAuthority("ADMIN"));
+        } else if (account.getType() == Account.AccountType.TRAINER) {
+            authorities.add(new SimpleGrantedAuthority("TRAINER"));
         } else {
             authorities.add(new SimpleGrantedAuthority("USER"));
         }
