@@ -2,4 +2,4 @@
 
 cd academia-api
 
-mvn clean install
+mvn test
