@@ -4,13 +4,12 @@ import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
 import Toggle from 'material-ui/Toggle'
 import { grey400 } from 'material-ui/styles/colors'
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify'
+
+import 'react-toastify/dist/ReactToastify.css'
 
 import PageBase from '../common/PageBase'
-
 import accountService from '../../../../services/accountService'
-
-import 'react-toastify/dist/ReactToastify.css';
 
 class AccountForm extends Component {
   state = {
@@ -26,36 +25,6 @@ class AccountForm extends Component {
     admin: false,
   }
 
-  showNotification (sucess, message){
-    this.setState({
-      notify: true,
-      notifySucess: sucess,
-      notifyMessage: message
-    })
-  }
-
-  statusRequestError(status) {
-    switch(status) {
-        case 400:
-            this.showNotification(false, "Problema ao enviar os dados. (400)")
-            break;
-        case 401:
-            this.showNotification(false, "Requisição não autorizada. (401)")
-            break;
-        case 403:
-            this.showNotification(false, "Sem acesso. (403)")
-            break;
-        case 404:
-            this.showNotification(false, "Página não encontrada. (404)")
-            break;
-        case 500:
-            this.showNotification(false, "Problema no servidor. (500)")
-            break;
-        default:
-            this.showNotification(false, "Erro.")
-    }
-  }
-
   componentDidMount() {
     const { id } = this.props.match.params
     if (id) {
@@ -65,14 +34,22 @@ class AccountForm extends Component {
           name,
           username,
           admin,
-          notify: false
+          notify: false,
         }))
     } else {
       this.setState({
         didLoad: true,
-        notify: false
+        notify: false,
       })
     }
+  }
+
+  showNotification(sucess, message) {
+    this.setState({
+      notify: true,
+      notifySucess: sucess,
+      notifyMessage: message,
+    })
   }
 
   handleSaveClick = (e) => {
@@ -93,18 +70,18 @@ class AccountForm extends Component {
     if (id) {
       accountService.update(id, data)
         .then(() => {
-          this.showNotification(true, "Usuário alterado com sucesso.")
+          this.showNotification(true, 'Usuário alterado com sucesso.')
         })
-        .catch((error) => {
-          this.statusRequestError(error.response.status)
+        .catch(() => {
+          this.showNotification(false, 'Erro, por favor tente novamente.')
         })
     } else {
       accountService.create(data)
         .then(() => {
-          this.showNotification(true, "Usuário criado com sucesso.")
+          this.showNotification(true, 'Usuário criado com sucesso.')
         })
-        .catch((error) => {
-          this.statusRequestError(error.response.status)
+        .catch(() => {
+          this.showNotification(false, 'Erro, por favor tente novamente.')
         })
     }
   }
@@ -136,8 +113,8 @@ class AccountForm extends Component {
       },
     }
 
-    if(this.state.notify){
-      if(this.state.notifySucess){
+    if (this.state.notify) {
+      if (this.state.notifySucess) {
         toast.success(this.state.notifyMessage)
       } else {
         toast.error(this.state.notifyMessage)
