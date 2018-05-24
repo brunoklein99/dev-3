@@ -37,20 +37,19 @@ public class Application {
             String adminUsernameAndPassword = "admin";
             Account admin = accountRepository.findByUsername(adminUsernameAndPassword);
             if (admin == null) {
-                accountService.create(new Account("Administrador da Academia", adminUsernameAndPassword, adminUsernameAndPassword, true));
+                accountService.create(new Account("Administrador da Academia", adminUsernameAndPassword, adminUsernameAndPassword, Account.AccountType.ADMIN));
             }
 
             String userUsernameAndPassword = "user";
             Account user = accountRepository.findByUsername(userUsernameAndPassword);
             if (user == null) {
-                accountService.create(new Account("Usuário da Silva", userUsernameAndPassword, userUsernameAndPassword, false));
+                accountService.create(new Account("Usuário da Silva", userUsernameAndPassword, userUsernameAndPassword));
             }
 
             String trainerUsernameAndPassword = "trainer";
             Account trainer = accountRepository.findByUsername(trainerUsernameAndPassword);
             if (trainer == null) {
-                Account account = new Account("Treinador 1", trainerUsernameAndPassword, trainerUsernameAndPassword, false);
-                account.isTrainer(true);
+                Account account = new Account("Treinador 1", trainerUsernameAndPassword, trainerUsernameAndPassword, Account.AccountType.TRAINER);
                 trainer = accountService.create(account);
             }
 

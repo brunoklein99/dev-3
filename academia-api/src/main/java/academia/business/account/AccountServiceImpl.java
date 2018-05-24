@@ -27,8 +27,7 @@ public class AccountServiceImpl implements AccountService {
         }
 
         // TODO verificar uniqueness do username
-        Account toSave = new Account(account.getName(), account.getUsername(), passwordEncoder.encode(account.getPassword()), account.getAdmin());
-        toSave.isTrainer(account.isTrainer());
+        Account toSave = new Account(account.getName(), account.getUsername(), passwordEncoder.encode(account.getPassword()), account.getType());
 
         return accountRepository.save(toSave);
     }
@@ -48,7 +47,7 @@ public class AccountServiceImpl implements AccountService {
 
         // TODO não permitir alterar username
         // TODO verificar uniqueness do username
-        Account toSave = new Account(account.getName(), account.getUsername(), passwordEncoder.encode(account.getPassword()), account.getAdmin());
+        Account toSave = new Account(account.getName(), account.getUsername(), passwordEncoder.encode(account.getPassword()), account.getType());
         return accountRepository.save(toSave);
     }
 }
