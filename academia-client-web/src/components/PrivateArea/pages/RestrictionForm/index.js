@@ -20,34 +20,38 @@ class RestrictionForm extends Component {
     notifyMessage: '',
     notifySucess: false,
 
-    name: '',
-    activities: '',
+    restriction: {
+      name: '',
+      activities: [],
+    },
+    activities: null,
   }
 
   componentDidMount() {
+    const activityPromise = activityService.all()
+
+    let restrictionPromise
     const { id } = this.props.match.params
     if (id) {
-      restrictionService.get(id)
-        .then(({
-          name, activities,
-        }) => this.setState({
-          didLoad: true,
-          name,
-          activities,
-          notify: false,
-        }))
+      restrictionPromise = restrictionService.get(id)
     } else {
-      activityService.all()
-        .then((data) => {
-          this.setState({
-            activities: data,
-          })
-        })
-      this.setState({
-        didLoad: true,
-        notify: false,
-      })
+      restrictionPromise = Promise.resolve()
     }
+
+    Promise.all([
+      activityPromise,
+      restrictionPromise,
+    ])
+      .then((data) => {
+        const activities = data[0]
+        const restriction = data[1] || this.state.restriction
+        this.setState({
+          activities,
+          restriction,
+          didLoad: true,
+          notify: false,
+        })
+      })
   }
 
   showNotification(sucess, message) {
@@ -61,41 +65,48 @@ class RestrictionForm extends Component {
   handleSaveClick = (e) => {
     e.preventDefault()
 
-    const {
-      name, activities,
-    } = this.state
-
-    const data = {
-      name,
-      activities,
-    }
+    const { restriction } = this.state
 
     const { id } = this.props.match.params
     if (id) {
-      restrictionService.update(id, data)
-        .then(() => {
-          this.showNotification(true, 'Restrição alterado com sucesso.')
-        })
-        .catch(() => {
-          this.showNotification(false, 'Erro, por favor tente novamente.')
-        })
+      restrictionService.update(id, restriction)
+        .then(() => this.showNotification(true, 'Restrição alterado com sucesso.'))
+        .catch(() => this.showNotification(false, 'Erro, por favor tente novamente.'))
     } else {
-      restrictionService.create(data)
-        .then(() => {
-          this.showNotification(true, 'Restrição criado com sucesso.')
-        })
-        .catch(() => {
-          this.showNotification(false, 'Erro, por favor tente novamente.')
-        })
+      restrictionService.create(restriction)
+        .then(() => this.showNotification(true, 'Restrição criado com sucesso.'))
+        .catch(() => this.showNotification(false, 'Erro, por favor tente novamente.'))
     }
   }
 
-  handleInputChange = (property, value) => this.setState({ [property]: value })
+  handleNameChange = (e, value) => {
+    this.setState({
+      restriction: {
+        ...this.state.restriction,
+        name: value,
+      },
+    })
+  }
 
-  handleNameChange = (e, value) => this.handleInputChange('name', value)
-  handleActivitiesChange = (e, value) => this.handleInputChange('activities', value)
+  handleActivitiesChange = (activity, checked) => {
+    let newList
+    if (checked) {
+      newList = [...this.state.restriction.activities, activity]
+    } else {
+      newList = this.state.restriction.activities.filter(a => a !== activity)
+    }
+
+    this.setState({
+      restriction: {
+        ...this.state.restriction,
+        activities: newList,
+      },
+    })
+  }
 
   render() {
+    const { restriction } = this.state
+
     const styles = {
       toggleDiv: {
         maxWidth: 300,
@@ -123,36 +134,37 @@ class RestrictionForm extends Component {
       }
     }
 
+    const isActivitySelected = activity => this.state.restriction.activities.includes(activity)
+
     let form = null
-    let listActiviteis = null
-    console.log(this.state.activities)
+    let listActivities = null
     if (this.state.activities) {
-      listActiviteis = this.state.activities.map((item, i) => (
+      listActivities = this.state.activities.map(activity => (
         <Checkbox
-          key={i}
-          value={item.id}
-          label={item.name}
+          key={activity.id}
+          label={activity.name}
           name="activities"
+          onCheck={(e, checked) => this.handleActivitiesChange(activity, checked)}
+          value={activity.id}
+          checked={isActivitySelected(activity)}
         />
       ))
     }
 
-
     if (this.state.didLoad) {
       form = (
         <form>
-
           <div>
             <TextField
               hintText="Nome"
               floatingLabelText="Nome"
               onChange={this.handleNameChange}
-              value={this.state.name}
+              value={restriction.name}
             />
           </div>
 
           <div >
-            { listActiviteis }
+            { listActivities }
           </div>
 
           <div style={styles.buttons}>
