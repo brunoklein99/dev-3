@@ -7,6 +7,7 @@ import AccountList from './pages/AccountList'
 import AccountForm from './pages/AccountForm'
 import ActivityList from './pages/ActivityList'
 import ActivityForm from './pages/ActivityForm'
+import ActivityDetail from './pages/ActivityDetail'
 import RestrictionList from './pages/RestrictionList'
 import RestrictionForm from './pages/RestrictionForm'
 
@@ -16,6 +17,7 @@ import {
   ACCOUNT_FORM,
   ACTIVITY_LIST,
   ACTIVITY_FORM,
+  ACTIVITY_DETAIL,
   RESTRICTION_LIST,
   RESTRICTION_FORM,
 } from '../../config/routes'
@@ -28,6 +30,7 @@ export default () => (
       <Route exact strict path={`${ACCOUNT_FORM}/:id?`} component={AccountForm} />
       <Route exact strict path={ACTIVITY_LIST} component={ActivityList} />
       <Route exact strict path={`${ACTIVITY_FORM}/:id?`} component={ActivityForm} />
+      <Route exact strict path={`${ACTIVITY_DETAIL}/:id?`} component={ActivityDetail} />
       <Route exact strict path={RESTRICTION_LIST} component={RestrictionList} />
       <Route exact strict path={`${RESTRICTION_FORM}/:id?`} component={RestrictionForm} />
     </App>

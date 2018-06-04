@@ -23,6 +23,9 @@ const styles = {
   editButton: {
     fill: grey500,
   },
+  deleteButton: {
+    fill: grey500,
+  },
   columns: {
     id: {
       width: '10%',
@@ -66,7 +69,7 @@ class RestrictionList extends Component {
     const { restrictions } = this.state
     return (
       <TableBody>
-        {restrictions.map(item => (
+        {restrictions.map((item => (
           <TableRow key={item.id}>
             <TableRowColumn style={styles.columns.name}>{item.name}</TableRowColumn>
             <TableRowColumn style={styles.columns.activities}>{item.activities.name}</TableRowColumn>
@@ -86,7 +89,8 @@ class RestrictionList extends Component {
               </Link>
             </TableRowColumn>
           </TableRow>
-        ))}
+        )))
+      }
       </TableBody>
     )
   }

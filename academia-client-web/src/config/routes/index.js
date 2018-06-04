@@ -7,6 +7,7 @@ export const ACCOUNT_FORM = '/accounts/'
 
 export const ACTIVITY_LIST = '/activities'
 export const ACTIVITY_FORM = '/activities/'
+export const ACTIVITY_DETAIL = '/activities/detail/'
 
 export const RESTRICTION_LIST = '/restrictions'
 export const RESTRICTION_FORM = '/restrictions/'

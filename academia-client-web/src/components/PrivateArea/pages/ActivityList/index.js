@@ -4,12 +4,13 @@ import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowCol
 import FloatingActionButton from 'material-ui/FloatingActionButton'
 import ContentCreate from 'material-ui/svg-icons/content/create'
 import ContentAdd from 'material-ui/svg-icons/content/add'
+import ContentVisibility from 'material-ui/svg-icons/action/visibility'
 import { pink500, grey200, grey500 } from 'material-ui/styles/colors'
 
 import PageBase from '../common/PageBase'
 import activityService from '../../../../services/activityService'
 
-import { ACTIVITY_FORM } from '../../../../config/routes'
+import { ACTIVITY_FORM, ACTIVITY_DETAIL } from '../../../../config/routes'
 
 const styles = {
   floatingActionButton: {
@@ -19,6 +20,9 @@ const styles = {
     bottom: 20,
     left: 'auto',
     position: 'fixed',
+  },
+  detailButton: {
+    fill: grey500,
   },
   editButton: {
     fill: grey500,
@@ -42,6 +46,9 @@ const styles = {
     endDate: {
       width: '15%',
     },
+    detail: {
+      width: '10%',
+    },
     edit: {
       width: '10%',
     },
@@ -63,7 +70,11 @@ class ActivityList extends Component {
 
   renderHeader() {
     return (
-      <TableHeader>
+      <TableHeader
+        displaySelectAll={false}
+        enableSelectAll={false}
+        adjustForCheckbox={false}
+      >
         <TableRow>
           <TableHeaderColumn style={styles.columns.name}>Nome</TableHeaderColumn>
           <TableHeaderColumn style={styles.columns.description}>Descrição</TableHeaderColumn>
@@ -71,6 +82,7 @@ class ActivityList extends Component {
           <TableHeaderColumn style={styles.columns.beginDate}>Começo</TableHeaderColumn>
           <TableHeaderColumn style={styles.columns.endDate}>Final</TableHeaderColumn>
           <TableHeaderColumn style={styles.columns.edit}>Editar</TableHeaderColumn>
+          <TableHeaderColumn style={styles.columns.detail}>Detalhar</TableHeaderColumn>
         </TableRow>
       </TableHeader>
     )
@@ -79,7 +91,9 @@ class ActivityList extends Component {
   renderBody() {
     const { activities } = this.state
     return (
-      <TableBody>
+      <TableBody
+        displayRowCheckbox={false}
+      >
         {activities.map(item => (
           <TableRow key={item.id}>
             <TableRowColumn style={styles.columns.name}>{item.name}</TableRowColumn>
@@ -99,6 +113,21 @@ class ActivityList extends Component {
                   iconStyle={styles.editButton}
                 >
                   <ContentCreate />
+                </FloatingActionButton>
+              </Link>
+            </TableRowColumn>
+            <TableRowColumn style={styles.columns.detail}>
+              <Link
+                className="button"
+                to={`${ACTIVITY_DETAIL}/${item.id}`}
+              >
+                <FloatingActionButton
+                  zDepth={0}
+                  mini
+                  backgroundColor={grey200}
+                  iconStyle={styles.editButton}
+                >
+                  <ContentVisibility />
                 </FloatingActionButton>
               </Link>
             </TableRowColumn>

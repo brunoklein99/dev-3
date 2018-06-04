@@ -1,6 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import RaisedButton from 'material-ui/RaisedButton'
+import {
+  RaisedButton,
+  GridList,
+  GridTile,
+  SelectField,
+  MenuItem,
+} from 'material-ui'
 import TextField from 'material-ui/TextField'
 import { grey400 } from 'material-ui/styles/colors'
 import { ToastContainer, toast } from 'react-toastify'
@@ -9,8 +15,20 @@ import 'react-toastify/dist/ReactToastify.css'
 
 import PageBase from '../common/PageBase'
 import activityService from '../../../../services/activityService'
+import accountService from '../../../../services/accountService'
 
-const formataData = data => (`${data.substr(8, 2)}/${data.substr(5, 2)}/${data.substr(0, 4)}`)
+const formataDataForm = data => (`${data.substr(8, 2)}/${data.substr(5, 2)}/${data.substr(0, 4)}`)
+const formataDataEnv = data => (`${data.substr(6, 4)}-${data.substr(3, 2)}-${data.substr(0, 2)}T00:00:00.000+0000`)
+
+/*
+  @TODO
+
+  1) MASKS
+      beginDate
+      endDate
+
+  2) Checkboxes Users
+*/
 
 class ActivityForm extends Component {
   state = {
@@ -19,37 +37,46 @@ class ActivityForm extends Component {
     notify: false,
     notifyMessage: '',
     notifySucess: false,
-
-    name: '',
-    description: '',
-    trainer: '',
-    users: false,
-    beginDate: '',
-    endDate: '',
+    activity: {
+      name: '',
+      description: '',
+      trainer: null,
+      users: [],
+      beginDate: '',
+      endDate: '',
+    },
+    trainers: [],
   }
 
   componentDidMount() {
+    const accountPromise = accountService.all()
+
+    let activityPromise
     const { id } = this.props.match.params
     if (id) {
-      activityService.get(id)
-        .then(({
-          name, description, trainer, users, beginDate, endDate,
-        }) => this.setState({
-          didLoad: true,
-          name,
-          description,
-          trainer: trainer.name,
-          users,
-          beginDate: formataData(beginDate),
-          endDate: formataData(endDate),
-          notify: false,
-        }))
+      activityPromise = activityService.get(id)
     } else {
-      this.setState({
-        didLoad: true,
-        notify: false,
-      })
+      activityPromise = Promise.resolve()
     }
+
+    Promise.all([
+      accountPromise,
+      activityPromise,
+    ])
+      .then((data) => {
+        const accounts = data[0].filter(user => user.type === 'TRAINER')
+        const activity = data[1] || this.state.activity
+        this.setState({
+          trainers: accounts,
+          activity: {
+            ...activity,
+            beginDate: formataDataForm(activity.beginDate),
+            endDate: formataDataForm(activity.beginDate),
+          },
+          didLoad: true,
+          notify: false,
+        })
+      })
   }
 
   showNotification(sucess, message) {
@@ -64,10 +91,17 @@ class ActivityForm extends Component {
     e.preventDefault()
 
     const {
-      name, description, trainer, users, beginDate, endDate,
+      activity: {
+        name,
+        description,
+        trainer,
+        users,
+        beginDate,
+        endDate,
+      },
     } = this.state
 
-    const data = {
+    let data = {
       name,
       description,
       trainer,
@@ -78,29 +112,54 @@ class ActivityForm extends Component {
 
     const { id } = this.props.match.params
     if (id) {
-      activityService.update(id, data)
-        .then(() => {
-          this.showNotification(true, 'Atividade alterado com sucesso.')
-        })
-        .catch(() => {
-          this.showNotification(false, 'Erro, por favor tente novamente.')
+      accountService.get(trainer)
+        .then((dataAccount) => {
+          data = {
+            ...data,
+            trainer: dataAccount,
+            beginDate: formataDataEnv(beginDate),
+            endDate: formataDataEnv(endDate),
+          }
+          activityService.update(id, data)
+            .then(() => {
+              this.showNotification(true, 'Atividade alterado com sucesso.')
+            })
+            .catch(() => {
+              this.showNotification(false, 'Erro, por favor tente novamente.')
+            })
         })
     } else {
-      activityService.create(data)
-        .then(() => {
-          this.showNotification(true, 'Atividade criado com sucesso.')
-        })
-        .catch(() => {
-          this.showNotification(false, 'Erro, por favor tente novamente.')
+      accountService.get(trainer)
+        .then((dataAccount) => {
+          data = {
+            ...data,
+            trainer: dataAccount,
+            beginDate: formataDataEnv(beginDate),
+            endDate: formataDataEnv(endDate),
+          }
+          activityService.create(data)
+            .then(() => {
+              this.showNotification(true, 'Atividade criado com sucesso.')
+            })
+            .catch(() => {
+              this.showNotification(false, 'Erro, por favor tente novamente.')
+            })
         })
     }
   }
 
-  handleInputChange = (property, value) => this.setState({ [property]: value })
+  handleInputChange = (property, value) => (
+    this.setState({
+      activity: {
+        ...this.state.activity,
+        [property]: value,
+      },
+    })
+  )
 
   handleNameChange = (e, value) => this.handleInputChange('name', value)
   handleDescriptionChange = (e, value) => this.handleInputChange('description', value)
-  handleTrainerChange = (e, value) => this.handleInputChange('trainer', value)
+  handleTrainerChange = (e, index, value) => this.handleInputChange('trainer', value)
   handleUsersChange = (e, value) => this.handleInputChange('users', value)
   handleBeginDateChange = (e, value) => this.handleInputChange('beginDate', value)
   handleEndDateChange = (e, value) => this.handleInputChange('endDate', value)
@@ -125,6 +184,11 @@ class ActivityForm extends Component {
       },
     }
 
+    const { trainers } = this.state
+    const listTrainer = trainers.map(trainer => (
+      <MenuItem key={trainer.id} selected={(this.state.activity.trainer !== null && trainer.id === this.state.activity.trainer.id)} value={trainer.id} primaryText={trainer.name} />
+    ))
+
     if (this.state.notify) {
       if (this.state.notifySucess) {
         toast.success(this.state.notifyMessage)
@@ -138,66 +202,76 @@ class ActivityForm extends Component {
     if (this.state.didLoad) {
       form = (
         <form>
-
-          <div>
-            <TextField
-              hintText="Nome"
-              floatingLabelText="Nome"
-              onChange={this.handleNameChange}
-              value={this.state.name}
-            />
-          </div>
-
-          <div>
-            <TextField
-              hintText="Descrição"
-              floatingLabelText="Descrição"
-              type="text"
-              onChange={this.handleDescriptionChange}
-              value={this.state.description}
-            />
-          </div>
-
-          <div >
-            <TextField
-              hintText="Treinador"
-              floatingLabelText="Treinador"
-              type="text"
-              onChange={this.handleTrainerChange}
-              value={this.state.trainer}
-            />
-          </div>
-
-          <div >
+          <GridList
+            cols={3}
+            padding={25}
+            cellHeight={70}
+          >
+            <GridTile>
+              <TextField
+                hintText="Nome"
+                floatingLabelText="Nome"
+                fullWidth
+                onChange={this.handleNameChange}
+                value={this.state.activity.name}
+              />
+            </GridTile>
+            <GridTile cols={2}>
+              <TextField
+                hintText="Descrição"
+                floatingLabelText="Descrição"
+                fullWidth
+                type="text"
+                onChange={this.handleDescriptionChange}
+                value={this.state.activity.description}
+              />
+            </GridTile>
+          </GridList>
+          <GridList
+            cols={3}
+            padding={25}
+            cellHeight={70}
+          >
+            <GridTile>
+              <SelectField
+                value={this.state.activity.trainer}
+                onChange={this.handleTrainerChange}
+              >
+                { listTrainer }
+              </SelectField>
+            </GridTile>
+            <GridTile>
+              <TextField
+                hintText="Data Inicial"
+                floatingLabelText="Data Inicial"
+                type="text"
+                onChange={this.handleBeginDateChange}
+                value={this.state.activity.beginDate}
+              />
+            </GridTile>
+            <GridTile>
+              <TextField
+                hintText="Data Final"
+                floatingLabelText="Data Final"
+                type="text"
+                onChange={this.handleEndDateChange}
+                value={this.state.activity.endDate}
+              />
+            </GridTile>
+          </GridList>
+          <GridList
+            cols={1}
+            padding={25}
+            cellHeight={70}
+          >
             <TextField
               hintText="Usuários"
               floatingLabelText="Usuários"
               type="text"
               onChange={this.handleUsersChange}
-              value={this.state.users}
+              value={this.state.activity.users}
             />
-          </div>
-
-          <div >
-            <TextField
-              hintText="Data Inicial"
-              floatingLabelText="Data Inicial"
-              type="text"
-              onChange={this.handleBeginDateChange}
-              value={this.state.beginDate}
-            />
-          </div>
-
-          <div >
-            <TextField
-              hintText="Data Final"
-              floatingLabelText="Data Final"
-              type="text"
-              onChange={this.handleEndDateChange}
-              value={this.state.endDate}
-            />
-          </div>
-
+          </GridList>
           <div style={styles.buttons}>
             <RaisedButton
               onClick={this.handleSaveClick}
