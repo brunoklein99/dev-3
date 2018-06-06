@@ -1,8 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import RaisedButton from 'material-ui/RaisedButton'
-import TextField from 'material-ui/TextField'
-import Checkbox from 'material-ui/Checkbox'
+import {
+  RaisedButton,
+  TextField,
+  Checkbox,
+  GridList,
+  GridTile,
+} from 'material-ui'
 import { grey400 } from 'material-ui/styles/colors'
 import { ToastContainer, toast } from 'react-toastify'
 
@@ -124,6 +128,9 @@ class RestrictionForm extends Component {
       saveButton: {
         marginLeft: 5,
       },
+      listCheckbox: {
+        marginTop: '20px',
+      },
     }
 
     if (this.state.notify) {
@@ -154,19 +161,24 @@ class RestrictionForm extends Component {
     if (this.state.didLoad) {
       form = (
         <form>
-          <div>
-            <TextField
-              hintText="Nome"
-              floatingLabelText="Nome"
-              onChange={this.handleNameChange}
-              value={restriction.name}
-            />
-          </div>
-
-          <div >
-            { listActivities }
-          </div>
-
+          <GridList
+            cols={2}
+            padding={25}
+            cellHeight={70}
+          >
+            <GridTile>
+              <TextField
+                hintText="Nome"
+                floatingLabelText="Nome"
+                onChange={this.handleNameChange}
+                value={restriction.name}
+                fullWidth
+              />
+            </GridTile>
+            <GridTile style={styles.listCheckbox}>
+              { listActivities }
+            </GridTile>
+          </GridList>
           <div style={styles.buttons}>
             <RaisedButton
               onClick={this.handleSaveClick}
