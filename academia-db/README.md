@@ -10,12 +10,23 @@ Para subir o servidor localmente (porta 3306):
 
 Esse script só funciona na primeira vez que for rodado, pois irá tentar criar um container com o servidor de banco de dados, e a partir da segunda vez ele já estará criado e irá falhar. Veja a parte dos comandos de Docker abaixo sobre o comando `start`
 
-## client
+## client web
+
+Use o client para rodar queries no server (a senha, usuário e database são "academia"):
+
+```
+./client-web.sh
+```
+
+Diferente do script do servidor de banco de dados, esse script da ferramenta cliente destrói qualquer instância previamente existente e recria. Não fazemos isso no caso do server porque não queremos apagar o container e perder seus dados.
+
+
+## client de linha de comando
 
 Use o client para rodar queries no server (a senha é "academia"):
 
 ```
-./client.sh
+./client-command-line.sh
 ```
 
 Diferente do script do servidor de banco de dados, esse script da ferramenta cliente destrói qualquer instância previamente existente e recria. Não fazemos isso no caso do server porque não queremos apagar o container e perder seus dados.
