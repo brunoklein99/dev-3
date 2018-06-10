@@ -1,5 +1,6 @@
 package academia.business.activity;
 
+import academia.domain.AccountType;
 import academia.model.Account;
 import academia.model.Activity;
 import org.junit.Assert;
@@ -32,7 +33,7 @@ public class ActivityUnitTests {
         Account trainer = new Account( );
         activity.setName( "PF" );
         activity.setDescription( "Preparador Físico" );
-        trainer.setType( Account.AccountType.TRAINER );
+        trainer.setType( AccountType.TRAINER );
         activity.setTrainer( trainer );
 
         try {
@@ -47,7 +48,7 @@ public class ActivityUnitTests {
         Activity activity = new Activity( );
         Account trainer = new Account( );
         activity.setDescription( "Preparador Físico" );
-        trainer.setType( Account.AccountType.TRAINER );
+        trainer.setType( AccountType.TRAINER );
         activity.setTrainer( trainer );
 
         try {
@@ -63,7 +64,7 @@ public class ActivityUnitTests {
         Activity activity = new Activity( );
         Account trainer = new Account( );
         activity.setName( "PF" );
-        trainer.setType( Account.AccountType.TRAINER );
+        trainer.setType( AccountType.TRAINER );
         activity.setTrainer( trainer );
 
         try {
@@ -80,7 +81,7 @@ public class ActivityUnitTests {
         Account trainer = new Account( );
         activity.setName( "PF" );
         activity.setDescription( "Preparador Físico" );
-        trainer.setType( Account.AccountType.TRAINER );
+        trainer.setType( AccountType.TRAINER );
 
         try {
             activityServiceImpl.create(activity);
@@ -98,7 +99,7 @@ public class ActivityUnitTests {
         activity.setDescription( "Preparador Físico" );
         trainer.setName( "Jonas" );
         activity.setTrainer( trainer );
-        trainer.setType( Account.AccountType.NORMAL );
+        trainer.setType( AccountType.CUSTOMER);
 
         try {
             activityServiceImpl.create(activity);

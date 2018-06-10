@@ -10,8 +10,6 @@ import {
 import { grey400 } from 'material-ui/styles/colors'
 import { ToastContainer, toast } from 'react-toastify'
 
-import 'react-toastify/dist/ReactToastify.css'
-
 import PageBase from '../common/PageBase'
 import restrictionService from '../../../../services/restrictionService'
 import activityService from '../../../../services/activityService'

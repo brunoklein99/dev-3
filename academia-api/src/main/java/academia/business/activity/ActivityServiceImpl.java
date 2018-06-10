@@ -1,6 +1,6 @@
 package academia.business.activity;
 
-import academia.model.Account;
+import academia.domain.AccountType;
 import academia.model.Activity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,7 +44,7 @@ public class ActivityServiceImpl implements ActivityService {
         if (activity.getTrainer() == null) {
             throw new ValidationException("Atividade deve ter um treinador");
         }
-        if (activity.getTrainer().getType() != Account.AccountType.TRAINER){
+        if (activity.getTrainer().getType() != AccountType.TRAINER){
             throw new ValidationException("Usuário atrelado a atividade deve ser um treinador");
         }
     }

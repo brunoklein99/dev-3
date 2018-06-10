@@ -55,7 +55,7 @@ class AccountList extends Component {
 
   renderHeader() {
     return (
-      <TableHeader>
+      <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
         <TableRow>
           <TableHeaderColumn style={styles.columns.name}>Nome</TableHeaderColumn>
           <TableHeaderColumn style={styles.columns.username}>Nome de usuário</TableHeaderColumn>
@@ -68,15 +68,14 @@ class AccountList extends Component {
 
   renderBody() {
     const { accounts } = this.state
-    const userType = admin => (admin ? 'Administrador' : 'Cliente')
 
     return (
-      <TableBody>
+      <TableBody displayRowCheckbox={false}>
         {accounts.map(item => (
           <TableRow key={item.id}>
             <TableRowColumn style={styles.columns.name}>{item.name}</TableRowColumn>
             <TableRowColumn style={styles.columns.username}>{item.username}</TableRowColumn>
-            <TableRowColumn style={styles.columns.type}>{userType(item.admin)}</TableRowColumn>
+            <TableRowColumn style={styles.columns.type}>{accountService.translateAccountType(item.type)}</TableRowColumn>
             <TableRowColumn style={styles.columns.edit}>
               <Link
                 className="button"

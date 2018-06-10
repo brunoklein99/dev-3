@@ -11,8 +11,6 @@ import TextField from 'material-ui/TextField'
 import { grey400 } from 'material-ui/styles/colors'
 import { ToastContainer, toast } from 'react-toastify'
 
-import 'react-toastify/dist/ReactToastify.css'
-
 import PageBase from '../common/PageBase'
 import activityService from '../../../../services/activityService'
 import accountService from '../../../../services/accountService'

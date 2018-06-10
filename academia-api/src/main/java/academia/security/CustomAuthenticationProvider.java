@@ -1,6 +1,7 @@
 package academia.security;
 
 import academia.business.account.AccountRepository;
+import academia.domain.AccountType;
 import academia.model.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -55,12 +56,14 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
 
         List<GrantedAuthority> authorities = new ArrayList<>();
 
-        if (account.getType() == Account.AccountType.ADMIN) {
+        if (account.getType() == AccountType.ADMIN) {
             authorities.add(new SimpleGrantedAuthority("ADMIN"));
-        } else if (account.getType() == Account.AccountType.TRAINER) {
+        } else if (account.getType() == AccountType.TRAINER) {
             authorities.add(new SimpleGrantedAuthority("TRAINER"));
-        } else {
+        } else if (account.getType() == AccountType.CUSTOMER) {
             authorities.add(new SimpleGrantedAuthority("USER"));
+        } else {
+            throw new RuntimeException("Tipo de conta inválida");
         }
 
         return new LoggedUser(account.getName(), account.getUsername(), account.getPassword(), authorities);

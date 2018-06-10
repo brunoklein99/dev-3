@@ -4,52 +4,102 @@ import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
 import Toggle from 'material-ui/Toggle'
 import { grey400 } from 'material-ui/styles/colors'
-import { ToastContainer, toast } from 'react-toastify'
-
-import 'react-toastify/dist/ReactToastify.css'
+import { ToastContainer } from 'react-toastify'
 
 import PageBase from '../common/PageBase'
 import accountService from '../../../../services/accountService'
+import notificationService, {
+  NOTIFICATION_SUCCESS,
+  NOTIFICATION_ERROR,
+} from '../../../../services/notificationService'
+
+const styles = {
+  toggleDiv: {
+    maxWidth: 300,
+    marginTop: 40,
+    marginBottom: 5,
+  },
+  toggleLabel: {
+    color: grey400,
+    fontWeight: 100,
+  },
+  buttons: {
+    marginTop: 30,
+    float: 'right',
+  },
+  saveButton: {
+    marginLeft: 5,
+  },
+}
 
 class AccountForm extends Component {
   state = {
     didLoad: false,
+    settings: null,
+    account: null,
+    notification: null,
 
-    notify: false,
-    notifyMessage: '',
-    notifySucess: false,
+    // notify: false,
+    // notifyMessage: '',
+    // notifySucess: false,
 
-    name: '',
-    username: '',
-    password: '',
-    admin: false,
+    // name: '',
+    // username: '',
+    // password: '',
+    // admin: false,
   }
 
   componentDidMount() {
     const { id } = this.props.match.params
-    if (id) {
-      accountService.get(id)
-        .then(({ name, username, admin }) => this.setState({
-          didLoad: true,
-          name,
-          username,
-          admin,
-          notify: false,
-        }))
-    } else {
-      this.setState({
-        didLoad: true,
-        notify: false,
-      })
-    }
-  }
 
-  showNotification(sucess, message) {
-    this.setState({
-      notify: true,
-      notifySucess: sucess,
-      notifyMessage: message,
-    })
+    let accountPromise
+    if (id) {
+      accountPromise = accountService.get(id)
+    } else {
+      accountPromise = Promise.resolve({})
+    }
+
+    const settingsPromise = accountService.settings()
+
+    Promise.all([
+      settingsPromise,
+      accountPromise,
+    ])
+      .then((data) => {
+        const [settings, account] = data
+        this.setState({
+          settings,
+          account,
+        })
+        // .then(({ name, username, admin }) => this.setState({
+        //   didLoad: true,
+        //   name,
+        //   username,
+        //   admin,
+        //   notify: false,
+        // }))
+      })
+      .finally(() => {
+        this.setState({
+          didLoad: true,
+        })
+      })
+
+    // if (id) {
+    //   accountService.get(id)
+    //     .then(({ name, username, admin }) => this.setState({
+    //       didLoad: true,
+    //       name,
+    //       username,
+    //       admin,
+    //       notify: false,
+    //     }))
+    // } else {
+    //   this.setState({
+    //     didLoad: true,
+    //     notify: false,
+    //   })
+    // }
   }
 
   handleSaveClick = (e) => {
@@ -69,20 +119,12 @@ class AccountForm extends Component {
     const { id } = this.props.match.params
     if (id) {
       accountService.update(id, data)
-        .then(() => {
-          this.showNotification(true, 'Usuário alterado com sucesso.')
-        })
-        .catch(() => {
-          this.showNotification(false, 'Erro, por favor tente novamente.')
-        })
+        .then(() => this.setState({ notification: { type: NOTIFICATION_SUCCESS, message: 'Usuário alterado com sucesso.' } }))
+        .catch(() => this.setState({ notification: { type: NOTIFICATION_ERROR, message: 'Erro, por favor tente novamente.' } }))
     } else {
       accountService.create(data)
-        .then(() => {
-          this.showNotification(true, 'Usuário criado com sucesso.')
-        })
-        .catch(() => {
-          this.showNotification(false, 'Erro, por favor tente novamente.')
-        })
+        .then(() => this.setState({ notification: { type: NOTIFICATION_SUCCESS, message: 'Usuário criado com sucesso.' } }))
+        .catch(() => this.setState({ notification: { type: NOTIFICATION_ERROR, message: 'Erro, por favor tente novamente.' } }))
     }
   }
 
@@ -94,35 +136,11 @@ class AccountForm extends Component {
   handleAdminChange = (e, value) => this.handleInputChange('admin', value)
 
   render() {
-    const styles = {
-      toggleDiv: {
-        maxWidth: 300,
-        marginTop: 40,
-        marginBottom: 5,
-      },
-      toggleLabel: {
-        color: grey400,
-        fontWeight: 100,
-      },
-      buttons: {
-        marginTop: 30,
-        float: 'right',
-      },
-      saveButton: {
-        marginLeft: 5,
-      },
-    }
-
     if (this.state.notify) {
-      if (this.state.notifySucess) {
-        toast.success(this.state.notifyMessage)
-      } else {
-        toast.error(this.state.notifyMessage)
-      }
+      notificationService.notify(this.state.notification)
     }
 
     let form = null
-
     if (this.state.didLoad) {
       form = (
         <form>
@@ -176,7 +194,6 @@ class AccountForm extends Component {
     }
 
     return (
-
       <PageBase
         title="Usuário"
       >

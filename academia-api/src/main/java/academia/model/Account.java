@@ -1,5 +1,6 @@
 package academia.model;
 
+import academia.domain.AccountType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
@@ -19,7 +20,7 @@ public class Account {
     }
 
     public Account(String name, String username, String password)  {
-        this(name, username, password, AccountType.NORMAL);
+        this(name, username, password, AccountType.CUSTOMER);
     }
 
     @Id
@@ -32,6 +33,7 @@ public class Account {
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
+
     private AccountType type;
 
     @OneToMany
@@ -83,9 +85,5 @@ public class Account {
 
     public void setRestrictions(List<Restriction> restrictions) {
         this.restrictions = restrictions;
-    }
-
-    public enum AccountType {
-        NORMAL, ADMIN, TRAINER
     }
 }

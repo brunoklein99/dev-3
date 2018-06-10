@@ -2,11 +2,15 @@ package academia.controller;
 
 import academia.business.account.AccountRepository;
 import academia.business.account.AccountService;
+import academia.domain.AccountType;
 import academia.model.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/private/accounts")
@@ -19,6 +23,13 @@ public class AccountController {
     private AccountService accountService;
 
     // TODO validar roles dos usuários nesses requests, apenas role admin pode buscar todos etc...
+
+    @RequestMapping(method = RequestMethod.GET, path = "/settings")
+    public Map<String, List> settings() {
+        Map<String, List> map = new HashMap<>();
+        map.put("accountType", Arrays.asList(AccountType.values()));
+        return map;
+    }
 
     @RequestMapping(method = RequestMethod.GET, path = "")
     public List<Account> all() {
