@@ -6,6 +6,7 @@ import Paper from 'material-ui/Paper'
 import RaisedButton from 'material-ui/RaisedButton'
 import { white } from 'material-ui/styles/colors'
 import TextField from 'material-ui/TextField'
+import { ToastContainer, toast } from 'react-toastify'
 
 import Loader from 'react-loader'
 
@@ -17,6 +18,11 @@ import { LOGIN } from '../../../config/routes'
 export default class Login extends Component {
   state = {
     didCheckAuthentication: false,
+
+    notify: false,
+    notifyMessage: '',
+    notifySucess: false,
+
     username: '',
     password: '',
     isAuthenticated: false,
@@ -28,7 +34,6 @@ export default class Login extends Component {
     if (referrer !== LOGIN) {
       this.setState({ referrer })
     }
-
     this.checkAuthentication()
   }
 
@@ -38,23 +43,36 @@ export default class Login extends Component {
       .catch(() => this.setState({ didCheckAuthentication: true }))
   }
 
+  showNotification(sucess, message) {
+    this.setState({
+      notify: true,
+      notifySucess: sucess,
+      notifyMessage: message,
+    })
+  }
+
   handleLoginSubmit = (e) => {
     e.preventDefault()
     const { username, password } = this.state
     loginService.login({ username, password })
       .then(() => this.setState({ isAuthenticated: true }))
-      .catch((err) => {
-        // TODO tratar falha
-        console.log(err)
+      .catch(() => {
+        this.showNotification(false, 'E-mail e/ou senha inválidos.')
       })
   }
 
   handleChangeUsername = (event) => {
-    this.setState({ username: event.target.value })
+    this.setState({
+      notify: false,
+      username: event.target.value,
+    })
   }
 
   handleChangePassword = (event) => {
-    this.setState({ password: event.target.value })
+    this.setState({
+      notify: false,
+      password: event.target.value,
+    })
   }
 
   renderLoginForm() {
@@ -95,9 +113,18 @@ export default class Login extends Component {
       },
     }
 
+    if (this.state.notify) {
+      if (this.state.notifySucess) {
+        toast.success(this.state.notifyMessage)
+      } else {
+        toast.error(this.state.notifyMessage)
+      }
+    }
+
     return (
       <MuiThemeProvider muiTheme={ThemeDefault}>
         <div>
+          <ToastContainer />
           <div style={styles.loginContainer}>
             <Paper style={styles.paper}>
               <form onSubmit={this.handleLoginSubmit}>
