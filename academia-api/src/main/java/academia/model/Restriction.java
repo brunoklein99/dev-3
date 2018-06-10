@@ -8,7 +8,6 @@ import java.util.List;
 public class Restriction {
 
     public Restriction(){
-        this.activities = new ArrayList<>();
     }
 
     @Id
@@ -16,9 +15,6 @@ public class Restriction {
     private Long id;
 
     private String name;
-
-    @OneToMany
-    private List<Activity> activities;
 
     public Long getId() {
         return id;
@@ -34,13 +30,5 @@ public class Restriction {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public List<Activity> getActivities() {
-        return activities;
-    }
-
-    public void setActivities(List<Activity> activities) {
-        this.activities = activities;
     }
 }

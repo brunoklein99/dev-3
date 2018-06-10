@@ -35,6 +35,9 @@ public class Activity {
 
     private Date endDate;
 
+    @OneToMany
+    private List<Restriction> restrictions;
+
     public Account getTrainer() {
         return trainer;
     }
@@ -89,5 +92,13 @@ public class Activity {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+    public List<Restriction> getRestrictions() {
+        return restrictions;
+    }
+
+    public void setRestrictions(List<Restriction> restrictions) {
+        this.restrictions = restrictions;
     }
 }

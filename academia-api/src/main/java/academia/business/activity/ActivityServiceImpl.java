@@ -53,6 +53,7 @@ public class ActivityServiceImpl implements ActivityService {
         Activity toSave = new Activity(activity.getName(), activity.getDescription(), activity.getTrainer());
         toSave.setBeginDate(activity.getBeginDate());
         toSave.setEndDate(activity.getEndDate());
+        toSave.setRestrictions(activity.getRestrictions());
         return toSave;
     }
 

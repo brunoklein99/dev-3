@@ -4,10 +4,12 @@ import academia.business.account.AccountRepository;
 import academia.business.account.AccountService;
 import academia.business.activity.ActivityRepository;
 import academia.business.activity.ActivityService;
+import academia.business.appointment.AppointmentService;
 import academia.business.restriction.RestrictionRepository;
 import academia.business.restriction.RestrictionService;
 import academia.model.Account;
 import academia.model.Activity;
+import academia.model.Appointment;
 import academia.model.Restriction;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -16,6 +18,7 @@ import org.springframework.context.annotation.Bean;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @SpringBootApplication
 public class Application {
@@ -32,7 +35,8 @@ public class Application {
             ActivityService activityService,
             ActivityRepository activityRepository,
             RestrictionService restrictionService,
-            RestrictionRepository restrictionRepository) {
+            RestrictionRepository restrictionRepository,
+            AppointmentService appointmentService) {
         return (args) -> {
             String adminUsernameAndPassword = "admin";
             Account admin = accountRepository.findByUsername(adminUsernameAndPassword);
@@ -58,19 +62,25 @@ public class Application {
                 activity = new Activity("exercicio1", "exercicio1descr", trainer);
                 activity.setBeginDate(new Date(2018, 1, 1));
                 activity.setEndDate(new Date(2018, 12, 31));
+
+                Restriction restriction = new Restriction();
+                restriction.setName("restriction1");
+                restriction = restrictionService.create(restriction);
+
+                List<Restriction> restrictions = new ArrayList<>();
+
+                restrictions.add(restriction);
+
+                activity.setRestrictions(restrictions);
                 activity = activityService.create(activity);
+
             }
 
-            Restriction restriction = restrictionRepository.findByName("restriction1");
-            if (restriction == null) {
-                restriction = new Restriction();
-                restriction.setName("restriction1");
-                if (restriction.getActivities() == null) {
-                    restriction.setActivities(new ArrayList<>());
-                }
-                restriction.getActivities().add(activity);
-                restriction = restrictionService.create(restriction);
-            }
+            Appointment appointment = new Appointment();
+            appointment.setActivity(activity);
+            appointment.setDate(new Date(2018, 1, 1));
+            appointment.setVagas(10);
+            appointmentService.create(appointment);
         };
     }
 }
