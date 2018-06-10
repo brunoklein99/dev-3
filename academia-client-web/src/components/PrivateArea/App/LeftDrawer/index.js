@@ -43,7 +43,31 @@ const LeftDrawer = (props) => {
         textShadow: '1px 1px #444',
       },
     },
+    subMenu: {
+      color: 'black',
+    },
   }
+
+  const menuItem = (menu, isRoot) => (
+    <MenuItem
+      key={menu.key}
+      style={styles.menuItem}
+      primaryText={menu.text}
+      leftIcon={menu.icon}
+      innerDivStyle={isRoot ? {} : styles.subMenu}
+      containerElement={<Link to={menu.link} />}
+    />
+  )
+
+  const menuWithChildren = menu => (
+    <MenuItem
+      key={menu.key}
+      style={styles.menuItem}
+      primaryText={menu.text}
+      leftIcon={menu.icon}
+      menuItems={menu.children.map(child => menuItem(child, false))}
+    />
+  )
 
   return (
     <Drawer
@@ -57,15 +81,7 @@ const LeftDrawer = (props) => {
         <span style={styles.avatar.span}>{props.user.name}</span>
       </div>
       <div>
-        {props.menus.map(menu => (
-          <MenuItem
-            key={menu.link}
-            style={styles.menuItem}
-            primaryText={menu.text}
-            leftIcon={menu.icon}
-            containerElement={<Link to={menu.link} />}
-          />
-        ))}
+        {props.menus.map(menu => (menu.link ? menuItem(menu, true) : menuWithChildren(menu)))}
       </div>
     </Drawer>
   )

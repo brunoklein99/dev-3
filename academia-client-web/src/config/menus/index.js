@@ -2,6 +2,7 @@ import React from 'react'
 
 import Assessment from 'material-ui/svg-icons/action/assessment'
 import GridOn from 'material-ui/svg-icons/image/grid-on'
+import People from 'material-ui/svg-icons/social/people'
 import Web from 'material-ui/svg-icons/av/web'
 
 import {
@@ -15,11 +16,53 @@ import {
 } from '../routes'
 
 export default [
-  { text: 'Dashboard', icon: <Assessment />, link: DASHBOARD },
-  { text: 'Usuários', icon: <GridOn />, link: ACCOUNT_LIST },
-  { text: 'Criar usuário', icon: <Web />, link: ACCOUNT_FORM },
-  { text: 'Atividades', icon: <GridOn />, link: ACTIVITY_LIST },
-  { text: 'Criar atividade', icon: <Web />, link: ACTIVITY_FORM },
-  { text: 'Restrições', icon: <GridOn />, link: RESTRICTION_LIST },
-  { text: 'Criar restrições', icon: <Web />, link: RESTRICTION_FORM },
+  {
+    key: DASHBOARD,
+    link: DASHBOARD,
+    text: 'Dashboard',
+    icon: <Assessment />,
+  },
+  {
+    key: ACCOUNT_LIST,
+    text: 'Usuários',
+    icon: <People />,
+    children: [
+      {
+        key: ACCOUNT_LIST,
+        link: ACCOUNT_LIST,
+        text: 'Listar Usuários',
+        icon: <GridOn />,
+      },
+      {
+        key: ACCOUNT_FORM,
+        link: ACCOUNT_FORM,
+        text: 'Criar usuário',
+        icon: <Web />,
+      },
+    ],
+  },
+  {
+    key: ACTIVITY_LIST,
+    link: ACTIVITY_LIST,
+    text: 'Atividades',
+    icon: <GridOn />,
+  },
+  {
+    key: ACTIVITY_FORM,
+    link: ACTIVITY_FORM,
+    text: 'Criar atividade',
+    icon: <Web />,
+  },
+  {
+    key: RESTRICTION_LIST,
+    link: RESTRICTION_LIST,
+    text: 'Restrições',
+    icon: <GridOn />,
+  },
+  {
+    key: RESTRICTION_FORM,
+    link: RESTRICTION_FORM,
+    text: 'Criar restrições',
+    icon: <Web />,
+  },
 ]
