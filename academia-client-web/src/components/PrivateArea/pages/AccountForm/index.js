@@ -180,8 +180,10 @@ class AccountForm extends Component {
       <PageBase
         title="Usuário"
       >
-        <ToastContainer />
-        {form}
+        <div>
+          <ToastContainer />
+          {form}
+        </div>
       </PageBase>
     )
   }
