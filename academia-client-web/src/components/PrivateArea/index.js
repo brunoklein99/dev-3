@@ -22,17 +22,18 @@ import {
   RESTRICTION_FORM,
 } from '../../config/routes'
 
-export default () => (
+/* eslint-disable react/prop-types */
+export default ({ location }) => (
   <div>
     <App>
-      <Route exact path={DASHBOARD} component={Dashboard} />
-      <Route exact strict path={ACCOUNT_LIST} component={AccountList} />
-      <Route exact strict path={`${ACCOUNT_FORM}/:id?`} component={AccountForm} />
-      <Route exact strict path={ACTIVITY_LIST} component={ActivityList} />
-      <Route exact strict path={`${ACTIVITY_FORM}/:id?`} component={ActivityForm} />
-      <Route exact strict path={`${ACTIVITY_DETAIL}/:id?`} component={ActivityDetail} />
-      <Route exact strict path={RESTRICTION_LIST} component={RestrictionList} />
-      <Route exact strict path={`${RESTRICTION_FORM}/:id?`} component={RestrictionForm} />
+      <Route exact path={DASHBOARD} component={Dashboard} key={`${DASHBOARD}-${location.pathname}`} />
+      <Route exact strict path={ACCOUNT_LIST} component={AccountList} key={`${ACCOUNT_LIST}-${location.pathname}`} />
+      <Route exact strict path={`${ACCOUNT_FORM}/:id?`} component={AccountForm} key={`${ACCOUNT_FORM}-${location.pathname}`} />
+      <Route exact strict path={ACTIVITY_LIST} component={ActivityList} key={`${ACTIVITY_LIST}-${location.pathname}`} />
+      <Route exact strict path={`${ACTIVITY_FORM}/:id?`} component={ActivityForm} key={`${ACTIVITY_FORM}-${location.pathname}`} />
+      <Route exact strict path={`${ACTIVITY_DETAIL}/:id?`} component={ActivityDetail} key={`${ACTIVITY_DETAIL}-${location.pathname}`} />
+      <Route exact strict path={RESTRICTION_LIST} component={RestrictionList} key={`${RESTRICTION_LIST}-${location.pathname}`} />
+      <Route exact strict path={`${RESTRICTION_FORM}/:id?`} component={RestrictionForm} key={`${RESTRICTION_FORM}-${location.pathname}`} />
     </App>
   </div>
 )

@@ -9,14 +9,16 @@ export {
 }
 
 class NotificationService {
-  notify(notification) {
-    if (notification.type === NOTIFICATION_SUCCESS) {
-      toast.success(notification.message)
-    } else if (notification.type === NOTIFICATION_ERROR) {
-      toast.error(notification.message)
-    } else {
-      throw new Error(`Tipo inválido de notificação: ${notification.type}`)
-    }
+  notifyError(message) {
+    return toast.error(message)
+  }
+
+  notifySuccess(message) {
+    return toast.success(message)
+  }
+
+  dismissAll() {
+    toast.dismiss()
   }
 }
 

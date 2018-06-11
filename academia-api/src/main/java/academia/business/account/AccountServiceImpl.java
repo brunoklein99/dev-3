@@ -21,33 +21,42 @@ public class AccountServiceImpl implements AccountService {
     public Account create(Account account) {
         String password = account.getPassword();
 
-        // TODO
         if (password == null || password.isEmpty()) {
             throw new ValidationException("Senha deve ser preenchida");
         }
 
-        // TODO verificar uniqueness do username
-        Account toSave = new Account(account.getName(), account.getUsername(), passwordEncoder.encode(account.getPassword()), account.getType());
+        Account existing = accountRepository.findByUsername(account.getUsername());
+        if (existing != null) {
+            throw new ValidationException("Nome de usuário já está em uso");
+        }
 
+        Account toSave = new Account(account.getName(), account.getUsername(), passwordEncoder.encode(account.getPassword()), account.getType());
         return accountRepository.save(toSave);
     }
 
     @Override
     public Account update(Account account) {
-        String password = account.getPassword();
+        Account existing = accountRepository.findById(account.getId()).get();
+        // não atualizamos a senha nesse método
+        Account toSave = new Account(account.getName(), account.getUsername(), existing.getPassword(), account.getType());
+        toSave.setId(existing.getId());
+        return accountRepository.save(toSave);
+    }
 
-        /*
-            TODO tratar casos em que não queremos atualizar o password,
-            provavelmente fazer uma rota separada só para isso e na rota default de update não atualizar,
-            fazer 2 formulários diferentes no client-side etc
-          */
-        if (password == null || password.isEmpty()) {
+    @Override
+    public Account updatePassword(Long id, PasswordUpdateDto passwordUpdateDto) {
+        Account existing = accountRepository.findById(id).get();
+
+        if (passwordUpdateDto.getPassword() == null || passwordUpdateDto.getPassword().isEmpty()) {
             throw new ValidationException("Senha deve ser preenchida");
         }
 
-        // TODO não permitir alterar username
-        // TODO verificar uniqueness do username
-        Account toSave = new Account(account.getName(), account.getUsername(), passwordEncoder.encode(account.getPassword()), account.getType());
+        if (!passwordUpdateDto.getPassword().equals(passwordUpdateDto.getPasswordConfirmation())) {
+            throw new ValidationException("Senha e confirmação devem ser iguais");
+        }
+
+        Account toSave = new Account(existing.getName(), existing.getUsername(), passwordEncoder.encode(passwordUpdateDto.getPassword()), existing.getType());
+        toSave.setId(existing.getId());
         return accountRepository.save(toSave);
     }
 }

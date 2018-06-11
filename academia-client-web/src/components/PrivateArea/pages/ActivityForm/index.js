@@ -9,7 +9,7 @@ import {
 } from 'material-ui'
 import TextField from 'material-ui/TextField'
 import { grey400 } from 'material-ui/styles/colors'
-import { ToastContainer, toast } from 'react-toastify'
+import { toast } from 'react-toastify'
 
 import PageBase from '../common/PageBase'
 import activityService from '../../../../services/activityService'
@@ -289,7 +289,6 @@ class ActivityForm extends Component {
         title="Atividade"
       >
         <div>
-          <ToastContainer />
           {form}
         </div>
       </PageBase>

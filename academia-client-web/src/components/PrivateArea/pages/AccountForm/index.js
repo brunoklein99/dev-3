@@ -1,17 +1,16 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { Redirect } from 'react-router-dom'
 import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
-import Toggle from 'material-ui/Toggle'
+import MenuItem from 'material-ui/MenuItem'
+import SelectField from 'material-ui/SelectField'
 import { grey400 } from 'material-ui/styles/colors'
-import { ToastContainer } from 'react-toastify'
 
 import PageBase from '../common/PageBase'
 import accountService from '../../../../services/accountService'
-import notificationService, {
-  NOTIFICATION_SUCCESS,
-  NOTIFICATION_ERROR,
-} from '../../../../services/notificationService'
+import notificationService from '../../../../services/notificationService'
+import { ACCOUNT_FORM } from '../../../../config/routes'
 
 const styles = {
   toggleDiv: {
@@ -36,29 +35,23 @@ class AccountForm extends Component {
   state = {
     didLoad: false,
     settings: null,
-    account: null,
-    notification: null,
-
-    // notify: false,
-    // notifyMessage: '',
-    // notifySucess: false,
-
-    // name: '',
-    // username: '',
-    // password: '',
-    // admin: false,
+    account: {
+      name: '',
+      username: '',
+      password: '',
+      type: null,
+    },
+    passwordUpdateDto: {
+      password: '',
+      passwordConfirmation: '',
+    },
+    redirect: false,
   }
 
   componentDidMount() {
-    const { id } = this.props.match.params
+    const id = this.getRouteId()
 
-    let accountPromise
-    if (id) {
-      accountPromise = accountService.get(id)
-    } else {
-      accountPromise = Promise.resolve({})
-    }
-
+    const accountPromise = id ? accountService.get(id) : Promise.resolve(this.state.account)
     const settingsPromise = accountService.settings()
 
     Promise.all([
@@ -69,120 +62,181 @@ class AccountForm extends Component {
         const [settings, account] = data
         this.setState({
           settings,
-          account,
-        })
-        // .then(({ name, username, admin }) => this.setState({
-        //   didLoad: true,
-        //   name,
-        //   username,
-        //   admin,
-        //   notify: false,
-        // }))
-      })
-      .finally(() => {
-        this.setState({
+          account: {
+            ...account,
+            type: id ? account.type : settings.accountType[0],
+          },
           didLoad: true,
         })
       })
-
-    // if (id) {
-    //   accountService.get(id)
-    //     .then(({ name, username, admin }) => this.setState({
-    //       didLoad: true,
-    //       name,
-    //       username,
-    //       admin,
-    //       notify: false,
-    //     }))
-    // } else {
-    //   this.setState({
-    //     didLoad: true,
-    //     notify: false,
-    //   })
-    // }
+      .catch(() => {
+        notificationService.notifyError('Erro ao carregar, tente novamente')
+      })
   }
 
-  handleSaveClick = (e) => {
+  getRouteId() {
+    return this.props.match.params.id
+  }
+
+  handleSaveAccountClick = (e) => {
     e.preventDefault()
 
-    const {
-      name, username, admin, password,
-    } = this.state
+    const { account } = this.state
 
-    const data = {
-      admin,
-      name,
-      password,
-      username,
-    }
-
-    const { id } = this.props.match.params
+    const id = this.getRouteId()
     if (id) {
-      accountService.update(id, data)
-        .then(() => this.setState({ notification: { type: NOTIFICATION_SUCCESS, message: 'Usuário alterado com sucesso.' } }))
-        .catch(() => this.setState({ notification: { type: NOTIFICATION_ERROR, message: 'Erro, por favor tente novamente.' } }))
+      accountService.update(id, account)
+        .then(() => notificationService.notifySuccess('Usuário alterado com sucesso'))
+        .catch(() => notificationService.notifyError('Erro ao salvar, tente novamente'))
     } else {
-      accountService.create(data)
-        .then(() => this.setState({ notification: { type: NOTIFICATION_SUCCESS, message: 'Usuário criado com sucesso.' } }))
-        .catch(() => this.setState({ notification: { type: NOTIFICATION_ERROR, message: 'Erro, por favor tente novamente.' } }))
+      accountService.create(account)
+        .then((data) => {
+          notificationService.notifySuccess('Usuário criado com sucesso')
+          this.setState({
+            account: data,
+            redirect: true,
+          })
+        })
+        .catch(() => notificationService.notifyError('Erro ao salvar, tente novamente'))
     }
   }
 
-  handleInputChange = (property, value) => this.setState({ [property]: value })
+  handleSavePasswordClick = (e) => {
+    e.preventDefault()
 
-  handleNameChange = (e, value) => this.handleInputChange('name', value)
-  handleUsernameChange = (e, value) => this.handleInputChange('username', value)
-  handlePasswordChange = (e, value) => this.handleInputChange('password', value)
-  handleAdminChange = (e, value) => this.handleInputChange('admin', value)
+    const { passwordUpdateDto } = this.state
+
+    const id = this.getRouteId()
+    accountService.updatePassword(id, passwordUpdateDto)
+      .then(() => notificationService.notifySuccess('Senha alterada com sucesso'))
+      .catch(() => notificationService.notifyError('Erro ao salvar, tente novamente'))
+  }
+
+  // account form
+  handleAccountInput = (property, value) => this.setState({
+    account: {
+      ...this.state.account,
+      [property]: value,
+    },
+  })
+  handleNameChange = (e, value) => this.handleAccountInput('name', value)
+  handleUsernameChange = (e, value) => this.handleAccountInput('username', value)
+  handlePasswordChange = (e, value) => this.handleAccountInput('password', value)
+  handleAccountTypeChange = (e, key, value) => this.handleAccountInput('type', value)
+
+  // account form
+  handlePasswordUpdateInput = (property, value) => this.setState({
+    passwordUpdateDto: {
+      ...this.state.passwordUpdateDto,
+      [property]: value,
+    },
+  })
+  handlePasswordUpdateChange = (e, value) => this.handlePasswordUpdateInput('password', value)
+  handlePasswordConfirmationUpdateChange = (e, value) => this.handlePasswordUpdateInput('passwordConfirmation', value)
 
   render() {
-    if (this.state.notify) {
-      notificationService.notify(this.state.notification)
+    const {
+      account,
+      didLoad,
+      passwordUpdateDto,
+      redirect,
+      settings,
+    } = this.state
+
+    if (redirect) {
+      return (
+        <Redirect to={`${ACCOUNT_FORM}/${this.state.account.id}`} />
+      )
     }
 
-    let form = null
-    if (this.state.didLoad) {
-      form = (
+    const id = this.getRouteId()
+
+    let accountForm = null
+    if (didLoad) {
+      accountForm = (
         <form>
           <TextField
             hintText="Nome"
             floatingLabelText="Nome"
             fullWidth
             onChange={this.handleNameChange}
-            value={this.state.name}
+            value={account.name}
           />
 
           <div>
             <TextField
+              disabled={!!id}
               hintText="Nome de usuário"
               floatingLabelText="Nome de usuário"
               onChange={this.handleUsernameChange}
-              value={this.state.username}
+              value={account.username}
             />
           </div>
 
+          {!id && (
+            <div>
+              <TextField
+                hintText="Senha"
+                floatingLabelText="Senha"
+                type="password"
+                onChange={this.handlePasswordChange}
+                value={account.password}
+              />
+            </div>
+          )}
+
+          <SelectField
+            floatingLabelText="Tipo de conta"
+            value={account.type}
+            onChange={this.handleAccountTypeChange}
+          >
+            {settings.accountType.map(t => (<MenuItem
+              key={t}
+              value={t}
+              primaryText={accountService.translateAccountType(t)}
+            />))}
+          </SelectField>
+
+          <div style={styles.buttons}>
+            <RaisedButton
+              onClick={this.handleSaveAccountClick}
+              label="Salvar"
+              style={styles.saveButton}
+              type="submit"
+              primary
+            />
+          </div>
+        </form>
+      )
+    }
+
+    let passwordForm = null
+    if (id) {
+      passwordForm = (
+        <form>
           <div>
             <TextField
               hintText="Senha"
               floatingLabelText="Senha"
               type="password"
-              onChange={this.handlePasswordChange}
-              value={this.state.password}
+              onChange={this.handlePasswordUpdateChange}
+              value={passwordUpdateDto.password}
             />
           </div>
 
-          <div style={styles.toggleDiv}>
-            <Toggle
-              label="Administrador"
-              labelStyle={styles.toggleLabel}
-              onToggle={this.handleAdminChange}
-              toggled={this.state.admin}
+          <div>
+            <TextField
+              hintText="Confirmação de Senha"
+              floatingLabelText="Confirmação de Senha"
+              type="password"
+              onChange={this.handlePasswordConfirmationUpdateChange}
+              value={passwordUpdateDto.passwordConfirmation}
             />
           </div>
 
           <div style={styles.buttons}>
             <RaisedButton
-              onClick={this.handleSaveClick}
+              onClick={this.handleSavePasswordClick}
               label="Salvar"
               style={styles.saveButton}
               type="submit"
@@ -198,8 +252,8 @@ class AccountForm extends Component {
         title="Usuário"
       >
         <div>
-          <ToastContainer />
-          {form}
+          {accountForm}
+          {passwordForm}
         </div>
       </PageBase>
     )

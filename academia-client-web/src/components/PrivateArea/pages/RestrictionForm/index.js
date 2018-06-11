@@ -8,7 +8,7 @@ import {
   GridTile,
 } from 'material-ui'
 import { grey400 } from 'material-ui/styles/colors'
-import { ToastContainer, toast } from 'react-toastify'
+import { toast } from 'react-toastify'
 
 import PageBase from '../common/PageBase'
 import restrictionService from '../../../../services/restrictionService'
@@ -196,7 +196,6 @@ class RestrictionForm extends Component {
         title="Restrição"
       >
         <div>
-          <ToastContainer />
           {form}
         </div>
       </PageBase>

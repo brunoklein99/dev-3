@@ -6,7 +6,7 @@ import Paper from 'material-ui/Paper'
 import RaisedButton from 'material-ui/RaisedButton'
 import { white } from 'material-ui/styles/colors'
 import TextField from 'material-ui/TextField'
-import { ToastContainer, toast } from 'react-toastify'
+import { toast } from 'react-toastify'
 
 import Loader from 'react-loader'
 
@@ -14,6 +14,43 @@ import ThemeDefault from '../../../theme-default'
 import loginService from '../../../services/loginService'
 
 import { LOGIN } from '../../../config/routes'
+
+const styles = {
+  loginContainer: {
+    minWidth: 320,
+    maxWidth: 400,
+    height: 'auto',
+    position: 'absolute',
+    top: '20%',
+    left: 0,
+    right: 0,
+    margin: 'auto',
+  },
+  paper: {
+    padding: 20,
+    overflow: 'auto',
+  },
+  loginBtn: {
+    float: 'right',
+  },
+  btn: {
+    background: '#4f81e9',
+    color: white,
+    padding: 7,
+    borderRadius: 2,
+    margin: 2,
+    fontSize: 13,
+  },
+  btnFacebook: {
+    background: '#4f81e9',
+  },
+  btnGoogle: {
+    background: '#e14441',
+  },
+  btnSpan: {
+    marginLeft: 5,
+  },
+}
 
 export default class Login extends Component {
   state = {
@@ -76,43 +113,6 @@ export default class Login extends Component {
   }
 
   renderLoginForm() {
-    const styles = {
-      loginContainer: {
-        minWidth: 320,
-        maxWidth: 400,
-        height: 'auto',
-        position: 'absolute',
-        top: '20%',
-        left: 0,
-        right: 0,
-        margin: 'auto',
-      },
-      paper: {
-        padding: 20,
-        overflow: 'auto',
-      },
-      loginBtn: {
-        float: 'right',
-      },
-      btn: {
-        background: '#4f81e9',
-        color: white,
-        padding: 7,
-        borderRadius: 2,
-        margin: 2,
-        fontSize: 13,
-      },
-      btnFacebook: {
-        background: '#4f81e9',
-      },
-      btnGoogle: {
-        background: '#e14441',
-      },
-      btnSpan: {
-        marginLeft: 5,
-      },
-    }
-
     if (this.state.notify) {
       if (this.state.notifySucess) {
         toast.success(this.state.notifyMessage)
@@ -124,7 +124,6 @@ export default class Login extends Component {
     return (
       <MuiThemeProvider muiTheme={ThemeDefault}>
         <div>
-          <ToastContainer />
           <div style={styles.loginContainer}>
             <Paper style={styles.paper}>
               <form onSubmit={this.handleLoginSubmit}>

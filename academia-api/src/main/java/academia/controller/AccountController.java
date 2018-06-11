@@ -2,6 +2,7 @@ package academia.controller;
 
 import academia.business.account.AccountRepository;
 import academia.business.account.AccountService;
+import academia.business.account.PasswordUpdateDto;
 import academia.domain.AccountType;
 import academia.model.Account;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,11 @@ public class AccountController {
     @RequestMapping(method = RequestMethod.GET, path = "/{id}")
     public Account findById(@PathVariable Long id) {
         return accountRepository.findById(id).get();
+    }
+
+    @RequestMapping(method = RequestMethod.PUT, path = "/password/{id}")
+    public Account updatePassword(@PathVariable Long id, @RequestBody PasswordUpdateDto passwordUpdateDto) {
+        return accountService.updatePassword(id, passwordUpdateDto);
     }
 
     @RequestMapping(method = RequestMethod.PUT, path = "/{id}")

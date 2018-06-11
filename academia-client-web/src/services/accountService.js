@@ -31,12 +31,19 @@ class AccountService {
       .then(({ data }) => data)
   }
 
-  update(id, data) {
-    return apiService.put(`${PREFIX}/${id}`, data)
+  update(id, updateData) {
+    return apiService.put(`${PREFIX}/${id}`, updateData)
+      .then(({ data }) => data)
   }
 
-  create(data) {
-    return apiService.post(PREFIX, data)
+  updatePassword(id, updateData) {
+    return apiService.put(`${PREFIX}/password/${id}`, updateData)
+      .then(({ data }) => data)
+  }
+
+  create(createData) {
+    return apiService.post(PREFIX, createData)
+      .then(({ data }) => data)
   }
 }
 

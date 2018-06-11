@@ -2,8 +2,8 @@ export const LOGIN = '/login'
 
 export const DASHBOARD = '/'
 
-export const ACCOUNT_LIST = '/accounts'
-export const ACCOUNT_FORM = '/accounts/'
+export const ACCOUNT_LIST = '/accounts/list'
+export const ACCOUNT_FORM = '/accounts/form'
 
 export const ACTIVITY_LIST = '/activities'
 export const ACTIVITY_FORM = '/activities/'
