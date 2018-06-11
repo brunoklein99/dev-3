@@ -12,15 +12,12 @@ public class Account {
         // hibernate needs the default constructor
     }
 
-    public Account(String name, String username, String password, AccountType type) {
+    public Account(String name, String username, String password, AccountType type, List<Restriction> restrictions) {
         this.name = name;
         this.username = username;
         this.password = password;
         this.type = type;
-    }
-
-    public Account(String name, String username, String password)  {
-        this(name, username, password, AccountType.CUSTOMER);
+        this.restrictions = restrictions;
     }
 
     @Id
@@ -29,6 +26,7 @@ public class Account {
 
     private String name;
 
+    @Column(unique = true)
     private String username;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -36,7 +34,7 @@ public class Account {
 
     private AccountType type;
 
-    @OneToMany
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private List<Restriction> restrictions;
 
     public Long getId() {

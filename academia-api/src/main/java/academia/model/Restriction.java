@@ -1,8 +1,6 @@
 package academia.model;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 public class Restriction {
@@ -10,10 +8,15 @@ public class Restriction {
     public Restriction(){
     }
 
+    public Restriction(String name){
+        this.name = name;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(unique = true)
     private String name;
 
     public Long getId() {

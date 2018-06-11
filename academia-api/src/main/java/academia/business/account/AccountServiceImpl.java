@@ -30,7 +30,7 @@ public class AccountServiceImpl implements AccountService {
             throw new ValidationException("Nome de usuário já está em uso");
         }
 
-        Account toSave = new Account(account.getName(), account.getUsername(), passwordEncoder.encode(account.getPassword()), account.getType());
+        Account toSave = new Account(account.getName(), account.getUsername(), passwordEncoder.encode(account.getPassword()), account.getType(), account.getRestrictions());
         return accountRepository.save(toSave);
     }
 
@@ -38,7 +38,7 @@ public class AccountServiceImpl implements AccountService {
     public Account update(Account account) {
         Account existing = accountRepository.findById(account.getId()).get();
         // não atualizamos a senha nesse método
-        Account toSave = new Account(account.getName(), account.getUsername(), existing.getPassword(), account.getType());
+        Account toSave = new Account(account.getName(), account.getUsername(), existing.getPassword(), account.getType(), account.getRestrictions());
         toSave.setId(existing.getId());
         return accountRepository.save(toSave);
     }
@@ -55,7 +55,7 @@ public class AccountServiceImpl implements AccountService {
             throw new ValidationException("Senha e confirmação devem ser iguais");
         }
 
-        Account toSave = new Account(existing.getName(), existing.getUsername(), passwordEncoder.encode(passwordUpdateDto.getPassword()), existing.getType());
+        Account toSave = new Account(existing.getName(), existing.getUsername(), passwordEncoder.encode(passwordUpdateDto.getPassword()), existing.getType(), existing.getRestrictions());
         toSave.setId(existing.getId());
         return accountRepository.save(toSave);
     }
