@@ -1,11 +1,15 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Redirect } from 'react-router-dom'
+
 import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
 import { grey400 } from 'material-ui/styles/colors'
 
+import Loader from 'react-loader'
+
 import PageBase from '../../common/PageBase'
+
 import restrictionService from '../../../../../services/restrictionService'
 import notificationService from '../../../../../services/notificationService'
 import { RESTRICTION_FORM } from '../../../../../config/routes'
@@ -91,8 +95,32 @@ class RestrictionForm extends Component {
     })
   }
 
+  renderForm(restriction) {
+    return (
+      <form>
+        <TextField
+          hintText="Nome"
+          floatingLabelText="Nome"
+          fullWidth
+          onChange={this.handleNameChange}
+          value={restriction.name}
+        />
+        <div style={styles.buttons}>
+          <RaisedButton
+            onClick={this.handleSaveClick}
+            label="Salvar"
+            style={styles.saveButton}
+            type="submit"
+            primary
+          />
+        </div>
+      </form>
+    )
+  }
+
   render() {
     const {
+      didLoad,
       redirect,
       restriction,
     } = this.state
@@ -103,37 +131,13 @@ class RestrictionForm extends Component {
       )
     }
 
-    let form = null
-    if (this.state.didLoad) {
-      form = (
-        <form>
-          <TextField
-            hintText="Nome"
-            floatingLabelText="Nome"
-            fullWidth
-            onChange={this.handleNameChange}
-            value={restriction.name}
-          />
-          <div style={styles.buttons}>
-            <RaisedButton
-              onClick={this.handleSaveClick}
-              label="Salvar"
-              style={styles.saveButton}
-              type="submit"
-              primary
-            />
-          </div>
-        </form>
-      )
-    }
-
     return (
       <PageBase
         title="Restrição"
       >
-        <div>
-          {form}
-        </div>
+        <Loader loaded={didLoad}>
+          {this.renderForm(restriction)}
+        </Loader>
       </PageBase>
     )
   }

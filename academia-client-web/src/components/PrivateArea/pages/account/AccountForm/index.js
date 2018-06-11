@@ -8,6 +8,8 @@ import RaisedButton from 'material-ui/RaisedButton'
 import SelectField from 'material-ui/SelectField'
 import TextField from 'material-ui/TextField'
 
+import Loader from 'react-loader'
+
 import PageBase from '../../common/PageBase'
 
 import { ACCOUNT_FORM } from '../../../../../config/routes'
@@ -40,7 +42,9 @@ class AccountForm extends Component {
     didLoad: false,
     redirect: false,
 
-    settings: {},
+    settings: {
+      accountType: [],
+    },
     account: {
       name: '',
       username: '',
@@ -320,12 +324,10 @@ class AccountForm extends Component {
       <PageBase
         title="Usuário"
       >
-        {didLoad ? (
-          <div>
-            {this.renderAccountForm(id, account, settings, restrictions)}
-            {this.renderPasswordForm(id, passwordUpdateDto)}
-          </div>
-        ) : null}
+        <Loader loaded={didLoad}>
+          {this.renderAccountForm(id, account, settings, restrictions)}
+          {this.renderPasswordForm(id, passwordUpdateDto)}
+        </Loader>
       </PageBase>
     )
   }
