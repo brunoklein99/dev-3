@@ -9,6 +9,7 @@ import academia.business.restriction.RestrictionRepository;
 import academia.business.restriction.RestrictionService;
 import academia.domain.AccountType;
 import academia.model.Account;
+import academia.model.Activity;
 import academia.model.Restriction;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -16,6 +17,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @SpringBootApplication
@@ -29,32 +31,34 @@ public class Application {
     public CommandLineRunner demo(
             AccountService accountService,
             AccountRepository accountRepository,
+
             RestrictionService restrictionService,
             RestrictionRepository restrictionRepository,
 
             ActivityService activityService,
             ActivityRepository activityRepository,
+
             AppointmentService appointmentService) {
         return (args) -> {
             /*
                 restrictions
              */
             String restrictionName1 = "Esforço cardíaco";
-            Restriction restriction1 = restrictionRepository.findByName(restrictionName1);
-            if (restriction1 == null) {
-                restriction1 = restrictionService.create(new Restriction(restrictionName1));
+            Restriction restrictionCardiaco = restrictionRepository.findByName(restrictionName1);
+            if (restrictionCardiaco == null) {
+                restrictionCardiaco = restrictionService.create(new Restriction(restrictionName1));
             }
 
             String restrictionName2 = "Impacto no joelho";
-            Restriction restriction2 = restrictionRepository.findByName(restrictionName2);
-            if (restriction2 == null) {
-                restriction2 = restrictionService.create(new Restriction(restrictionName2));
+            Restriction restrictionJoelho = restrictionRepository.findByName(restrictionName2);
+            if (restrictionJoelho == null) {
+                restrictionJoelho = restrictionService.create(new Restriction(restrictionName2));
             }
 
             String restrictionName3 = "Esforço na coluna";
-            Restriction restriction3 = restrictionRepository.findByName(restrictionName3);
-            if (restriction3 == null) {
-                restriction3 = restrictionService.create(new Restriction(restrictionName3));
+            Restriction restrictionColuna = restrictionRepository.findByName(restrictionName3);
+            if (restrictionColuna == null) {
+                restrictionColuna = restrictionService.create(new Restriction(restrictionName3));
             }
 
             /*
@@ -69,7 +73,7 @@ public class Application {
             String customerUsernameAndPassword = "customer";
             Account customer = accountRepository.findByUsername(customerUsernameAndPassword);
             if (customer == null) {
-                List<Restriction> restrictions = Arrays.asList(restriction1, restriction2);
+                List<Restriction> restrictions = Arrays.asList(restrictionCardiaco, restrictionJoelho);
                 customer = new Account("Cliente da Silva", customerUsernameAndPassword, customerUsernameAndPassword, AccountType.CUSTOMER, restrictions);
                 customer = accountService.create(customer);
             }
@@ -80,25 +84,21 @@ public class Application {
                 trainer = accountService.create(new Account("Treinador 1", trainerUsernameAndPassword, trainerUsernameAndPassword, AccountType.TRAINER, null));
             }
 
-//            Activity activity = activityRepository.findByName("exercicio1");
-//            if (activity == null) {
-//                activity = new Activity("exercicio1", "exercicio1descr", trainer);
-//                activity.setBeginDate(new Date(2018, 1, 1));
-//                activity.setEndDate(new Date(2018, 12, 31));
-//
-//                Restriction restriction = new Restriction();
-//                restriction.setName("restriction1");
-//                restriction = restrictionService.create(restriction);
-//
-//                List<Restriction> restrictions = new ArrayList<>();
-//
-//                restrictions.add(restriction);
-//
-//                activity.setRestrictions(restrictions);
-//                activity = activityService.create(activity);
-//
-//            }
-//
+            /*
+                activities
+             */
+            String activity1Name = "Corrida";
+            Activity activity1 = activityRepository.findByName(activity1Name);
+            if (activity1 == null) {
+                activity1 = new Activity(activity1Name, "Corrida na esteira como treinamento cardiovascular", trainer);
+                activity1.setBeginDate(new Date(2018, 1, 1));
+                activity1.setEndDate(new Date(2018, 12, 31));
+
+                List<Restriction> restrictions = Arrays.asList(restrictionJoelho);
+                activity1.setRestrictions(restrictions);
+                activity1 = activityService.create(activity1);
+            }
+
 //            Appointment appointment = new Appointment();
 //            appointment.setActivity(activity);
 //            appointment.setDate(new Date(2018, 1, 1));

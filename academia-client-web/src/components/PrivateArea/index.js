@@ -2,12 +2,16 @@ import React from 'react'
 import { Route } from 'react-router-dom'
 
 import App from './App'
+
 import Dashboard from './pages/Dashboard'
+
 import AccountList from './pages/account/AccountList'
 import AccountForm from './pages/account/AccountForm'
-import ActivityList from './pages/ActivityList'
-import ActivityForm from './pages/ActivityForm'
-import ActivityDetail from './pages/ActivityDetail'
+
+import ActivityList from './pages/activity/ActivityList'
+import ActivityForm from './pages/activity/ActivityForm'
+import ActivityDetail from './pages/activity/ActivityDetail'
+
 import RestrictionList from './pages/restriction/RestrictionList'
 import RestrictionForm from './pages/restriction/RestrictionForm'
 

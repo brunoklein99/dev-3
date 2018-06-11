@@ -7,10 +7,10 @@ import ContentAdd from 'material-ui/svg-icons/content/add'
 import ContentVisibility from 'material-ui/svg-icons/action/visibility'
 import { pink500, grey200, grey500 } from 'material-ui/styles/colors'
 
-import PageBase from '../common/PageBase'
-import activityService from '../../../../services/activityService'
+import PageBase from '../../common/PageBase'
+import activityService from '../../../../../services/activityService'
 
-import { ACTIVITY_FORM, ACTIVITY_DETAIL } from '../../../../config/routes'
+import { ACTIVITY_FORM, ACTIVITY_DETAIL } from '../../../../../config/routes'
 
 const styles = {
   floatingActionButton: {

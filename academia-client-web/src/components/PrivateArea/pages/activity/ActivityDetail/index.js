@@ -12,8 +12,8 @@ import {
 import { ActionDeleteForever } from 'material-ui/svg-icons'
 import { pink500 } from 'material-ui/styles/colors'
 
-import PageBase from '../common/PageBase'
-import activityService from '../../../../services/activityService'
+import PageBase from '../../common/PageBase'
+import activityService from '../../../../../services/activityService'
 
 const formataData = data => (`${data.substr(8, 2)}/${data.substr(5, 2)}/${data.substr(0, 4)}`)
 
