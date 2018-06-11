@@ -6,12 +6,12 @@ import Paper from 'material-ui/Paper'
 import RaisedButton from 'material-ui/RaisedButton'
 import { white } from 'material-ui/styles/colors'
 import TextField from 'material-ui/TextField'
-import { toast } from 'react-toastify'
 
 import Loader from 'react-loader'
 
 import ThemeDefault from '../../../theme-default'
 import loginService from '../../../services/loginService'
+import notificationService from '../../../services/notificationService'
 
 import { LOGIN } from '../../../config/routes'
 
@@ -55,15 +55,13 @@ const styles = {
 export default class Login extends Component {
   state = {
     didCheckAuthentication: false,
-
-    notify: false,
-    notifyMessage: '',
-    notifySucess: false,
-
-    username: '',
-    password: '',
     isAuthenticated: false,
     referrer: null,
+
+    credentials: {
+      username: '',
+      password: '',
+    },
   }
 
   componentDidMount() {
@@ -80,46 +78,34 @@ export default class Login extends Component {
       .catch(() => this.setState({ didCheckAuthentication: true }))
   }
 
-  showNotification(sucess, message) {
-    this.setState({
-      notify: true,
-      notifySucess: sucess,
-      notifyMessage: message,
-    })
-  }
-
   handleLoginSubmit = (e) => {
     e.preventDefault()
-    const { username, password } = this.state
-    loginService.login({ username, password })
+    const { credentials } = this.state
+    loginService.login(credentials)
       .then(() => this.setState({ isAuthenticated: true }))
-      .catch(() => {
-        this.showNotification(false, 'E-mail e/ou senha inválidos.')
-      })
+      .catch(() => notificationService.notifyError('E-mail e/ou senha inválidos'))
   }
 
   handleChangeUsername = (event) => {
     this.setState({
-      notify: false,
-      username: event.target.value,
+      credentials: {
+        ...this.state.credentials,
+        username: event.target.value,
+      },
     })
   }
 
   handleChangePassword = (event) => {
     this.setState({
-      notify: false,
-      password: event.target.value,
+      credentials: {
+        ...this.state.credentials,
+        password: event.target.value,
+      },
     })
   }
 
   renderLoginForm() {
-    if (this.state.notify) {
-      if (this.state.notifySucess) {
-        toast.success(this.state.notifyMessage)
-      } else {
-        toast.error(this.state.notifyMessage)
-      }
-    }
+    const { credentials } = this.state
 
     return (
       <MuiThemeProvider muiTheme={ThemeDefault}>
@@ -133,7 +119,7 @@ export default class Login extends Component {
                   floatingLabelText="Nome de usuário"
                   fullWidth
                   onChange={this.handleChangeUsername}
-                  value={this.state.username}
+                  value={credentials.username}
                 />
                 <TextField
                   hintText="Senha"
@@ -141,7 +127,7 @@ export default class Login extends Component {
                   fullWidth
                   type="password"
                   onChange={this.handleChangePassword}
-                  value={this.state.password}
+                  value={credentials.password}
                 />
                 <RaisedButton
                   label="Login"
