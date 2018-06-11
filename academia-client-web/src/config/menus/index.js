@@ -1,6 +1,7 @@
 import React from 'react'
 
 import Assessment from 'material-ui/svg-icons/action/assessment'
+import ErrorOutline from 'material-ui/svg-icons/alert/error-outline'
 import GridOn from 'material-ui/svg-icons/image/grid-on'
 import People from 'material-ui/svg-icons/social/people'
 import Web from 'material-ui/svg-icons/av/web'
@@ -22,6 +23,8 @@ export default [
     text: 'Dashboard',
     icon: <Assessment />,
   },
+
+  // account
   {
     key: ACCOUNT_LIST,
     text: 'Usuários',
@@ -41,6 +44,29 @@ export default [
       },
     ],
   },
+
+  // restriction
+  {
+    key: RESTRICTION_LIST,
+    text: 'Restrições',
+    icon: <ErrorOutline />,
+    children: [
+      {
+        key: RESTRICTION_LIST,
+        link: RESTRICTION_LIST,
+        text: 'Listar Restrições',
+        icon: <GridOn />,
+      },
+      {
+        key: RESTRICTION_FORM,
+        link: RESTRICTION_FORM,
+        text: 'Criar restrição',
+        icon: <Web />,
+      },
+    ],
+  },
+
+  // activity
   {
     key: ACTIVITY_LIST,
     link: ACTIVITY_LIST,
@@ -51,18 +77,6 @@ export default [
     key: ACTIVITY_FORM,
     link: ACTIVITY_FORM,
     text: 'Criar atividade',
-    icon: <Web />,
-  },
-  {
-    key: RESTRICTION_LIST,
-    link: RESTRICTION_LIST,
-    text: 'Restrições',
-    icon: <GridOn />,
-  },
-  {
-    key: RESTRICTION_FORM,
-    link: RESTRICTION_FORM,
-    text: 'Criar restrições',
     icon: <Web />,
   },
 ]

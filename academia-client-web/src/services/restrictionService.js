@@ -11,12 +11,14 @@ class RestrictionService {
       .then(({ data }) => data)
   }
 
-  update(id, data) {
-    return apiService.put(`/api/private/restrictions/${id}`, data)
+  update(id, updateData) {
+    return apiService.put(`/api/private/restrictions/${id}`, updateData)
+      .then(({ data }) => data)
   }
 
-  create(data) {
-    return apiService.post('/api/private/restrictions', data)
+  create(createData) {
+    return apiService.post('/api/private/restrictions', createData)
+      .then(({ data }) => data)
   }
 }
 

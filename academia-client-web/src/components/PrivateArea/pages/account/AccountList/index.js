@@ -6,10 +6,10 @@ import ContentCreate from 'material-ui/svg-icons/content/create'
 import ContentAdd from 'material-ui/svg-icons/content/add'
 import { pink500, grey200, grey500 } from 'material-ui/styles/colors'
 
-import PageBase from '../common/PageBase'
-import restrictionService from '../../../../services/restrictionService'
+import PageBase from '../../common/PageBase'
+import accountService from '../../../../../services/accountService'
 
-import { RESTRICTION_FORM } from '../../../../config/routes'
+import { ACCOUNT_FORM } from '../../../../../config/routes'
 
 const styles = {
   floatingActionButton: {
@@ -23,18 +23,18 @@ const styles = {
   editButton: {
     fill: grey500,
   },
-  deleteButton: {
-    fill: grey500,
-  },
   columns: {
     id: {
       width: '10%',
     },
     name: {
-      width: '30%',
+      width: '40%',
     },
-    activities: {
-      width: '50%',
+    username: {
+      width: '20%',
+    },
+    type: {
+      width: '20%',
     },
     edit: {
       width: '10%',
@@ -42,23 +42,24 @@ const styles = {
   },
 }
 
-class RestrictionList extends Component {
+class AccountList extends Component {
   state = {
-    restrictions: [],
+    accounts: [],
   }
 
   componentDidMount() {
-    restrictionService.all()
-      .then(data => this.setState({ restrictions: data }))
+    accountService.all()
+      .then(data => this.setState({ accounts: data }))
       .catch(err => console.log(err))
   }
 
   renderHeader() {
     return (
-      <TableHeader>
+      <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
         <TableRow>
           <TableHeaderColumn style={styles.columns.name}>Nome</TableHeaderColumn>
-          <TableHeaderColumn style={styles.columns.activities.name}>Atividades</TableHeaderColumn>
+          <TableHeaderColumn style={styles.columns.username}>Nome de usuário</TableHeaderColumn>
+          <TableHeaderColumn style={styles.columns.type}>Tipo</TableHeaderColumn>
           <TableHeaderColumn style={styles.columns.edit}>Editar</TableHeaderColumn>
         </TableRow>
       </TableHeader>
@@ -66,17 +67,19 @@ class RestrictionList extends Component {
   }
 
   renderBody() {
-    const { restrictions } = this.state
+    const { accounts } = this.state
+
     return (
-      <TableBody>
-        {restrictions.map((item => (
+      <TableBody displayRowCheckbox={false}>
+        {accounts.map(item => (
           <TableRow key={item.id}>
             <TableRowColumn style={styles.columns.name}>{item.name}</TableRowColumn>
-            <TableRowColumn style={styles.columns.activities}>{item.activities.name}</TableRowColumn>
+            <TableRowColumn style={styles.columns.username}>{item.username}</TableRowColumn>
+            <TableRowColumn style={styles.columns.type}>{accountService.translateAccountType(item.type)}</TableRowColumn>
             <TableRowColumn style={styles.columns.edit}>
               <Link
                 className="button"
-                to={`${RESTRICTION_FORM}/${item.id}`}
+                to={`${ACCOUNT_FORM}/${item.id}`}
               >
                 <FloatingActionButton
                   zDepth={0}
@@ -89,8 +92,7 @@ class RestrictionList extends Component {
               </Link>
             </TableRowColumn>
           </TableRow>
-        )))
-      }
+        ))}
       </TableBody>
     )
   }
@@ -98,10 +100,10 @@ class RestrictionList extends Component {
   render() {
     return (
       <PageBase
-        title="Atiividades"
+        title="Usuários"
       >
         <div>
-          <Link to={RESTRICTION_FORM} >
+          <Link to={ACCOUNT_FORM} >
             <FloatingActionButton style={styles.floatingActionButton} backgroundColor={pink500}>
               <ContentAdd />
             </FloatingActionButton>
@@ -117,4 +119,4 @@ class RestrictionList extends Component {
   }
 }
 
-export default RestrictionList
+export default AccountList

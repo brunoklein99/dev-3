@@ -3,13 +3,13 @@ import { Route } from 'react-router-dom'
 
 import App from './App'
 import Dashboard from './pages/Dashboard'
-import AccountList from './pages/AccountList'
-import AccountForm from './pages/AccountForm'
+import AccountList from './pages/account/AccountList'
+import AccountForm from './pages/account/AccountForm'
 import ActivityList from './pages/ActivityList'
 import ActivityForm from './pages/ActivityForm'
 import ActivityDetail from './pages/ActivityDetail'
-import RestrictionList from './pages/RestrictionList'
-import RestrictionForm from './pages/RestrictionForm'
+import RestrictionList from './pages/restriction/RestrictionList'
+import RestrictionForm from './pages/restriction/RestrictionForm'
 
 import {
   DASHBOARD,

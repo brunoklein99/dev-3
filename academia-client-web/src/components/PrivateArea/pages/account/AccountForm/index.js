@@ -7,10 +7,10 @@ import MenuItem from 'material-ui/MenuItem'
 import SelectField from 'material-ui/SelectField'
 import { grey400 } from 'material-ui/styles/colors'
 
-import PageBase from '../common/PageBase'
-import accountService from '../../../../services/accountService'
-import notificationService from '../../../../services/notificationService'
-import { ACCOUNT_FORM } from '../../../../config/routes'
+import PageBase from '../../common/PageBase'
+import accountService from '../../../../../services/accountService'
+import notificationService from '../../../../../services/notificationService'
+import { ACCOUNT_FORM } from '../../../../../config/routes'
 
 const styles = {
   toggleDiv: {
@@ -34,7 +34,9 @@ const styles = {
 class AccountForm extends Component {
   state = {
     didLoad: false,
-    settings: null,
+    redirect: false,
+
+    settings: {},
     account: {
       name: '',
       username: '',
@@ -45,7 +47,6 @@ class AccountForm extends Component {
       password: '',
       passwordConfirmation: '',
     },
-    redirect: false,
   }
 
   componentDidMount() {
@@ -86,12 +87,12 @@ class AccountForm extends Component {
     const id = this.getRouteId()
     if (id) {
       accountService.update(id, account)
-        .then(() => notificationService.notifySuccess('Usuário alterado com sucesso'))
+        .then(() => notificationService.notifySuccess('Salvo com sucesso'))
         .catch(() => notificationService.notifyError('Erro ao salvar, tente novamente'))
     } else {
       accountService.create(account)
         .then((data) => {
-          notificationService.notifySuccess('Usuário criado com sucesso')
+          notificationService.notifySuccess('Salvo com sucesso')
           this.setState({
             account: data,
             redirect: true,

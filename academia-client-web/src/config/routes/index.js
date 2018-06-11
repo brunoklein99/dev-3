@@ -9,5 +9,5 @@ export const ACTIVITY_LIST = '/activities'
 export const ACTIVITY_FORM = '/activities/'
 export const ACTIVITY_DETAIL = '/activities/detail/'
 
-export const RESTRICTION_LIST = '/restrictions'
-export const RESTRICTION_FORM = '/restrictions/'
+export const RESTRICTION_LIST = '/restrictions/list'
+export const RESTRICTION_FORM = '/restrictions/form'
