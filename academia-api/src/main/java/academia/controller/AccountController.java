@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/private/accounts")
@@ -35,6 +36,26 @@ public class AccountController {
     @RequestMapping(method = RequestMethod.GET, path = "")
     public List<Account> all() {
         return accountRepository.findAll();
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path = "/find/trainers")
+    public List<Account> findTrainers() {
+        return accountRepository
+                .findAll()
+                .stream()
+                .filter(a -> a.getType() == AccountType.TRAINER)
+                .collect(Collectors.toList())
+                ;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path = "/find/customers")
+    public List<Account> findCustomers() {
+        return accountRepository
+                .findAll()
+                .stream()
+                .filter(a -> a.getType() == AccountType.CUSTOMER)
+                .collect(Collectors.toList())
+                ;
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/{id}")

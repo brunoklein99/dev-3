@@ -16,8 +16,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 @SpringBootApplication
@@ -61,42 +61,96 @@ public class Application {
                 restrictionColuna = restrictionService.create(new Restriction(restrictionName3));
             }
 
+            String restrictionNameRespiratorio = "Esforço respiratório";
+            Restriction restrictionRespiratorio = restrictionRepository.findByName(restrictionNameRespiratorio);
+            if (restrictionRespiratorio == null) {
+                restrictionRespiratorio = restrictionService.create(new Restriction(restrictionNameRespiratorio));
+            }
+
             /*
                 accounts
              */
-            String adminUsernameAndPassword = "admin";
-            Account admin = accountRepository.findByUsername(adminUsernameAndPassword);
+            String adminName = "admin";
+            Account admin = accountRepository.findByUsername(adminName);
             if (admin == null) {
-                admin = accountService.create(new Account("Administrador da Academia", adminUsernameAndPassword, adminUsernameAndPassword, AccountType.ADMIN, null));
+                admin = accountService.create(new Account("Administrador da Academia", adminName, adminName, AccountType.ADMIN, null));
             }
 
-            String customerUsernameAndPassword = "customer";
-            Account customer = accountRepository.findByUsername(customerUsernameAndPassword);
+            String customerName = "customer";
+            Account customer = accountRepository.findByUsername(customerName);
             if (customer == null) {
                 List<Restriction> restrictions = Arrays.asList(restrictionCardiaco, restrictionJoelho);
-                customer = new Account("Cliente da Silva", customerUsernameAndPassword, customerUsernameAndPassword, AccountType.CUSTOMER, restrictions);
+                customer = new Account("Cliente da Silva", customerName, customerName, AccountType.CUSTOMER, restrictions);
                 customer = accountService.create(customer);
             }
 
-            String trainerUsernameAndPassword = "trainer";
-            Account trainer = accountRepository.findByUsername(trainerUsernameAndPassword);
-            if (trainer == null) {
-                trainer = accountService.create(new Account("Treinador 1", trainerUsernameAndPassword, trainerUsernameAndPassword, AccountType.TRAINER, null));
+            String trainerBodyBuilderName = "trainer1";
+            Account trainerBodyBuilder = accountRepository.findByUsername(trainerBodyBuilderName);
+            if (trainerBodyBuilder == null) {
+                trainerBodyBuilder = accountService.create(new Account("João Marombeiro", trainerBodyBuilderName, trainerBodyBuilderName, AccountType.TRAINER, null));
+            }
+
+            String trainerAthleticName = "trainer2";
+            Account trainerAthletic = accountRepository.findByUsername(trainerAthleticName);
+            if (trainerAthletic == null) {
+                trainerAthletic = accountService.create(new Account("José Corredor", trainerAthleticName, trainerAthleticName, AccountType.TRAINER, null));
+            }
+
+            String trainerYogaName = "trainer3";
+            Account trainerYogaGuy = accountRepository.findByUsername(trainerYogaName);
+            if (trainerYogaGuy == null) {
+                trainerYogaGuy = accountService.create(new Account("Yoga Guy", trainerYogaName, trainerYogaName, AccountType.TRAINER, null));
             }
 
             /*
                 activities
              */
-            String activity1Name = "Corrida";
-            Activity activity1 = activityRepository.findByName(activity1Name);
-            if (activity1 == null) {
-                activity1 = new Activity(activity1Name, "Corrida na esteira como treinamento cardiovascular", trainer);
-                activity1.setBeginDate(new Date(2018, 1, 1));
-                activity1.setEndDate(new Date(2018, 12, 31));
+            String activityNameRunning = "Corrida";
+            Activity activityRunning = activityRepository.findByName(activityNameRunning);
+            if (activityRunning == null) {
+                activityRunning = new Activity(activityNameRunning, "Corrida na esteira para treinamento cardiovascular",
+                        Arrays.asList(trainerAthletic), Arrays.asList(restrictionJoelho, restrictionColuna, restrictionRespiratorio));
+                activityRunning = activityService.create(activityRunning);
+            }
 
-                List<Restriction> restrictions = Arrays.asList(restrictionJoelho);
-                activity1.setRestrictions(restrictions);
-                activity1 = activityService.create(activity1);
+            String activityNameWalking = "Caminhada";
+            Activity activityWalking = activityRepository.findByName(activityNameWalking);
+            if (activityWalking == null) {
+                activityWalking = new Activity(activityNameWalking, "Caminhada na esteira para treinamento cardiovascular",
+                        Arrays.asList(trainerAthletic, trainerYogaGuy), new ArrayList<>());
+                activityWalking = activityService.create(activityWalking);
+            }
+
+            String activityNameWeightTraining = "Musculação - reforço";
+            Activity activityWeightTraining = activityRepository.findByName(activityNameWeightTraining);
+            if (activityWeightTraining == null) {
+                activityWeightTraining = new Activity(activityNameWeightTraining, "Musculação para reforço muscular",
+                        Arrays.asList(trainerBodyBuilder), Arrays.asList(restrictionColuna));
+                activityWeightTraining = activityService.create(activityWeightTraining);
+            }
+
+            String activityNameBodyBuilding = "Musculação - hipertrofia";
+            Activity activityBodyBuilding = activityRepository.findByName(activityNameBodyBuilding);
+            if (activityBodyBuilding == null) {
+                activityBodyBuilding = new Activity(activityNameBodyBuilding, "Musculação para ganho de massa muscular",
+                        Arrays.asList(trainerBodyBuilder), Arrays.asList(restrictionColuna, restrictionCardiaco));
+                activityBodyBuilding = activityService.create(activityBodyBuilding);
+            }
+
+            String activityNameYoga = "Yoga";
+            Activity activityYoga = activityRepository.findByName(activityNameYoga);
+            if (activityYoga == null) {
+                activityYoga = new Activity(activityNameYoga, "Aulas de Yoga",
+                        Arrays.asList(trainerYogaGuy), new ArrayList<>());
+                activityYoga = activityService.create(activityYoga);
+            }
+
+            String activityNamePilates = "Pilates";
+            Activity activityPilates = activityRepository.findByName(activityNamePilates);
+            if (activityPilates == null) {
+                activityPilates = new Activity(activityNamePilates, "Aulas de Pilates",
+                        Arrays.asList(trainerYogaGuy, trainerBodyBuilder), new ArrayList<>());
+                activityPilates = activityService.create(activityPilates);
             }
 
 //            Appointment appointment = new Appointment();

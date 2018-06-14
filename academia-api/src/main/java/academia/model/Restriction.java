@@ -4,8 +4,8 @@ import javax.persistence.*;
 
 @Entity
 public class Restriction {
-
-    public Restriction(){
+    public Restriction() {
+        // hibernate needs the default constructor
     }
 
     public Restriction(String name){

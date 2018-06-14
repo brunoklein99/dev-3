@@ -34,7 +34,7 @@ public class Account {
 
     private AccountType type;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @ManyToMany(cascade = CascadeType.MERGE)
     private List<Restriction> restrictions;
 
     public Long getId() {

@@ -4,13 +4,12 @@ import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowCol
 import FloatingActionButton from 'material-ui/FloatingActionButton'
 import ContentCreate from 'material-ui/svg-icons/content/create'
 import ContentAdd from 'material-ui/svg-icons/content/add'
-import ContentVisibility from 'material-ui/svg-icons/action/visibility'
 import { pink500, grey200, grey500 } from 'material-ui/styles/colors'
 
 import PageBase from '../../common/PageBase'
 import activityService from '../../../../../services/activityService'
 
-import { ACTIVITY_FORM, ACTIVITY_DETAIL } from '../../../../../config/routes'
+import { ACTIVITY_FORM } from '../../../../../config/routes'
 
 const styles = {
   floatingActionButton: {
@@ -28,34 +27,17 @@ const styles = {
     fill: grey500,
   },
   columns: {
-    id: {
-      width: '10%',
-    },
     name: {
-      width: '20%',
+      width: '40%',
     },
     description: {
-      width: '20%',
-    },
-    trainer: {
-      width: '20%',
-    },
-    beginDate: {
-      width: '15%',
-    },
-    endDate: {
-      width: '15%',
-    },
-    detail: {
-      width: '10%',
+      width: '50%',
     },
     edit: {
       width: '10%',
     },
   },
 }
-
-const formataData = data => (`${data.substr(8, 2)}/${data.substr(5, 2)}/${data.substr(0, 4)}`)
 
 class ActivityList extends Component {
   state = {
@@ -70,19 +52,11 @@ class ActivityList extends Component {
 
   renderHeader() {
     return (
-      <TableHeader
-        displaySelectAll={false}
-        enableSelectAll={false}
-        adjustForCheckbox={false}
-      >
+      <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
         <TableRow>
           <TableHeaderColumn style={styles.columns.name}>Nome</TableHeaderColumn>
           <TableHeaderColumn style={styles.columns.description}>Descrição</TableHeaderColumn>
-          <TableHeaderColumn style={styles.columns.trainer}>Treinador</TableHeaderColumn>
-          <TableHeaderColumn style={styles.columns.beginDate}>Começo</TableHeaderColumn>
-          <TableHeaderColumn style={styles.columns.endDate}>Final</TableHeaderColumn>
           <TableHeaderColumn style={styles.columns.edit}>Editar</TableHeaderColumn>
-          <TableHeaderColumn style={styles.columns.detail}>Detalhar</TableHeaderColumn>
         </TableRow>
       </TableHeader>
     )
@@ -91,16 +65,11 @@ class ActivityList extends Component {
   renderBody() {
     const { activities } = this.state
     return (
-      <TableBody
-        displayRowCheckbox={false}
-      >
+      <TableBody displayRowCheckbox={false}>
         {activities.map(item => (
           <TableRow key={item.id}>
             <TableRowColumn style={styles.columns.name}>{item.name}</TableRowColumn>
             <TableRowColumn style={styles.columns.description}>{item.description}</TableRowColumn>
-            <TableRowColumn style={styles.columns.trainer}>{item.trainer.name}</TableRowColumn>
-            <TableRowColumn style={styles.columns.beginDate}>{formataData(item.beginDate)}</TableRowColumn>
-            <TableRowColumn style={styles.columns.endDate}>{formataData(item.endDate)}</TableRowColumn>
             <TableRowColumn style={styles.columns.edit}>
               <Link
                 className="button"
@@ -116,21 +85,6 @@ class ActivityList extends Component {
                 </FloatingActionButton>
               </Link>
             </TableRowColumn>
-            <TableRowColumn style={styles.columns.detail}>
-              <Link
-                className="button"
-                to={`${ACTIVITY_DETAIL}/${item.id}`}
-              >
-                <FloatingActionButton
-                  zDepth={0}
-                  mini
-                  backgroundColor={grey200}
-                  iconStyle={styles.editButton}
-                >
-                  <ContentVisibility />
-                </FloatingActionButton>
-              </Link>
-            </TableRowColumn>
           </TableRow>
         ))}
       </TableBody>
@@ -140,7 +94,7 @@ class ActivityList extends Component {
   render() {
     return (
       <PageBase
-        title="Atiividades"
+        title="Atividades"
       >
         <div>
           <Link to={ACTIVITY_FORM} >

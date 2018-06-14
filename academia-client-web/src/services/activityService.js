@@ -11,12 +11,14 @@ class ActivityService {
       .then(({ data }) => data)
   }
 
-  update(id, data) {
-    return apiService.put(`/api/private/activities/${id}`, data)
+  update(id, updateData) {
+    return apiService.put(`/api/private/activities/${id}`, updateData)
+      .then(({ data }) => data)
   }
 
-  create(data) {
-    return apiService.post('/api/private/activities', data)
+  create(createData) {
+    return apiService.post('/api/private/activities', createData)
+      .then(({ data }) => data)
   }
 }
 

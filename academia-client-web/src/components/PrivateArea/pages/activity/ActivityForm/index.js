@@ -1,148 +1,112 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import {
-  RaisedButton,
-  GridList,
-  GridTile,
-  SelectField,
-  MenuItem,
-} from 'material-ui'
+import { Redirect } from 'react-router-dom'
+
+import MenuItem from 'material-ui/MenuItem'
+import RaisedButton from 'material-ui/RaisedButton'
+import SelectField from 'material-ui/SelectField'
 import TextField from 'material-ui/TextField'
+
 import { grey400 } from 'material-ui/styles/colors'
-import { toast } from 'react-toastify'
+
+import Loader from 'react-loader'
 
 import PageBase from '../../common/PageBase'
+
+import { ACTIVITY_FORM } from '../../../../../config/routes'
 import activityService from '../../../../../services/activityService'
 import accountService from '../../../../../services/accountService'
+import notificationService from '../../../../../services/notificationService'
+import restrictionService from '../../../../../services/restrictionService'
 
-const formataDataForm = data => (`${data.substr(8, 2)}/${data.substr(5, 2)}/${data.substr(0, 4)}`)
-const formataDataEnv = data => (`${data.substr(6, 4)}-${data.substr(3, 2)}-${data.substr(0, 2)}T00:00:00.000+0000`)
-
-/*
-  @TODO
-
-  1) MASKS
-      beginDate
-      endDate
-
-  2) Checkboxes Users
-*/
+const styles = {
+  toggleDiv: {
+    maxWidth: 300,
+    marginTop: 40,
+    marginBottom: 5,
+  },
+  toggleLabel: {
+    color: grey400,
+    fontWeight: 100,
+  },
+  buttons: {
+    marginTop: 30,
+    float: 'right',
+  },
+  saveButton: {
+    marginLeft: 5,
+  },
+}
 
 class ActivityForm extends Component {
   state = {
     didLoad: false,
+    redirect: false,
 
-    notify: false,
-    notifyMessage: '',
-    notifySucess: false,
     activity: {
       name: '',
       description: '',
-      trainer: null,
-      users: [],
-      beginDate: '',
-      endDate: '',
+      restrictions: [],
+      trainers: [],
     },
+    restrictions: [],
     trainers: [],
   }
 
   componentDidMount() {
-    const accountPromise = accountService.all()
+    const id = this.getRouteId()
 
-    let activityPromise
-    const { id } = this.props.match.params
-    if (id) {
-      activityPromise = activityService.get(id)
-    } else {
-      activityPromise = Promise.resolve()
-    }
+    const activityPromise = id ? activityService.get(id) : Promise.resolve(this.state.activity)
+    const restrictionsPromise = restrictionService.all()
+    const trainersPromise = accountService.getTrainers()
 
     Promise.all([
-      accountPromise,
       activityPromise,
+      restrictionsPromise,
+      trainersPromise,
     ])
       .then((data) => {
-        const accounts = data[0].filter(user => user.type === 'TRAINER')
-        const activity = data[1] || this.state.activity
+        const [activity, restrictions, trainers] = data
         this.setState({
-          trainers: accounts,
           activity: {
             ...activity,
-            beginDate: formataDataForm(activity.beginDate),
-            endDate: formataDataForm(activity.beginDate),
+            restrictions: activity.restrictions.map(i => restrictions.find(i2 => i2.id === i.id)), // substitui as instâncias pelas instâncias do `all`
+            trainers: activity.trainers.map(i => trainers.find(i2 => i2.id === i.id)), // substitui as instâncias pelas instâncias do `all`
           },
+          restrictions,
+          trainers,
           didLoad: true,
-          notify: false,
         })
+      })
+      .catch(() => {
+        notificationService.notifyError('Erro ao carregar, tente novamente')
       })
   }
 
-  showNotification(sucess, message) {
-    this.setState({
-      notify: true,
-      notifySucess: sucess,
-      notifyMessage: message,
-    })
+  getRouteId() {
+    return this.props.match.params.id
   }
 
   handleSaveClick = (e) => {
     e.preventDefault()
 
-    const {
-      activity: {
-        name,
-        description,
-        trainer,
-        users,
-        beginDate,
-        endDate,
-      },
-    } = this.state
-
-    let data = {
-      name,
-      description,
-      trainer,
-      users,
-      beginDate,
-      endDate,
-    }
+    const { activity } = this.state
 
     const { id } = this.props.match.params
     if (id) {
-      accountService.get(trainer)
-        .then((dataAccount) => {
-          data = {
-            ...data,
-            trainer: dataAccount,
-            beginDate: formataDataEnv(beginDate),
-            endDate: formataDataEnv(endDate),
-          }
-          activityService.update(id, data)
-            .then(() => {
-              this.showNotification(true, 'Atividade alterado com sucesso.')
-            })
-            .catch(() => {
-              this.showNotification(false, 'Erro, por favor tente novamente.')
-            })
-        })
+      activityService.update(id, activity)
+        .then(() => notificationService.notifySuccess('Salvo com sucesso'))
+        .catch(() => notificationService.notifyError('Erro ao salvar, tente novamente'))
     } else {
-      accountService.get(trainer)
-        .then((dataAccount) => {
-          data = {
-            ...data,
-            trainer: dataAccount,
-            beginDate: formataDataEnv(beginDate),
-            endDate: formataDataEnv(endDate),
-          }
-          activityService.create(data)
-            .then(() => {
-              this.showNotification(true, 'Atividade criado com sucesso.')
-            })
-            .catch(() => {
-              this.showNotification(false, 'Erro, por favor tente novamente.')
-            })
+      activityService.create(activity)
+        .then((data) => {
+          notificationService.notifySuccess('Salvo com sucesso')
+          this.setState({
+            activity: data,
+            redirect: true,
+          })
         })
+        .catch(() => notificationService.notifyError('Erro ao salvar, tente novamente'))
     }
   }
 
@@ -157,140 +121,112 @@ class ActivityForm extends Component {
 
   handleNameChange = (e, value) => this.handleInputChange('name', value)
   handleDescriptionChange = (e, value) => this.handleInputChange('description', value)
-  handleTrainerChange = (e, index, value) => this.handleInputChange('trainer', value)
-  handleUsersChange = (e, value) => this.handleInputChange('users', value)
-  handleBeginDateChange = (e, value) => this.handleInputChange('beginDate', value)
-  handleEndDateChange = (e, value) => this.handleInputChange('endDate', value)
+  handleChangeRestrictions = (e, key, value) => this.handleInputChange('restrictions', value)
+  handleChangeTrainers = (e, key, value) => this.handleInputChange('trainers', value)
+
+  renderActivityForm(id, activity, restrictions, trainers) {
+    const isRestrictionChecked = (activityRestrictions, restriction) => !!activityRestrictions.find(r => r.id === restriction.id)
+    const isTrainerChecked = (activityTrainers, trainer) => !!activityTrainers.find(r => r.id === trainer.id)
+
+    return (
+      <form>
+        <div>
+          <TextField
+            hintText="Nome"
+            floatingLabelText="Nome"
+            onChange={this.handleNameChange}
+            value={activity.name}
+          />
+        </div>
+
+        <div>
+          <TextField
+            fullWidth
+            hintText="Description"
+            floatingLabelText="Description"
+            onChange={this.handleDescriptionChange}
+            value={activity.description}
+          />
+        </div>
+
+        <div>
+          <SelectField
+            multiple
+            fullWidth
+            hintText="Restrições associadas à atividade"
+            floatingLabelText="Restrições associadas à atividade"
+            value={activity.restrictions}
+            onChange={this.handleChangeRestrictions}
+          >
+            {restrictions.map(r => (
+              <MenuItem
+                key={r.name}
+                insetChildren
+                checked={isRestrictionChecked(activity.restrictions, r)}
+                value={r}
+                primaryText={r.name}
+              />
+            ))}
+          </SelectField>
+        </div>
+
+        <div>
+          <SelectField
+            multiple
+            fullWidth
+            hintText="Treinadores da atividade"
+            floatingLabelText="Treinadores da atividade"
+            value={activity.trainers}
+            onChange={this.handleChangeTrainers}
+          >
+            {trainers.map(t => (
+              <MenuItem
+                key={t.name}
+                insetChildren
+                checked={isTrainerChecked(activity.trainers, t)}
+                value={t}
+                primaryText={t.name}
+              />
+            ))}
+          </SelectField>
+        </div>
+
+        <div style={styles.buttons}>
+          <RaisedButton
+            onClick={this.handleSaveClick}
+            label="Salvar"
+            style={styles.saveButton}
+            type="submit"
+            primary
+          />
+        </div>
+      </form>
+    )
+  }
 
   render() {
-    const styles = {
-      toggleDiv: {
-        maxWidth: 300,
-        marginTop: 40,
-        marginBottom: 5,
-      },
-      toggleLabel: {
-        color: grey400,
-        fontWeight: 100,
-      },
-      buttons: {
-        marginTop: 30,
-        float: 'right',
-      },
-      saveButton: {
-        marginLeft: 5,
-      },
-    }
+    const {
+      activity,
+      didLoad,
+      redirect,
+      restrictions,
+      trainers,
+    } = this.state
 
-    const { trainers } = this.state
-    const listTrainer = trainers.map(trainer => (
-      <MenuItem key={trainer.id} selected={(this.state.activity.trainer !== null && trainer.id === this.state.activity.trainer.id)} value={trainer.id} primaryText={trainer.name} />
-    ))
-
-    if (this.state.notify) {
-      if (this.state.notifySucess) {
-        toast.success(this.state.notifyMessage)
-      } else {
-        toast.error(this.state.notifyMessage)
-      }
-    }
-
-    let form = null
-
-    if (this.state.didLoad) {
-      form = (
-        <form>
-          <GridList
-            cols={3}
-            padding={25}
-            cellHeight={70}
-          >
-            <GridTile>
-              <TextField
-                hintText="Nome"
-                floatingLabelText="Nome"
-                fullWidth
-                onChange={this.handleNameChange}
-                value={this.state.activity.name}
-              />
-            </GridTile>
-            <GridTile cols={2}>
-              <TextField
-                hintText="Descrição"
-                floatingLabelText="Descrição"
-                fullWidth
-                type="text"
-                onChange={this.handleDescriptionChange}
-                value={this.state.activity.description}
-              />
-            </GridTile>
-          </GridList>
-          <GridList
-            cols={3}
-            padding={25}
-            cellHeight={70}
-          >
-            <GridTile>
-              <SelectField
-                value={this.state.activity.trainer}
-                onChange={this.handleTrainerChange}
-              >
-                { listTrainer }
-              </SelectField>
-            </GridTile>
-            <GridTile>
-              <TextField
-                hintText="Data Inicial"
-                floatingLabelText="Data Inicial"
-                type="text"
-                onChange={this.handleBeginDateChange}
-                value={this.state.activity.beginDate}
-              />
-            </GridTile>
-            <GridTile>
-              <TextField
-                hintText="Data Final"
-                floatingLabelText="Data Final"
-                type="text"
-                onChange={this.handleEndDateChange}
-                value={this.state.activity.endDate}
-              />
-            </GridTile>
-          </GridList>
-          <GridList
-            cols={1}
-            padding={25}
-            cellHeight={70}
-          >
-            <TextField
-              hintText="Usuários"
-              floatingLabelText="Usuários"
-              type="text"
-              onChange={this.handleUsersChange}
-              value={this.state.activity.users}
-            />
-          </GridList>
-          <div style={styles.buttons}>
-            <RaisedButton
-              onClick={this.handleSaveClick}
-              label="Salvar"
-              style={styles.saveButton}
-              type="submit"
-              primary
-            />
-          </div>
-        </form>
+    if (redirect) {
+      return (
+        <Redirect to={`${ACTIVITY_FORM}/${activity.id}`} />
       )
     }
 
+    const id = this.getRouteId()
     return (
-
       <PageBase
         title="Atividade"
       >
-        <div>
-          {form}
-        </div>
+        <Loader loaded={didLoad}>
+          {this.renderActivityForm(id, activity, restrictions, trainers)}
+        </Loader>
       </PageBase>
     )
   }

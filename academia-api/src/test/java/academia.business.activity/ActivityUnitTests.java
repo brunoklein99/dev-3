@@ -10,6 +10,7 @@ import org.mockito.Mockito;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import javax.validation.ValidationException;
+import java.util.Arrays;
 
 public class ActivityUnitTests {
 
@@ -34,7 +35,7 @@ public class ActivityUnitTests {
         activity.setName( "PF" );
         activity.setDescription( "Preparador Físico" );
         trainer.setType( AccountType.TRAINER );
-        activity.setTrainer( trainer );
+        activity.setTrainers(Arrays.asList(trainer));
 
         try {
             activityServiceImpl.create(activity);
@@ -49,7 +50,7 @@ public class ActivityUnitTests {
         Account trainer = new Account( );
         activity.setDescription( "Preparador Físico" );
         trainer.setType( AccountType.TRAINER );
-        activity.setTrainer( trainer );
+        activity.setTrainers(Arrays.asList(trainer));
 
         try {
             activityServiceImpl.create(activity);
@@ -65,7 +66,7 @@ public class ActivityUnitTests {
         Account trainer = new Account( );
         activity.setName( "PF" );
         trainer.setType( AccountType.TRAINER );
-        activity.setTrainer( trainer );
+        activity.setTrainers(Arrays.asList(trainer));
 
         try {
             activityServiceImpl.create(activity);
@@ -98,7 +99,7 @@ public class ActivityUnitTests {
         activity.setName( "PF" );
         activity.setDescription( "Preparador Físico" );
         trainer.setName( "Jonas" );
-        activity.setTrainer( trainer );
+        activity.setTrainers(Arrays.asList(trainer));
         trainer.setType( AccountType.CUSTOMER);
 
         try {

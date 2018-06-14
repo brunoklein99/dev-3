@@ -2,11 +2,12 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Redirect } from 'react-router-dom'
 
-import { grey400 } from 'material-ui/styles/colors'
 import MenuItem from 'material-ui/MenuItem'
 import RaisedButton from 'material-ui/RaisedButton'
 import SelectField from 'material-ui/SelectField'
 import TextField from 'material-ui/TextField'
+
+import { grey400 } from 'material-ui/styles/colors'
 
 import Loader from 'react-loader'
 
@@ -78,7 +79,7 @@ class AccountForm extends Component {
           account: {
             ...account,
             type: id ? account.type : settings.accountType[0],
-            restrictions: account.restrictions.map(r => restrictions.find(r2 => r2.id === r.id)),
+            restrictions: account.restrictions.map(r => restrictions.find(r2 => r2.id === r.id)), // substitui as instâncias pelas instâncias do `all`
           },
           restrictions,
           didLoad: true,
@@ -131,24 +132,7 @@ class AccountForm extends Component {
   handleUsernameChange = (e, value) => this.handleAccountInput('username', value)
   handlePasswordChange = (e, value) => this.handleAccountInput('password', value)
   handleAccountTypeChange = (e, key, value) => this.handleAccountInput('type', value)
-
-  /*
-    -------------
-    restrictions form
-    -------------
-  */
-  handleSaveRestrictionsClick = (e) => {
-    e.preventDefault()
-  }
-
-  handleChangeRestrictions = (e, key, payload) => {
-    this.setState({
-      account: {
-        ...this.state.account,
-        restrictions: payload,
-      },
-    })
-  }
+  handleChangeRestrictions = (e, key, value) => this.handleAccountInput('restrictions', value)
 
   /*
     -------------
@@ -176,7 +160,7 @@ class AccountForm extends Component {
   handlePasswordConfirmationUpdateChange = (e, value) => this.handlePasswordUpdateInput('passwordConfirmation', value)
 
   renderAccountForm(id, account, settings, restrictions) {
-    const isChecked = (accountRestrictions, restriction) => !!accountRestrictions.find(r => r.id === restriction.id)
+    const isRestrictionChecked = (accountRestrictions, restriction) => !!accountRestrictions.find(r => r.id === restriction.id)
 
     return (
       <form>
@@ -227,26 +211,24 @@ class AccountForm extends Component {
         </div>
 
         <div>
-          {id && (
-            <SelectField
-              multiple
-              fullWidth
-              hintText="Restrições associadas ao usuário"
-              floatingLabelText="Restrições associadas ao usuário"
-              value={account.restrictions}
-              onChange={this.handleChangeRestrictions}
-            >
-              {restrictions.map(r => (
-                <MenuItem
-                  key={r.name}
-                  insetChildren
-                  checked={isChecked(account.restrictions, r)}
-                  value={r}
-                  primaryText={r.name}
-                />
-              ))}
-            </SelectField>
-          )}
+          <SelectField
+            multiple
+            fullWidth
+            hintText="Restrições associadas ao usuário"
+            floatingLabelText="Restrições associadas ao usuário"
+            value={account.restrictions}
+            onChange={this.handleChangeRestrictions}
+          >
+            {restrictions.map(r => (
+              <MenuItem
+                key={r.name}
+                insetChildren
+                checked={isRestrictionChecked(account.restrictions, r)}
+                value={r}
+                primaryText={r.name}
+              />
+            ))}
+          </SelectField>
         </div>
 
         <div style={styles.buttons}>
@@ -315,7 +297,7 @@ class AccountForm extends Component {
 
     if (redirect) {
       return (
-        <Redirect to={`${ACCOUNT_FORM}/${this.state.account.id}`} />
+        <Redirect to={`${ACCOUNT_FORM}/${account.id}`} />
       )
     }
 

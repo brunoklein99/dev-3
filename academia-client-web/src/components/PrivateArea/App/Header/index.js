@@ -72,7 +72,7 @@ class Header extends Component {
                 anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
               >
                 <MenuItem
-                  primaryText="Sign out"
+                  primaryText="Sair"
                   onClick={this.handleLogoutClick}
                 />
               </IconMenu>

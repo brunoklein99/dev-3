@@ -1,6 +1,7 @@
 import React from 'react'
 
 import Assessment from 'material-ui/svg-icons/action/assessment'
+import DirectionsRun from 'material-ui/svg-icons/maps/directions-run'
 import ErrorOutline from 'material-ui/svg-icons/alert/error-outline'
 import GridOn from 'material-ui/svg-icons/image/grid-on'
 import People from 'material-ui/svg-icons/social/people'
@@ -10,10 +11,10 @@ import {
   DASHBOARD,
   ACCOUNT_LIST,
   ACCOUNT_FORM,
-  ACTIVITY_FORM,
-  ACTIVITY_LIST,
   RESTRICTION_LIST,
   RESTRICTION_FORM,
+  ACTIVITY_FORM,
+  ACTIVITY_LIST,
 } from '../routes'
 
 export default [
@@ -69,14 +70,21 @@ export default [
   // activity
   {
     key: ACTIVITY_LIST,
-    link: ACTIVITY_LIST,
     text: 'Atividades',
-    icon: <GridOn />,
-  },
-  {
-    key: ACTIVITY_FORM,
-    link: ACTIVITY_FORM,
-    text: 'Criar atividade',
-    icon: <Web />,
+    icon: <DirectionsRun />,
+    children: [
+      {
+        key: ACTIVITY_LIST,
+        link: ACTIVITY_LIST,
+        text: 'Listar Atividades',
+        icon: <GridOn />,
+      },
+      {
+        key: ACTIVITY_FORM,
+        link: ACTIVITY_FORM,
+        text: 'Criar atividade',
+        icon: <Web />,
+      },
+    ],
   },
 ]

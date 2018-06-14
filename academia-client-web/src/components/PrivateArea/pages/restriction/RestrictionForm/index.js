@@ -127,7 +127,7 @@ class RestrictionForm extends Component {
 
     if (redirect) {
       return (
-        <Redirect to={`${RESTRICTION_FORM}/${this.state.restriction.id}`} />
+        <Redirect to={`${RESTRICTION_FORM}/${restriction.id}`} />
       )
     }
 
