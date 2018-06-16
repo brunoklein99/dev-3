@@ -7,9 +7,9 @@ import ContentAdd from 'material-ui/svg-icons/content/add'
 import { pink500, grey200, grey500 } from 'material-ui/styles/colors'
 
 import PageBase from '../../common/PageBase'
-import restrictionService from '../../../../../services/restrictionService'
+import planService from '../../../../../services/planService'
 
-import { RESTRICTION_FORM } from '../../../../../config/routes'
+import { PLAN_FORM } from '../../../../../config/routes'
 
 const styles = {
   floatingActionButton: {
@@ -30,22 +30,19 @@ const styles = {
     name: {
       width: '30%',
     },
-    activities: {
-      width: '50%',
-    },
     edit: {
       width: '10%',
     },
   },
 }
 
-class RestrictionList extends Component {
+class PlanList extends Component {
   state = {
     restrictions: [],
   }
 
   componentDidMount() {
-    restrictionService.all()
+    planService.all()
       .then(data => this.setState({ restrictions: data }))
       .catch(err => console.log(err))
   }
@@ -71,7 +68,7 @@ class RestrictionList extends Component {
             <TableRowColumn style={styles.columns.edit}>
               <Link
                 className="button"
-                to={`${RESTRICTION_FORM}/${item.id}`}
+                to={`${PLAN_FORM}/${item.id}`}
               >
                 <FloatingActionButton
                   zDepth={0}
@@ -93,10 +90,10 @@ class RestrictionList extends Component {
   render() {
     return (
       <PageBase
-        title="Restrições"
+        title="Planos"
       >
         <div>
-          <Link to={RESTRICTION_FORM} >
+          <Link to={PLAN_FORM} >
             <FloatingActionButton style={styles.floatingActionButton} backgroundColor={pink500}>
               <ContentAdd />
             </FloatingActionButton>
@@ -112,4 +109,4 @@ class RestrictionList extends Component {
   }
 }
 
-export default RestrictionList
+export default PlanList

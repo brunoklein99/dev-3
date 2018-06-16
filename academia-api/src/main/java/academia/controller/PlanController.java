@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/private/plans")
 public class PlanController {
 
     @Autowired
@@ -36,6 +37,4 @@ public class PlanController {
     public Plan create(@RequestBody Plan plan) {
         return service.create(plan);
     }
-
-
 }

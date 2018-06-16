@@ -10,3 +10,6 @@ export const RESTRICTION_FORM = '/restrictions/form'
 
 export const ACTIVITY_LIST = '/activities/list'
 export const ACTIVITY_FORM = '/activities/form'
+
+export const PLAN_LIST = '/plans/list'
+export const PLAN_FORM = '/plans/form'

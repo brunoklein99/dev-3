@@ -14,7 +14,7 @@ import ThemeDefault from '../../../theme-default'
 import loginService from '../../../services/loginService'
 import notificationService from '../../../services/notificationService'
 
-import { LOGIN } from '../../../config/routes'
+import { LOGIN, DASHBOARD } from '../../../config/routes'
 
 const styles = {
   loginContainer: {
@@ -147,7 +147,7 @@ export default class Login extends Component {
   renderFormOrRedirect() {
     const { isAuthenticated } = this.state
     if (isAuthenticated) {
-      const referrer = this.state.referrer || '/'
+      const referrer = this.state.referrer || DASHBOARD
       return (
         <Redirect to={referrer} />
       )

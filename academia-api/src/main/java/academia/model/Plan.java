@@ -17,14 +17,18 @@ public class Plan {
     private String name;
 
     @OneToMany
-    private List<Activity> activities;
+    private List<Appointment> appointments;
+
+    public List<Appointment> getAppointments() {
+        return appointments;
+    }
+
+    public void setAppointments(List<Appointment> appointments) {
+        this.appointments = appointments;
+    }
 
     public Long getId() {
         return id;
-    }
-
-    public List<Activity> getActivities() {
-        return activities;
     }
 
     public String getName() {
@@ -33,10 +37,6 @@ public class Plan {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public void setActivities(List<Activity> activities) {
-        this.activities = activities;
     }
 
     public void setName(String name) {
