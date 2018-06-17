@@ -57,7 +57,7 @@ class PlanList extends Component {
       <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
         <TableRow>
           <TableHeaderColumn style={styles.columns.name}>Cliente</TableHeaderColumn>
-          <TableHeaderColumn style={styles.columns.appointments}>Atividades</TableHeaderColumn>
+          <TableHeaderColumn style={styles.columns.appointments}>Aulas</TableHeaderColumn>
           <TableHeaderColumn style={styles.columns.edit}>Editar</TableHeaderColumn>
         </TableRow>
       </TableHeader>
@@ -68,9 +68,9 @@ class PlanList extends Component {
     const sortedAppointments = sortBy(appointments, appointment => moment(appointment.start).valueOf())
     return (
       <div>
-        {sortedAppointments.map(appointment => (
+        {sortedAppointments.map((appointment, i) => (
           <div key={appointment.id}>
-            {moment(appointment.start).format('DD/MM/YYYY HH:mm:ss')} - {appointment.activity.name} (com {appointment.trainer.name})
+            {`Aula ${i + 1}:`} {moment(appointment.start).format('DD/MM/YYYY HH:mm:ss')} - {appointment.activity.name} (com {appointment.trainer.name})
           </div>
         ))}
       </div>

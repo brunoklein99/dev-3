@@ -95,6 +95,14 @@ public class Application {
                 customer2 = accountService.create(customer2);
             }
 
+            String customerName3 = "customer3";
+            Account customer3 = accountRepository.findByUsername(customerName3);
+            if (customer3 == null) {
+                List<Restriction> restrictions = Arrays.asList();
+                customer3 = new Account("Sr Saudável", customerName3, customerName3, AccountType.CUSTOMER, restrictions);
+                customer3 = accountService.create(customer3);
+            }
+
             String trainerBodyBuilderName = "trainer1";
             Account trainerBodyBuilder = accountRepository.findByUsername(trainerBodyBuilderName);
             if (trainerBodyBuilder == null) {
@@ -167,13 +175,14 @@ public class Application {
             /*
                 activities
              */
-            Appointment appointment1 = new Appointment(activityRunning, trainerAthletic, LocalDateTime.parse("21/06/2018 16:00", formatter));
-            Appointment appointment2 = new Appointment(activityRunning, trainerAthletic, LocalDateTime.parse("22/06/2018 16:00", formatter));
+            Appointment appointment1 = new Appointment(activityWalking, trainerAthletic, LocalDateTime.parse("20/06/2018 16:00", formatter));
+            Appointment appointment2 = new Appointment(activityWalking, trainerAthletic, LocalDateTime.parse("21/06/2018 16:00", formatter));
+            Appointment appointment3 = new Appointment(activityYoga, trainerYogaGuy, LocalDateTime.parse("22/06/2018 18:00", formatter));
 
             /*
                 plan
              */
-            Plan plan1 = new Plan(customer1, Arrays.asList(appointment1, appointment2));
+            Plan plan1 = new Plan(customer1, Arrays.asList(appointment1, appointment2, appointment3));
             planService.create(plan1);
         };
     }

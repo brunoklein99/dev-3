@@ -152,16 +152,18 @@ class PlanForm extends Component {
     }
   }
 
-  handlePlanChange = (property, value) => (
+  handlePlanChange = mutation => (
     this.setState({
       plan: {
         ...this.state.plan,
-        [property]: value,
+        ...mutation,
       },
     })
   )
 
-  handleChangeCustomer = (e, key, value) => this.handlePlanChange('customer', value)
+  handleChangeCustomer = (e, key, value) => this.handlePlanChange({
+    customer: value,
+  })
 
   handleAddActivity = () => {
     const lastestAppointment = last(sortBy(this.state.plan.appointments, appointment => moment(appointment.start).valueOf()))
@@ -199,9 +201,10 @@ class PlanForm extends Component {
   handleChangeAppointmentActivity = (appointment, e, key, value) => this.handleAppointmentChange(appointment, { activity: value, trainer: null })
   handleChangeAppointmentTrainer = (appointment, e, key, value) => this.handleAppointmentChange(appointment, { trainer: value })
 
-  renderAppointmentForm(appointment, activities) {
+  renderAppointmentForm(appointment, filteredActivities, i) {
     return (
       <div key={appointment.start}>
+        <h5 style={globalStyles.sectionTitle}>Aula {i + 1}</h5>
         <div>
           <DateTimePicker
             clearIcon={null}
@@ -221,7 +224,7 @@ class PlanForm extends Component {
             value={appointment.activity}
             onChange={(...args) => this.handleChangeAppointmentActivity(appointment, ...args)}
           >
-            {activities.map(activity => (<MenuItem
+            {filteredActivities.map(activity => (<MenuItem
               key={activity.id}
               value={activity}
               primaryText={activity.name}
@@ -252,10 +255,12 @@ class PlanForm extends Component {
 
   renderAppointmentList(plan, activities) {
     const sortedAppointments = sortBy(plan.appointments, appointment => moment(appointment.start).valueOf())
+    const filteredActivities = activities.filter(activity => plan.customer.restrictions.every(r1 => !activity.restrictions.find(r2 => r1.id === r2.id)))
+
     return (
       <div style={styles.appointmentList}>
         <h4 style={globalStyles.sectionTitle}>Aulas</h4>
-        {sortedAppointments.map(appointment => this.renderAppointmentForm(appointment, activities))}
+        {sortedAppointments.map((appointment, i) => this.renderAppointmentForm(appointment, filteredActivities, i))}
         <FloatingActionButton
           style={styles.floatingActionButton}
           backgroundColor={pink500}
@@ -272,6 +277,7 @@ class PlanForm extends Component {
       <form>
         <div>
           <SelectField
+            disabled={!!plan.id}
             fullWidth
             hintText="Cliente do plano"
             floatingLabelText="Cliente do plano"
@@ -298,7 +304,7 @@ class PlanForm extends Component {
             primary
           />
         </div>
-        {this.renderAppointmentList(plan, activities)}
+        {plan.customer && this.renderAppointmentList(plan, activities)}
       </form>
     )
   }
