@@ -5,6 +5,7 @@ import FloatingActionButton from 'material-ui/FloatingActionButton'
 import ContentCreate from 'material-ui/svg-icons/content/create'
 import ContentAdd from 'material-ui/svg-icons/content/add'
 import { pink500, grey200, grey500 } from 'material-ui/styles/colors'
+import moment from 'moment'
 
 import PageBase from '../../common/PageBase'
 import planService from '../../../../../services/planService'
@@ -30,6 +31,9 @@ const styles = {
     name: {
       width: '30%',
     },
+    appointments: {
+      width: '50%',
+    },
     edit: {
       width: '10%',
     },
@@ -38,12 +42,12 @@ const styles = {
 
 class PlanList extends Component {
   state = {
-    restrictions: [],
+    plans: [],
   }
 
   componentDidMount() {
     planService.all()
-      .then(data => this.setState({ restrictions: data }))
+      .then(data => this.setState({ plans: data }))
       .catch(err => console.log(err))
   }
 
@@ -51,24 +55,38 @@ class PlanList extends Component {
     return (
       <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
         <TableRow>
-          <TableHeaderColumn style={styles.columns.name}>Nome</TableHeaderColumn>
+          <TableHeaderColumn style={styles.columns.name}>Cliente</TableHeaderColumn>
+          <TableHeaderColumn style={styles.columns.appointments}>Atividades</TableHeaderColumn>
           <TableHeaderColumn style={styles.columns.edit}>Editar</TableHeaderColumn>
         </TableRow>
       </TableHeader>
     )
   }
 
+  renderAppointments(appointments) {
+    return (
+      <div>
+        {appointments.map(appointment => (
+          <div key={appointment.id}>
+            {moment(appointment.start).format('DD/MM/YYYY HH:mm:ss')} - {appointment.activity.name} - {appointment.trainer.name}
+          </div>
+        ))}
+      </div>
+    )
+  }
+
   renderBody() {
-    const { restrictions } = this.state
+    const { plans } = this.state
     return (
       <TableBody displayRowCheckbox={false}>
-        {restrictions.map((item => (
-          <TableRow key={item.id}>
-            <TableRowColumn style={styles.columns.name}>{item.name}</TableRowColumn>
+        {plans.map((plan => (
+          <TableRow key={plan.id}>
+            <TableRowColumn style={styles.columns.name}>{plan.customer.name}</TableRowColumn>
+            <TableRowColumn style={styles.columns.appointments}>{this.renderAppointments(plan.appointments)}</TableRowColumn>
             <TableRowColumn style={styles.columns.edit}>
               <Link
                 className="button"
-                to={`${PLAN_FORM}/${item.id}`}
+                to={`${PLAN_FORM}/${plan.id}`}
               >
                 <FloatingActionButton
                   zDepth={0}

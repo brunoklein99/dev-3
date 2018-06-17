@@ -4,18 +4,18 @@ import academia.business.account.AccountRepository;
 import academia.business.account.AccountService;
 import academia.business.activity.ActivityRepository;
 import academia.business.activity.ActivityService;
-import academia.business.appointment.AppointmentService;
+import academia.business.plan.PlanService;
 import academia.business.restriction.RestrictionRepository;
 import academia.business.restriction.RestrictionService;
 import academia.domain.AccountType;
-import academia.model.Account;
-import academia.model.Activity;
-import academia.model.Restriction;
+import academia.model.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -38,8 +38,11 @@ public class Application {
             ActivityService activityService,
             ActivityRepository activityRepository,
 
-            AppointmentService appointmentService) {
+            PlanService planService
+    ) {
         return (args) -> {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
             /*
                 restrictions
              */
@@ -76,12 +79,20 @@ public class Application {
                 admin = accountService.create(new Account("Administrador da Academia", adminName, adminName, AccountType.ADMIN, null));
             }
 
-            String customerName = "customer";
-            Account customer = accountRepository.findByUsername(customerName);
-            if (customer == null) {
+            String customerName1 = "customer1";
+            Account customer1 = accountRepository.findByUsername(customerName1);
+            if (customer1 == null) {
                 List<Restriction> restrictions = Arrays.asList(restrictionCardiaco, restrictionJoelho);
-                customer = new Account("Cliente da Silva", customerName, customerName, AccountType.CUSTOMER, restrictions);
-                customer = accountService.create(customer);
+                customer1 = new Account("Rafael da Silva", customerName1, customerName1, AccountType.CUSTOMER, restrictions);
+                customer1 = accountService.create(customer1);
+            }
+
+            String customerName2 = "customer2";
+            Account customer2 = accountRepository.findByUsername(customerName2);
+            if (customer2 == null) {
+                List<Restriction> restrictions = Arrays.asList(restrictionRespiratorio);
+                customer2 = new Account("Luís dos Santos", customerName2, customerName2, AccountType.CUSTOMER, restrictions);
+                customer2 = accountService.create(customer2);
             }
 
             String trainerBodyBuilderName = "trainer1";
@@ -153,11 +164,17 @@ public class Application {
                 activityPilates = activityService.create(activityPilates);
             }
 
-//            Appointment appointment = new Appointment();
-//            appointment.setActivity(activity);
-//            appointment.setDate(new Date(2018, 1, 1));
-//            appointment.setVagas(10);
-//            appointmentService.create(appointment);
+            /*
+                activities
+             */
+            Appointment appointment1 = new Appointment(activityRunning, trainerAthletic, LocalDateTime.parse("21/06/2018 16:00", formatter));
+            Appointment appointment2 = new Appointment(activityRunning, trainerAthletic, LocalDateTime.parse("22/06/2018 16:00", formatter));
+
+            /*
+                plan
+             */
+            Plan plan1 = new Plan(customer1, Arrays.asList(appointment1, appointment2));
+            planService.create(plan1);
         };
     }
 }

@@ -124,7 +124,7 @@ class ActivityForm extends Component {
   handleChangeRestrictions = (e, key, value) => this.handleInputChange('restrictions', value)
   handleChangeTrainers = (e, key, value) => this.handleInputChange('trainers', value)
 
-  renderActivityForm(id, activity, restrictions, trainers) {
+  renderActivityForm(activity, restrictions, trainers) {
     const isRestrictionChecked = (activityRestrictions, restriction) => !!activityRestrictions.find(r => r.id === restriction.id)
     const isTrainerChecked = (activityTrainers, trainer) => !!activityTrainers.find(r => r.id === trainer.id)
 
@@ -219,13 +219,12 @@ class ActivityForm extends Component {
       )
     }
 
-    const id = this.getRouteId()
     return (
       <PageBase
         title="Atividade"
       >
         <Loader loaded={didLoad}>
-          {this.renderActivityForm(id, activity, restrictions, trainers)}
+          {this.renderActivityForm(activity, restrictions, trainers)}
         </Loader>
       </PageBase>
     )

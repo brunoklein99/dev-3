@@ -38,24 +38,23 @@ public class AccountController {
         return accountRepository.findAll();
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/find/trainers")
-    public List<Account> findTrainers() {
+    private List<Account> filterByType(AccountType accountType) {
         return accountRepository
                 .findAll()
                 .stream()
-                .filter(a -> a.getType() == AccountType.TRAINER)
+                .filter(a -> a.getType() == accountType)
                 .collect(Collectors.toList())
                 ;
     }
 
+    @RequestMapping(method = RequestMethod.GET, path = "/find/trainers")
+    public List<Account> findTrainers() {
+        return this.filterByType(AccountType.TRAINER);
+    }
+
     @RequestMapping(method = RequestMethod.GET, path = "/find/customers")
     public List<Account> findCustomers() {
-        return accountRepository
-                .findAll()
-                .stream()
-                .filter(a -> a.getType() == AccountType.CUSTOMER)
-                .collect(Collectors.toList())
-                ;
+        return this.filterByType(AccountType.CUSTOMER);
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/{id}")

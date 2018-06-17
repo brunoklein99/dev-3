@@ -1,24 +1,57 @@
 package academia.model;
 
+import academia.domain.AccountType;
+
 import javax.persistence.*;
-import java.util.Date;
+import javax.validation.ValidationException;
+import java.time.LocalDateTime;
 
 @Entity
 public class Appointment {
+    public Appointment() {
+        // hibernate needs the default constructor
+    }
+
+    public Appointment(Activity activity, Account trainer, LocalDateTime start) {
+        this.validate(trainer);
+
+        this.activity = activity;
+        this.trainer = trainer;
+        this.start = start;
+    }
+
+    private void validate(Account trainer) {
+        if (trainer.getType() != AccountType.TRAINER) {
+            throw new ValidationException("Appointment deve ter um treinador com o tipo de conta de treinador");
+        }
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     private Activity activity;
 
-    private Date date;
+    @ManyToOne
+    private Account trainer;
 
-    private int vagas;
+    private LocalDateTime start;
 
-    public Appointment(){
+    public Account getTrainer() {
+        return trainer;
+    }
 
+    public void setTrainer(Account trainer) {
+        this.trainer = trainer;
+    }
+
+    public LocalDateTime getStart() {
+        return start;
+    }
+
+    public void setStart(LocalDateTime start) {
+        this.start = start;
     }
 
     public Long getId() {
@@ -29,27 +62,11 @@ public class Appointment {
         this.id = id;
     }
 
-    public Date getDate() {
-        return date;
-    }
-
     public Activity getActivity() {
         return activity;
     }
 
-    public int getVagas() {
-        return vagas;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
     public void setActivity(Activity activity) {
         this.activity = activity;
-    }
-
-    public void setVagas(int vagas) {
-        this.vagas = vagas;
     }
 }

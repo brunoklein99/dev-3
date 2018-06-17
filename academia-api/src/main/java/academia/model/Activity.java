@@ -5,7 +5,7 @@ import java.util.List;
 
 @Entity
 public class Activity {
-    public Activity(){
+    public Activity() {
         // hibernate needs the default constructor
     }
 

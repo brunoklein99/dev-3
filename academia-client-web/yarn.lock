@@ -3640,7 +3640,7 @@ interpret@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/interpret/-/interpret-1.1.0.tgz#7ed1b1410c6a0e0f78cf95d3b8440c63f78b8614"
 
-invariant@^2.2.1, invariant@^2.2.2:
+invariant@^2.2.1, invariant@^2.2.2, invariant@^2.2.4:
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/invariant/-/invariant-2.2.4.tgz#610f3c92c9359ce1db616e538008d23ff35158e6"
   dependencies:
@@ -4789,6 +4789,10 @@ mkdirp@0.5.1, mkdirp@0.5.x, "mkdirp@>=0.5 0", mkdirp@^0.5.1, mkdirp@~0.5.0, mkdi
   dependencies:
     minimist "0.0.8"
 
+moment@2.22.2:
+  version "2.22.2"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.22.2.tgz#3c257f9839fc0e93ff53149632239eb90783ff66"
+
 ms@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
@@ -5846,6 +5850,13 @@ react-event-listener@^0.5.1:
     babel-runtime "^6.26.0"
     fbjs "^0.8.16"
     prop-types "^15.6.0"
+    warning "^3.0.0"
+
+react-input-mask@^2.0.1:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/react-input-mask/-/react-input-mask-2.0.2.tgz#1726b16315eeedcb005d97b4f76d3a03c3d69df8"
+  dependencies:
+    invariant "^2.2.4"
     warning "^3.0.0"
 
 react-loader@2.4.3:
