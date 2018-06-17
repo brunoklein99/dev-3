@@ -6,6 +6,7 @@ import ContentCreate from 'material-ui/svg-icons/content/create'
 import ContentAdd from 'material-ui/svg-icons/content/add'
 import { pink500, grey200, grey500 } from 'material-ui/styles/colors'
 import moment from 'moment'
+import sortBy from 'lodash/sortBy'
 
 import PageBase from '../../common/PageBase'
 import planService from '../../../../../services/planService'
@@ -64,11 +65,12 @@ class PlanList extends Component {
   }
 
   renderAppointments(appointments) {
+    const sortedAppointments = sortBy(appointments, appointment => moment(appointment.start).valueOf())
     return (
       <div>
-        {appointments.map(appointment => (
+        {sortedAppointments.map(appointment => (
           <div key={appointment.id}>
-            {moment(appointment.start).format('DD/MM/YYYY HH:mm:ss')} - {appointment.activity.name} - {appointment.trainer.name}
+            {moment(appointment.start).format('DD/MM/YYYY HH:mm:ss')} - {appointment.activity.name} (com {appointment.trainer.name})
           </div>
         ))}
       </div>

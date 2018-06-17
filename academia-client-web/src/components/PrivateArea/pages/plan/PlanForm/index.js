@@ -2,15 +2,21 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Redirect } from 'react-router-dom'
 
+import Divider from 'material-ui/Divider'
 import ContentAdd from 'material-ui/svg-icons/content/add'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
 import MenuItem from 'material-ui/MenuItem'
 import RaisedButton from 'material-ui/RaisedButton'
-// import TextField from 'material-ui/TextField'
 import SelectField from 'material-ui/SelectField'
+import DatePickerDialog from 'material-ui/DatePicker/DatePickerDialog'
+import TimePickerDialog from 'material-ui/TimePicker/TimePickerDialog'
 import { pink500, grey400 } from 'material-ui/styles/colors'
 
+import DateTimePicker from 'material-ui-datetimepicker'
 import Loader from 'react-loader'
+import moment from 'moment'
+import last from 'lodash/last'
+import sortBy from 'lodash/sortBy'
 
 import PageBase from '../../common/PageBase'
 
@@ -47,8 +53,8 @@ const styles = {
   floatingActionButton: {
     margin: 0,
     top: 'auto',
-    right: 20,
-    bottom: 20,
+    right: 200,
+    bottom: 10,
     left: 'auto',
     position: 'absolute',
   },
@@ -65,7 +71,6 @@ class PlanForm extends Component {
     },
     activities: [],
     customers: [],
-    trainers: [],
   }
 
   componentDidMount() {
@@ -111,7 +116,6 @@ class PlanForm extends Component {
           },
           activities: activitiesWithMappedTrainers,
           customers,
-          trainers,
           didLoad: true,
         })
       })
@@ -160,12 +164,19 @@ class PlanForm extends Component {
   handleChangeCustomer = (e, key, value) => this.handlePlanChange('customer', value)
 
   handleAddActivity = () => {
-    console.log('# handleAddActivity')
+    const lastestAppointment = last(sortBy(this.state.plan.appointments, appointment => moment(appointment.start).valueOf()))
+    const start = lastestAppointment ? moment(lastestAppointment.start).add(1, 'days').format('YYYY-MM-DDTHH:mm:ss') : moment().format('YYYY-MM-DDTHH:mm:ss')
+
+    this.setState({
+      plan: {
+        ...this.state.plan,
+        appointments: [...this.state.plan.appointments, { start }],
+      },
+    })
   }
 
   handleAppointmentChange = (appointment, mutation) => {
     this.setState(prevState => ({
-      ...prevState,
       plan: {
         ...prevState.plan,
         appointments: prevState.plan.appointments.map(a => (appointment === a ? ({
@@ -176,15 +187,33 @@ class PlanForm extends Component {
     }))
   }
 
-  handleChangeAppointmentStart = (appointment, e, value) => this.handleAppointmentChange(appointment, { start: value })
+  handleChangeAppointmentStart = (appointment, value) => {
+    const newValue = moment(value).format('YYYY-MM-DDTHH:mm:ss')
+    const appointmentAtSameTime = this.state.plan.appointments.find(a => a.start === newValue)
+    if (appointmentAtSameTime) {
+      notificationService.notifyError('Não podem haver duas aulas no mesmo horário')
+      return
+    }
+    this.handleAppointmentChange(appointment, { start: newValue })
+  }
   handleChangeAppointmentActivity = (appointment, e, key, value) => this.handleAppointmentChange(appointment, { activity: value, trainer: null })
   handleChangeAppointmentTrainer = (appointment, e, key, value) => this.handleAppointmentChange(appointment, { trainer: value })
 
   renderAppointmentForm(appointment, activities) {
+    console.log('### appointment.start', appointment.start)
     return (
-      // TODO não vai poder ser ID na criação
-      <div key={appointment.id}>
-        {/* {appointment.start} */}
+      <div key={appointment.start}>
+        <div>
+          <DateTimePicker
+            clearIcon={null}
+            value={appointment.start ? moment(appointment.start).format('DD/MM/YYYY HH:mm:ss') : null}
+            format="DD/MM/YYYY HH:mm:ss"
+            onChange={(...args) => this.handleChangeAppointmentStart(appointment, ...args)}
+            DatePicker={DatePickerDialog}
+            TimePicker={TimePickerDialog}
+            floatingLabelText="Data e hora da atividade"
+          />
+        </div>
 
         <div>
           <SelectField
@@ -217,18 +246,17 @@ class PlanForm extends Component {
             </SelectField>
           </div>
         )}
-
-        {/* {appointment.activity.name}
-        {appointment.trainer.name} */}
+        <Divider />
       </div>
     )
   }
 
   renderAppointmentList(plan, activities) {
+    const sortedAppointments = sortBy(plan.appointments, appointment => moment(appointment.start).valueOf())
     return (
       <div style={styles.appointmentList}>
         <h4 style={globalStyles.sectionTitle}>Aulas</h4>
-        {plan.appointments.map(appointment => this.renderAppointmentForm(appointment, activities))}
+        {sortedAppointments.map(appointment => this.renderAppointmentForm(appointment, activities))}
         <FloatingActionButton
           style={styles.floatingActionButton}
           backgroundColor={pink500}
