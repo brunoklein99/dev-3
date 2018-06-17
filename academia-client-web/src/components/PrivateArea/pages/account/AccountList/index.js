@@ -50,7 +50,7 @@ class AccountList extends Component {
   componentDidMount() {
     accountService.all()
       .then(data => this.setState({ accounts: data }))
-      .catch(err => console.log(err))
+      .catch(err => console.error(err))
   }
 
   renderHeader() {

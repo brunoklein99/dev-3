@@ -20,11 +20,14 @@ import {
   PLAN_LIST,
 } from '../routes'
 
+import accountTypes from '../../constants/accountTypes'
+
 export default [
   {
     key: DASHBOARD,
     link: DASHBOARD,
     text: 'Dashboard',
+    allowed: [accountTypes.ADMIN, accountTypes.CUSTOMER, accountTypes.TRAINER],
     icon: <Assessment />,
   },
 
@@ -32,6 +35,7 @@ export default [
   {
     key: ACCOUNT_LIST,
     text: 'Usuários',
+    allowed: [accountTypes.ADMIN, accountTypes.TRAINER],
     icon: <People />,
     children: [
       {
@@ -53,6 +57,7 @@ export default [
   {
     key: RESTRICTION_LIST,
     text: 'Restrições',
+    allowed: [accountTypes.ADMIN, accountTypes.TRAINER],
     icon: <ErrorOutline />,
     children: [
       {
@@ -74,6 +79,7 @@ export default [
   {
     key: ACTIVITY_LIST,
     text: 'Atividades',
+    allowed: [accountTypes.ADMIN, accountTypes.TRAINER],
     icon: <DirectionsRun />,
     children: [
       {
@@ -96,6 +102,7 @@ export default [
     key: PLAN_LIST,
     text: 'Planos',
     icon: <Assignment />,
+    allowed: [accountTypes.ADMIN, accountTypes.CUSTOMER, accountTypes.TRAINER],
     children: [
       {
         key: PLAN_LIST,

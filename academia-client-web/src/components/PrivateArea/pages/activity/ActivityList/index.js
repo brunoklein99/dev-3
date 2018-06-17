@@ -47,7 +47,7 @@ class ActivityList extends Component {
   componentDidMount() {
     activityService.all()
       .then(data => this.setState({ activities: data }))
-      .catch(err => console.log(err))
+      .catch(err => console.error(err))
   }
 
   renderHeader() {

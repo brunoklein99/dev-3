@@ -23,7 +23,7 @@ class Header extends Component {
       .then(() => {
         this.setState({ logout: true })
       })
-      .catch(err => console.log(err))
+      .catch(err => console.error(err))
   }
 
   render() {

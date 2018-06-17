@@ -49,7 +49,7 @@ class PlanList extends Component {
   componentDidMount() {
     planService.all()
       .then(data => this.setState({ plans: data }))
-      .catch(err => console.log(err))
+      .catch(err => console.error(err))
   }
 
   renderHeader() {

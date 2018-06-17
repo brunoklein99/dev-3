@@ -200,7 +200,6 @@ class PlanForm extends Component {
   handleChangeAppointmentTrainer = (appointment, e, key, value) => this.handleAppointmentChange(appointment, { trainer: value })
 
   renderAppointmentForm(appointment, activities) {
-    console.log('### appointment.start', appointment.start)
     return (
       <div key={appointment.start}>
         <div>

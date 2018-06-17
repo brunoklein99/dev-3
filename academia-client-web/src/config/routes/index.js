@@ -1,6 +1,8 @@
+// public
 export const LOGIN = '/login'
 
-export const DASHBOARD = '/'
+// private
+export const DASHBOARD = '/dashboard'
 
 export const ACCOUNT_LIST = '/accounts/list'
 export const ACCOUNT_FORM = '/accounts/form'

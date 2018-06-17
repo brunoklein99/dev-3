@@ -1,4 +1,5 @@
 import apiService from './apiService'
+import accountTypes from '../constants/accountTypes'
 
 const PREFIX = '/api/private/accounts'
 
@@ -35,9 +36,9 @@ class AccountService {
 
   translateAccountType(accountType) {
     const map = {
-      ADMIN: 'Administrador',
-      CUSTOMER: 'Cliente',
-      TRAINER: 'Treinador',
+      [accountTypes.ADMIN]: 'Administrador',
+      [accountTypes.CUSTOMER]: 'Cliente',
+      [accountTypes.TRAINER]: 'Treinador',
     }
 
     if (map[accountType]) {

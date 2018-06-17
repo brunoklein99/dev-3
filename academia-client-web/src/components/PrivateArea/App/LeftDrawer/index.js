@@ -7,7 +7,7 @@ import MenuItem from 'material-ui/MenuItem'
 import { Link } from 'react-router-dom'
 
 const LeftDrawer = (props) => {
-  const { navDrawerOpen } = props
+  const { menus, navDrawerOpen, user } = props
 
   const styles = {
     logo: {
@@ -48,26 +48,42 @@ const LeftDrawer = (props) => {
     },
   }
 
-  const menuItem = (menu, isRoot) => (
-    <MenuItem
-      key={menu.key}
-      style={styles.menuItem}
-      primaryText={menu.text}
-      leftIcon={menu.icon}
-      innerDivStyle={isRoot ? {} : styles.subMenu}
-      containerElement={<Link to={menu.link} />}
-    />
-  )
+  const menuItem = (authority, menu, isRoot) => {
+    const hasAuthority = menu.allowed ? menu.allowed.includes(authority) : true
+    if (!hasAuthority) {
+      return null
+    }
 
-  const menuWithChildren = menu => (
-    <MenuItem
-      key={menu.key}
-      style={styles.menuItem}
-      primaryText={menu.text}
-      leftIcon={menu.icon}
-      menuItems={menu.children.map(child => menuItem(child, false))}
-    />
-  )
+    return (
+      <MenuItem
+        key={menu.key}
+        style={styles.menuItem}
+        primaryText={menu.text}
+        leftIcon={menu.icon}
+        innerDivStyle={isRoot ? {} : styles.subMenu}
+        containerElement={<Link to={menu.link} />}
+      />
+    )
+  }
+
+  const menuWithChildren = (authority, menu) => {
+    const hasAuthority = menu.allowed ? menu.allowed.includes(authority) : true
+    if (!hasAuthority) {
+      return null
+    }
+
+    return (
+      <MenuItem
+        key={menu.key}
+        style={styles.menuItem}
+        primaryText={menu.text}
+        leftIcon={menu.icon}
+        menuItems={menu.children.map(child => menuItem(authority, child, false))}
+      />
+    )
+  }
+
+  const { authority } = user.authorities[0]
 
   return (
     <Drawer
@@ -78,10 +94,10 @@ const LeftDrawer = (props) => {
           ABC Academia
       </div>
       <div style={styles.avatar.div}>
-        <span style={styles.avatar.span}>{props.user.name}</span>
+        <span style={styles.avatar.span}>{user.name}</span>
       </div>
       <div>
-        {props.menus.map(menu => (menu.link ? menuItem(menu, true) : menuWithChildren(menu)))}
+        {menus.map(menu => (menu.link ? menuItem(authority, menu, true) : menuWithChildren(authority, menu)))}
       </div>
     </Drawer>
   )

@@ -61,7 +61,7 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
         } else if (account.getType() == AccountType.TRAINER) {
             authorities.add(new SimpleGrantedAuthority("TRAINER"));
         } else if (account.getType() == AccountType.CUSTOMER) {
-            authorities.add(new SimpleGrantedAuthority("USER"));
+            authorities.add(new SimpleGrantedAuthority("CUSTOMER"));
         } else {
             throw new RuntimeException("Tipo de conta inválida");
         }

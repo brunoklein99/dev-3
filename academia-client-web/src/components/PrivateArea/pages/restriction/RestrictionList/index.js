@@ -47,7 +47,7 @@ class RestrictionList extends Component {
   componentDidMount() {
     restrictionService.all()
       .then(data => this.setState({ restrictions: data }))
-      .catch(err => console.log(err))
+      .catch(err => console.error(err))
   }
 
   renderHeader() {
