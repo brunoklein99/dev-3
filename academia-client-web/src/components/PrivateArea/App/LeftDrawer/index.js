@@ -78,7 +78,7 @@ const LeftDrawer = (props) => {
         style={styles.menuItem}
         primaryText={menu.text}
         leftIcon={menu.icon}
-        menuItems={menu.children.map(child => menuItem(authority, child, false))}
+        menuItems={menu.children.map(child => menuItem(authority, child, false)).filter(i => !!i)}
       />
     )
   }

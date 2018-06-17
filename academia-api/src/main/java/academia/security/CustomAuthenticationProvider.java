@@ -66,6 +66,6 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
             throw new RuntimeException("Tipo de conta inválida");
         }
 
-        return new LoggedUser(account.getName(), account.getUsername(), account.getPassword(), authorities);
+        return new LoggedUser(account.getId(), account.getName(), account.getUsername(), account.getPassword(), authorities);
     }
 }

@@ -27,7 +27,6 @@ export default [
     key: DASHBOARD,
     link: DASHBOARD,
     text: 'Dashboard',
-    allowed: [accountTypes.ADMIN, accountTypes.CUSTOMER, accountTypes.TRAINER],
     icon: <Assessment />,
   },
 
@@ -102,7 +101,6 @@ export default [
     key: PLAN_LIST,
     text: 'Planos',
     icon: <Assignment />,
-    allowed: [accountTypes.ADMIN, accountTypes.CUSTOMER, accountTypes.TRAINER],
     children: [
       {
         key: PLAN_LIST,

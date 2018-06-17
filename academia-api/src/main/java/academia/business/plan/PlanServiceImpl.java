@@ -1,15 +1,22 @@
 package academia.business.plan;
 
+import academia.business.account.AccountRepository;
 import academia.business.appointment.AppointmentService;
+import academia.domain.AccountType;
+import academia.model.Account;
 import academia.model.Appointment;
 import academia.model.Plan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.validation.ValidationException;
+import java.util.List;
 
 @Service
 public class PlanServiceImpl implements PlanService {
+
+    @Autowired
+    private AccountRepository accountRepository;
 
     @Autowired
     private PlanRepository repository;
@@ -42,4 +49,12 @@ public class PlanServiceImpl implements PlanService {
         return this.save(plan);
     }
 
+    @Override
+    public List<Plan> all(Long accountId) {
+        Account account = accountRepository.findById(accountId).get();
+        if (account.getType() == AccountType.CUSTOMER) {
+            return repository.findByCustomer(account);
+        }
+        return repository.findAll();
+    }
 }

@@ -144,7 +144,7 @@ public class Application {
             Activity activityWeightTraining = activityRepository.findByName(activityNameWeightTraining);
             if (activityWeightTraining == null) {
                 activityWeightTraining = new Activity(activityNameWeightTraining, "Musculação para reforço muscular",
-                        Arrays.asList(trainerBodyBuilder), Arrays.asList(restrictionColuna));
+                        Arrays.asList(trainerBodyBuilder, trainerYogaGuy), Arrays.asList(restrictionColuna));
                 activityWeightTraining = activityService.create(activityWeightTraining);
             }
 
@@ -173,17 +173,19 @@ public class Application {
             }
 
             /*
-                activities
+                plan
              */
             Appointment appointment1 = new Appointment(activityWalking, trainerAthletic, LocalDateTime.parse("20/06/2018 16:00", formatter));
             Appointment appointment2 = new Appointment(activityWalking, trainerAthletic, LocalDateTime.parse("21/06/2018 16:00", formatter));
             Appointment appointment3 = new Appointment(activityYoga, trainerYogaGuy, LocalDateTime.parse("22/06/2018 18:00", formatter));
-
-            /*
-                plan
-             */
             Plan plan1 = new Plan(customer1, Arrays.asList(appointment1, appointment2, appointment3));
             planService.create(plan1);
+
+            Appointment appointment4 = new Appointment(activityBodyBuilding, trainerBodyBuilder, LocalDateTime.parse("20/06/2018 16:00", formatter));
+            Appointment appointment5 = new Appointment(activityRunning, trainerAthletic, LocalDateTime.parse("21/06/2018 16:00", formatter));
+            Appointment appointment6 = new Appointment(activityPilates, trainerYogaGuy, LocalDateTime.parse("22/06/2018 18:00", formatter));
+            Plan plan2 = new Plan(customer3, Arrays.asList(appointment4, appointment5, appointment6));
+            planService.create(plan2);
         };
     }
 }
