@@ -7,6 +7,27 @@ Esse projeto é composto de 3 partes:
 - um cliente web (em React) que se conecta na API e provê as funcionalidades ao usuário (`academia-client-web`)
 
 
+## demo
+
+Para testar a aplicação funcionando no ambiente de QA, acesse http://104.131.164.5:3000/.
+
+Os usuários/senhas disponíveis são:
+
+```
+# usuários administradores
+admin/admin
+
+# usuários cliente
+customer1/customer1
+customer2/customer2
+customer3/customer3
+
+# usuários treinador
+trainer1/trainer1
+trainer2/trainer2
+trainer3/trainer3
+```
+
 ## desenvolvendo
 
 Sugerimos rodar o banco de dados em Docker, sempre.
