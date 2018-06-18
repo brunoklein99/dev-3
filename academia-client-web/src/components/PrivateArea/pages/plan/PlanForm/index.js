@@ -23,6 +23,7 @@ import PageBase from '../../common/PageBase'
 import globalStyles from '../../../../../styles'
 import accountService from '../../../../../services/accountService'
 import activityService from '../../../../../services/activityService'
+import loginService from '../../../../../services/loginService'
 import planService from '../../../../../services/planService'
 import notificationService from '../../../../../services/notificationService'
 import { PLAN_FORM } from '../../../../../config/routes'
@@ -108,10 +109,18 @@ class PlanForm extends Component {
             trainer: mapTrainers([appointment.trainer])[0],
           }))
 
+        const user = loginService.getUser()
+        const getCustomer = () => {
+          if (loginService.isCustomer()) {
+            return plan.customer ? customers.find(customer => customer.id === plan.customer.id) : customers.find(customer => customer.id === user.accountId)
+          }
+          return plan.customer ? customers.find(customer => customer.id === plan.customer.id) : this.state.plan.customer // substitui a instância pela instância do `getCustomers`
+        }
+
         this.setState({
           plan: {
             ...plan,
-            customer: plan.customer ? customers.find(customer => customer.id === plan.customer.id) : this.state.plan.customer, // substitui a instância pela instância do `getCustomers`
+            customer: getCustomer(),
             appointments: plan.appointments ? mapAppointments(plan.appointments) : this.state.plan.appointments, // substitui a instância pela instância do `all`
           },
           activities: activitiesWithMappedTrainers,
@@ -277,7 +286,8 @@ class PlanForm extends Component {
       <form>
         <div>
           <SelectField
-            disabled={!!plan.id}
+            // não deixa editar se já foi salvo, ou se é o próprio cliente editando
+            disabled={!!plan.id || loginService.isCustomer()}
             fullWidth
             hintText="Cliente do plano"
             floatingLabelText="Cliente do plano"

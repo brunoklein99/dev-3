@@ -1,5 +1,7 @@
 import apiService from './apiService'
 
+import accountTypes from '../constants/accountTypes'
+
 let isAuthenticated = false
 let user = null
 
@@ -13,7 +15,15 @@ class LoginService {
   }
 
   isAdmin() {
-    return user.authorities[0].authority === 'ADMIN'
+    return user.authorities[0].authority === accountTypes.ADMIN
+  }
+
+  isCustomer() {
+    return user.authorities[0].authority === accountTypes.CUSTOMER
+  }
+
+  isTrainer() {
+    return user.authorities[0].authority === accountTypes.TRAINER
   }
 
   checkAuthentication() {
