@@ -1,13 +1,17 @@
+// public
 export const LOGIN = '/login'
 
-export const DASHBOARD = '/'
+// private
+export const DASHBOARD = '/dashboard'
 
-export const ACCOUNT_LIST = '/accounts'
-export const ACCOUNT_FORM = '/accounts/'
+export const ACCOUNT_LIST = '/accounts/list'
+export const ACCOUNT_FORM = '/accounts/form'
 
-export const ACTIVITY_LIST = '/activities'
-export const ACTIVITY_FORM = '/activities/'
-export const ACTIVITY_DETAIL = '/activities/detail/'
+export const RESTRICTION_LIST = '/restrictions/list'
+export const RESTRICTION_FORM = '/restrictions/form'
 
-export const RESTRICTION_LIST = '/restrictions'
-export const RESTRICTION_FORM = '/restrictions/'
+export const ACTIVITY_LIST = '/activities/list'
+export const ACTIVITY_FORM = '/activities/form'
+
+export const PLAN_LIST = '/plans/list'
+export const PLAN_FORM = '/plans/form'

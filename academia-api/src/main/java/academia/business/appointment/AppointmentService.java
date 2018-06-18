@@ -5,9 +5,6 @@ import academia.model.Appointment;
 
 public interface AppointmentService {
 
-    Appointment create(Appointment appointment);
-
-    Appointment update(Appointment appointment);
-
+    Appointment save(Appointment appointment);
 
 }

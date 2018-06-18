@@ -14,6 +14,11 @@ const styles = {
     fontWeight: typography.fontWeightLight,
     marginBottom: 20,
   },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: typography.fontWeightLight,
+    marginTop: 50,
+  },
   paper: {
     padding: 30,
   },

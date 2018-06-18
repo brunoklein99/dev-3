@@ -1,20 +1,19 @@
 package academia.model;
 
 import javax.persistence.*;
-import java.util.Date;
 import java.util.List;
 
 @Entity
 public class Activity {
-
-    public Activity(){
-
+    public Activity() {
+        // hibernate needs the default constructor
     }
 
-    public Activity(String name, String description, Account trainer){
+    public Activity(String name, String description, List<Account> trainers, List<Restriction> restrictions){
         this.name = name;
         this.description = description;
-        this.trainer = trainer;
+        this.trainers = trainers;
+        this.restrictions = restrictions;
     }
 
     @Id
@@ -25,25 +24,18 @@ public class Activity {
 
     private String description;
 
-    @ManyToOne
-    private Account trainer;
+    @ManyToMany(cascade = CascadeType.MERGE)
+    private List<Account> trainers;
 
-    @OneToMany
-    private List<Account> users;
-
-    private Date beginDate;
-
-    private Date endDate;
-
-    @OneToMany
+    @ManyToMany(cascade = CascadeType.MERGE)
     private List<Restriction> restrictions;
 
-    public Account getTrainer() {
-        return trainer;
+    public List<Account> getTrainers() {
+        return trainers;
     }
 
-    public void setTrainer(Account trainer) {
-        this.trainer = trainer;
+    public void setTrainers(List<Account> trainers) {
+        this.trainers = trainers;
     }
 
     public Long getId() {
@@ -68,30 +60,6 @@ public class Activity {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public List<Account> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<Account> users) {
-        this.users = users;
-    }
-
-    public Date getBeginDate() {
-        return beginDate;
-    }
-
-    public void setBeginDate(Date beginDate) {
-        this.beginDate = beginDate;
-    }
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
     }
 
     public List<Restriction> getRestrictions() {

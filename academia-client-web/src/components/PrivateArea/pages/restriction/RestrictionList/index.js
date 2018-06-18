@@ -6,10 +6,10 @@ import ContentCreate from 'material-ui/svg-icons/content/create'
 import ContentAdd from 'material-ui/svg-icons/content/add'
 import { pink500, grey200, grey500 } from 'material-ui/styles/colors'
 
-import PageBase from '../common/PageBase'
-import accountService from '../../../../services/accountService'
+import PageBase from '../../common/PageBase'
+import restrictionService from '../../../../../services/restrictionService'
 
-import { ACCOUNT_FORM } from '../../../../config/routes'
+import { RESTRICTION_FORM } from '../../../../../config/routes'
 
 const styles = {
   floatingActionButton: {
@@ -28,13 +28,10 @@ const styles = {
       width: '10%',
     },
     name: {
-      width: '40%',
+      width: '30%',
     },
-    username: {
-      width: '20%',
-    },
-    type: {
-      width: '20%',
+    activities: {
+      width: '50%',
     },
     edit: {
       width: '10%',
@@ -42,24 +39,22 @@ const styles = {
   },
 }
 
-class AccountList extends Component {
+class RestrictionList extends Component {
   state = {
-    accounts: [],
+    restrictions: [],
   }
 
   componentDidMount() {
-    accountService.all()
-      .then(data => this.setState({ accounts: data }))
-      .catch(err => console.log(err))
+    restrictionService.all()
+      .then(data => this.setState({ restrictions: data }))
+      .catch(err => console.error(err))
   }
 
   renderHeader() {
     return (
-      <TableHeader>
+      <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
         <TableRow>
           <TableHeaderColumn style={styles.columns.name}>Nome</TableHeaderColumn>
-          <TableHeaderColumn style={styles.columns.username}>Nome de usuário</TableHeaderColumn>
-          <TableHeaderColumn style={styles.columns.type}>Tipo</TableHeaderColumn>
           <TableHeaderColumn style={styles.columns.edit}>Editar</TableHeaderColumn>
         </TableRow>
       </TableHeader>
@@ -67,20 +62,16 @@ class AccountList extends Component {
   }
 
   renderBody() {
-    const { accounts } = this.state
-    const userType = admin => (admin ? 'Administrador' : 'Cliente')
-
+    const { restrictions } = this.state
     return (
-      <TableBody>
-        {accounts.map(item => (
+      <TableBody displayRowCheckbox={false}>
+        {restrictions.map((item => (
           <TableRow key={item.id}>
             <TableRowColumn style={styles.columns.name}>{item.name}</TableRowColumn>
-            <TableRowColumn style={styles.columns.username}>{item.username}</TableRowColumn>
-            <TableRowColumn style={styles.columns.type}>{userType(item.admin)}</TableRowColumn>
             <TableRowColumn style={styles.columns.edit}>
               <Link
                 className="button"
-                to={`${ACCOUNT_FORM}/${item.id}`}
+                to={`${RESTRICTION_FORM}/${item.id}`}
               >
                 <FloatingActionButton
                   zDepth={0}
@@ -93,7 +84,8 @@ class AccountList extends Component {
               </Link>
             </TableRowColumn>
           </TableRow>
-        ))}
+        )))
+      }
       </TableBody>
     )
   }
@@ -101,10 +93,10 @@ class AccountList extends Component {
   render() {
     return (
       <PageBase
-        title="Usuários"
+        title="Restrições"
       >
         <div>
-          <Link to={ACCOUNT_FORM} >
+          <Link to={RESTRICTION_FORM} >
             <FloatingActionButton style={styles.floatingActionButton} backgroundColor={pink500}>
               <ContentAdd />
             </FloatingActionButton>
@@ -120,4 +112,4 @@ class AccountList extends Component {
   }
 }
 
-export default AccountList
+export default RestrictionList

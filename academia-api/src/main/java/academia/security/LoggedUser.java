@@ -10,10 +10,13 @@ import java.util.Collection;
  */
 public class LoggedUser extends User {
 
-    public LoggedUser(String name, String username, String password, Collection<? extends GrantedAuthority> authorities) {
+    public LoggedUser(Long accountId, String name, String username, String password, Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);
+        this.accountId = accountId;
         this.name = name;
     }
+
+    private Long accountId;
 
     private String name;
 
@@ -23,5 +26,13 @@ public class LoggedUser extends User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Long getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(Long accountId) {
+        this.accountId = accountId;
     }
 }

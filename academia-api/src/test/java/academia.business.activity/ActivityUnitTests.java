@@ -1,5 +1,6 @@
 package academia.business.activity;
 
+import academia.domain.AccountType;
 import academia.model.Account;
 import academia.model.Activity;
 import org.junit.Assert;
@@ -9,6 +10,7 @@ import org.mockito.Mockito;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import javax.validation.ValidationException;
+import java.util.Arrays;
 
 public class ActivityUnitTests {
 
@@ -32,8 +34,8 @@ public class ActivityUnitTests {
         Account trainer = new Account( );
         activity.setName( "PF" );
         activity.setDescription( "Preparador Físico" );
-        trainer.setType( Account.AccountType.TRAINER );
-        activity.setTrainer( trainer );
+        trainer.setType( AccountType.TRAINER );
+        activity.setTrainers(Arrays.asList(trainer));
 
         try {
             activityServiceImpl.create(activity);
@@ -47,8 +49,8 @@ public class ActivityUnitTests {
         Activity activity = new Activity( );
         Account trainer = new Account( );
         activity.setDescription( "Preparador Físico" );
-        trainer.setType( Account.AccountType.TRAINER );
-        activity.setTrainer( trainer );
+        trainer.setType( AccountType.TRAINER );
+        activity.setTrainers(Arrays.asList(trainer));
 
         try {
             activityServiceImpl.create(activity);
@@ -63,8 +65,8 @@ public class ActivityUnitTests {
         Activity activity = new Activity( );
         Account trainer = new Account( );
         activity.setName( "PF" );
-        trainer.setType( Account.AccountType.TRAINER );
-        activity.setTrainer( trainer );
+        trainer.setType( AccountType.TRAINER );
+        activity.setTrainers(Arrays.asList(trainer));
 
         try {
             activityServiceImpl.create(activity);
@@ -80,7 +82,7 @@ public class ActivityUnitTests {
         Account trainer = new Account( );
         activity.setName( "PF" );
         activity.setDescription( "Preparador Físico" );
-        trainer.setType( Account.AccountType.TRAINER );
+        trainer.setType( AccountType.TRAINER );
 
         try {
             activityServiceImpl.create(activity);
@@ -97,8 +99,8 @@ public class ActivityUnitTests {
         activity.setName( "PF" );
         activity.setDescription( "Preparador Físico" );
         trainer.setName( "Jonas" );
-        activity.setTrainer( trainer );
-        trainer.setType( Account.AccountType.NORMAL );
+        activity.setTrainers(Arrays.asList(trainer));
+        trainer.setType( AccountType.CUSTOMER);
 
         try {
             activityServiceImpl.create(activity);

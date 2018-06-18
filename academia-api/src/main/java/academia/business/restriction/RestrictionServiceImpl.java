@@ -1,12 +1,10 @@
 package academia.business.restriction;
 
-import academia.model.Activity;
 import academia.model.Restriction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.validation.ValidationException;
-import java.util.List;
 
 @Service
 public class RestrictionServiceImpl implements RestrictionService {
@@ -14,8 +12,7 @@ public class RestrictionServiceImpl implements RestrictionService {
     @Autowired
     private RestrictionRepository restrictionRepository;
 
-    @Override
-    public Restriction create(Restriction restriction) {
+    private Restriction save(Restriction restriction) {
         validate(restriction);
 
         Restriction toSave = new Restriction();
@@ -26,14 +23,13 @@ public class RestrictionServiceImpl implements RestrictionService {
     }
 
     @Override
+    public Restriction create(Restriction restriction) {
+        return this.save(restriction);
+    }
+
+    @Override
     public Restriction update(Restriction restriction) {
-        validate(restriction);
-
-        Restriction toSave = new Restriction();
-        toSave.setId(restriction.getId());
-        toSave.setName(restriction.getName());
-
-        return restrictionRepository.save(toSave);
+        return this.save(restriction);
     }
 
     private static void validate(Restriction restriction){

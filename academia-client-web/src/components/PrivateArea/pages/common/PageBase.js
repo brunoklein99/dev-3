@@ -8,7 +8,7 @@ const PageBase = (props) => {
   const { title } = props
 
   return (
-    <div>
+    <div className="PageBase">
       <Paper style={globalStyles.paper}>
         <h3 style={globalStyles.title}>{title}</h3>
 

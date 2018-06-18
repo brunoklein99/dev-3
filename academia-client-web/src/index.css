@@ -27,6 +27,11 @@ a:hover {
   text-decoration: underline;
 }
 
+.PageBase .loader {
+  position: relative;
+  height: 200px;
+}
+
 .m-b-15 {
   margin-bottom: 15px
 }

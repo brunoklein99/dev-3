@@ -23,7 +23,7 @@ class Header extends Component {
       .then(() => {
         this.setState({ logout: true })
       })
-      .catch(err => console.log(err))
+      .catch(err => console.error(err))
   }
 
   render() {
@@ -72,7 +72,7 @@ class Header extends Component {
                 anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
               >
                 <MenuItem
-                  primaryText="Sign out"
+                  primaryText="Sair"
                   onClick={this.handleLogoutClick}
                 />
               </IconMenu>

@@ -1,6 +1,5 @@
 package academia.business.activity;
 
-import academia.model.Account;
 import academia.model.Activity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +26,7 @@ public class ActivityServiceImpl implements ActivityService {
         validate(activity);
 
         Activity toSave = copyActivity(activity);
+        toSave.setId(activity.getId());
 
         return activityRepository.save(toSave);
     }
@@ -41,18 +41,13 @@ public class ActivityServiceImpl implements ActivityService {
             throw new ValidationException("Atividade deve ter uma descrição");
         }
 
-        if (activity.getTrainer() == null) {
-            throw new ValidationException("Atividade deve ter um treinador");
-        }
-        if (activity.getTrainer().getType() != Account.AccountType.TRAINER){
-            throw new ValidationException("Usuário atrelado a atividade deve ser um treinador");
+        if (activity.getTrainers() == null || activity.getTrainers().size() == 0) {
+            throw new ValidationException("Atividade deve ter pelo menos um treinador");
         }
     }
 
     private static Activity copyActivity(Activity activity){
-        Activity toSave = new Activity(activity.getName(), activity.getDescription(), activity.getTrainer());
-        toSave.setBeginDate(activity.getBeginDate());
-        toSave.setEndDate(activity.getEndDate());
+        Activity toSave = new Activity(activity.getName(), activity.getDescription(), activity.getTrainers(), activity.getRestrictions());
         toSave.setRestrictions(activity.getRestrictions());
         return toSave;
     }

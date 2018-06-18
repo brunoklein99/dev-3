@@ -3,12 +3,15 @@ package academia.controller;
 import academia.business.plan.PlanRepository;
 import academia.business.plan.PlanService;
 import academia.model.Plan;
+import academia.security.LoggedUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/private/plans")
 public class PlanController {
 
     @Autowired
@@ -19,7 +22,8 @@ public class PlanController {
 
     @RequestMapping(method = RequestMethod.GET, path = "")
     public List<Plan> all() {
-        return repository.findAll();
+        LoggedUser principal = (LoggedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return service.all(principal.getAccountId());
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/{id}")
@@ -36,6 +40,4 @@ public class PlanController {
     public Plan create(@RequestBody Plan plan) {
         return service.create(plan);
     }
-
-
 }

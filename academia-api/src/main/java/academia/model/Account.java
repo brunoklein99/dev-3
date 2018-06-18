@@ -1,5 +1,6 @@
 package academia.model;
 
+import academia.domain.AccountType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
@@ -11,15 +12,12 @@ public class Account {
         // hibernate needs the default constructor
     }
 
-    public Account(String name, String username, String password, AccountType type) {
+    public Account(String name, String username, String password, AccountType type, List<Restriction> restrictions) {
         this.name = name;
         this.username = username;
         this.password = password;
         this.type = type;
-    }
-
-    public Account(String name, String username, String password)  {
-        this(name, username, password, AccountType.NORMAL);
+        this.restrictions = restrictions;
     }
 
     @Id
@@ -28,13 +26,15 @@ public class Account {
 
     private String name;
 
+    @Column(unique = true)
     private String username;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
+
     private AccountType type;
 
-    @OneToMany
+    @ManyToMany(cascade = CascadeType.MERGE)
     private List<Restriction> restrictions;
 
     public Long getId() {
@@ -83,9 +83,5 @@ public class Account {
 
     public void setRestrictions(List<Restriction> restrictions) {
         this.restrictions = restrictions;
-    }
-
-    public enum AccountType {
-        NORMAL, ADMIN, TRAINER
     }
 }
