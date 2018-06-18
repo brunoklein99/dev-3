@@ -5,8 +5,8 @@ import FloatingActionButton from 'material-ui/FloatingActionButton'
 import ContentCreate from 'material-ui/svg-icons/content/create'
 import ContentAdd from 'material-ui/svg-icons/content/add'
 import { pink500, grey200, grey500 } from 'material-ui/styles/colors'
-import moment from 'moment'
-import sortBy from 'lodash/sortBy'
+
+import { format, sortByDate } from '../../../../../utils/date'
 
 import PageBase from '../../common/PageBase'
 import planService from '../../../../../services/planService'
@@ -65,12 +65,12 @@ class PlanList extends Component {
   }
 
   renderAppointments(appointments) {
-    const sortedAppointments = sortBy(appointments, appointment => moment(appointment.start).valueOf())
+    const sortedAppointments = sortByDate(appointments, 'start')
     return (
       <div>
         {sortedAppointments.map((appointment, i) => (
           <div key={appointment.id}>
-            {`Aula ${i + 1}:`} {moment(appointment.start).format('DD/MM/YYYY HH:mm:ss')} - {appointment.activity.name} (com {appointment.trainer.name})
+            {`Aula ${i + 1}:`} {format(appointment.start)} - {appointment.activity.name} (com {appointment.trainer.name})
           </div>
         ))}
       </div>

@@ -53,6 +53,7 @@ public class PlanServiceImpl implements PlanService {
     public List<Plan> all(Long accountId) {
         Account account = accountRepository.findById(accountId).get();
         if (account.getType() == AccountType.CUSTOMER) {
+            // para cliente, só mostra os próprios planos
             return repository.findByCustomer(account);
         }
         return repository.findAll();

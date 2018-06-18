@@ -16,7 +16,8 @@ import DateTimePicker from 'material-ui-datetimepicker'
 import Loader from 'react-loader'
 import moment from 'moment'
 import last from 'lodash/last'
-import sortBy from 'lodash/sortBy'
+
+import { sortByDate } from '../../../../../utils/date'
 
 import PageBase from '../../common/PageBase'
 
@@ -175,7 +176,7 @@ class PlanForm extends Component {
   })
 
   handleAddActivity = () => {
-    const lastestAppointment = last(sortBy(this.state.plan.appointments, appointment => moment(appointment.start).valueOf()))
+    const lastestAppointment = last(sortByDate(this.state.plan.appointments, 'start'))
     const start = lastestAppointment ? moment(lastestAppointment.start).add(1, 'days').format('YYYY-MM-DDTHH:mm:ss') : moment().format('YYYY-MM-DDTHH:mm:ss')
 
     this.setState({
@@ -263,7 +264,7 @@ class PlanForm extends Component {
   }
 
   renderAppointmentList(plan, activities) {
-    const sortedAppointments = sortBy(plan.appointments, appointment => moment(appointment.start).valueOf())
+    const sortedAppointments = sortByDate(plan.appointments, 'start')
     const filteredActivities = activities.filter(activity => plan.customer.restrictions.every(r1 => !activity.restrictions.find(r2 => r1.id === r2.id)))
 
     return (
