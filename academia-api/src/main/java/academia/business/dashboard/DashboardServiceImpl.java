@@ -57,6 +57,12 @@ public class DashboardServiceImpl implements DashboardService {
     }
 
     private Map<String, Object> getTrainerDashboard(Account account) {
-        return null;
+        Map<String, Object> map = new HashMap<>();
+
+        List<Plan> plans = planService.all(account.getId());
+        List<TrainerAppointmentDto> trainerAppointments = plans.stream().map(p -> p.getAppointments().stream().filter(a -> a.getTrainer().getId().equals(account.getId())).map(a -> new TrainerAppointmentDto(a, p.getCustomer())).collect(Collectors.toList())).flatMap(List::stream).collect(Collectors.toList());
+        map.put("trainerAppointments", trainerAppointments);
+
+        return map;
     }
 }

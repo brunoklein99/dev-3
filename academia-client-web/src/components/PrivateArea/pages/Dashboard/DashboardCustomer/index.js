@@ -43,7 +43,7 @@ export default class DashboardCustomer extends Component {
             <div key={appointment.id} style={isToday(appointment.start) ? styles.today : {}}>
               <ListItem
                 leftAvatar={<Avatar icon={<DirectionsRun />} />}
-                primaryText={`${format(appointment.start)}: ${appointment.activity.name}`}
+                primaryText={`${format(appointment.start)}: ${appointment.activity.name} (com ${appointment.trainer.name})`}
                 secondaryText={appointment.activity.description}
                 rightIcon={isToday(appointment.start) ? <NewReleases /> : null}
               />
