@@ -11,7 +11,7 @@ import NewReleases from 'material-ui/svg-icons/av/new-releases'
 import { grey200, cyan600, white } from 'material-ui/styles/colors'
 import { typography } from 'material-ui/styles'
 
-import { format, isToday, sortByDate } from '../../../../../utils/date'
+import { format, isToday, isTodayOrAfter, sortByDate } from '../../../../../utils/date'
 
 const styles = {
   subheader: {
@@ -60,7 +60,7 @@ export default class DashboardCustomer extends Component {
     return (
       <div className="row">
         <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12 m-b-15 ">
-          {this.renderNextAppointments(data.appointments)}
+          {this.renderNextAppointments(data.appointments.filter(a => isTodayOrAfter(a.start)))}
         </div>
       </div>
     )

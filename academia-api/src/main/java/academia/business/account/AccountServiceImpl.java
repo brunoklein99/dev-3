@@ -1,13 +1,15 @@
 package academia.business.account;
 
+import academia.domain.AccountType;
 import academia.model.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.validation.ValidationException;
+import java.util.List;
+import java.util.stream.Collectors;
 
-// TODO implementar as validações adequadas nessa classe, assinaladas com TODO específico e outras necessárias
 @Service
 public class AccountServiceImpl implements AccountService {
 
@@ -58,5 +60,24 @@ public class AccountServiceImpl implements AccountService {
         Account toSave = new Account(existing.getName(), existing.getUsername(), passwordEncoder.encode(passwordUpdateDto.getPassword()), existing.getType(), existing.getRestrictions());
         toSave.setId(existing.getId());
         return accountRepository.save(toSave);
+    }
+
+    @Override
+    public List<Account> getTrainers() {
+        return this.filterByType(AccountType.TRAINER);
+    }
+
+    @Override
+    public List<Account> getCustomers() {
+        return this.filterByType(AccountType.CUSTOMER);
+    }
+
+    private List<Account> filterByType(AccountType accountType) {
+        return accountRepository
+                .findAll()
+                .stream()
+                .filter(a -> a.getType() == accountType)
+                .collect(Collectors.toList())
+                ;
     }
 }

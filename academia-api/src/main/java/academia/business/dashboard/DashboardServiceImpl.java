@@ -1,6 +1,7 @@
 package academia.business.dashboard;
 
 import academia.business.account.AccountRepository;
+import academia.business.account.AccountService;
 import academia.business.plan.PlanService;
 import academia.domain.AccountType;
 import academia.model.Account;
@@ -19,6 +20,9 @@ public class DashboardServiceImpl implements DashboardService {
 
     @Autowired
     private AccountRepository accountRepository;
+
+    @Autowired
+    private AccountService accountService;
 
     @Autowired
     private PlanService planService;
@@ -43,7 +47,18 @@ public class DashboardServiceImpl implements DashboardService {
     }
 
     private Map<String,Object> getAdminDashboard(Account account) {
-        return null;
+        Map<String, Object> map = new HashMap<>();
+
+        map.put("customers", accountService.getCustomers());
+        map.put("trainers", accountService.getTrainers());
+
+        List<Plan> plans = planService.all(account.getId());
+        map.put("plans", plans);
+
+        List<TrainerAppointmentDto> trainerAppointments = plans.stream().map(p -> p.getAppointments().stream().map(a -> new TrainerAppointmentDto(a, p.getCustomer())).collect(Collectors.toList())).flatMap(List::stream).collect(Collectors.toList());
+        map.put("trainerAppointments", trainerAppointments);
+
+        return map;
     }
 
     private Map<String,Object> getCustomerDashboard(Account account) {

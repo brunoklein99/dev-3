@@ -12,7 +12,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/private/accounts")
@@ -38,23 +37,14 @@ public class AccountController {
         return accountRepository.findAll();
     }
 
-    private List<Account> filterByType(AccountType accountType) {
-        return accountRepository
-                .findAll()
-                .stream()
-                .filter(a -> a.getType() == accountType)
-                .collect(Collectors.toList())
-                ;
-    }
-
     @RequestMapping(method = RequestMethod.GET, path = "/find/trainers")
     public List<Account> findTrainers() {
-        return this.filterByType(AccountType.TRAINER);
+        return this.accountService.getTrainers();
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/find/customers")
     public List<Account> findCustomers() {
-        return this.filterByType(AccountType.CUSTOMER);
+        return this.accountService.getCustomers();
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/{id}")
