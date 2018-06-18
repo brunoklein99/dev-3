@@ -88,7 +88,7 @@ public class ActivityUnitTests {
             activityServiceImpl.create(activity);
             Assert.fail("Deve cair no catch, pois falhou");
         } catch ( ValidationException e ){
-            Assert.assertEquals(e.getMessage(), "Atividade deve ter um treinador");
+            Assert.assertEquals(e.getMessage(), "Atividade deve ter pelo menos um treinador");
         }
     }
 
