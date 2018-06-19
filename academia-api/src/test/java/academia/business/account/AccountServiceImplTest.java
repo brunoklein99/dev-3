@@ -63,4 +63,22 @@ public class AccountServiceImplTest {
         // assert
         Mockito.verify(accountRepository, Mockito.times(1)).save(Mockito.any(Account.class));
     }
+    
+    @Test
+    public void nao_permite_contas_duplicadas() {
+        Account account = new Account();
+        account.setUsername("Joao");
+        account.setPassword("abc123");
+        accountService.create(account);
+
+        Account accountDupla = new Account();
+        accountDupla.setUsername("Joao");
+        accountDupla.setPassword("abc123");        
+        try {
+        	accountService.create(account);
+            Assert.fail("Deve cair no catch, pois falhou");
+        } catch ( Exception e ){
+            Assert.assertEquals(e.getMessage() ,"Nome de usuário já está em uso");
+        }
+    }
 }

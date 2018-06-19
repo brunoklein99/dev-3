@@ -43,6 +43,24 @@ public class ActivityUnitTests {
             Assert.fail("Não deve falhar pois tem todos atributos");
         }
     }
+    
+    @Test
+    public void name_cannot_be_blank() {
+
+        Activity activity = new Activity( );
+        Account trainer = new Account( );
+        activity.setName( "" );
+        activity.setDescription( "Preparador Físico" );
+        trainer.setType( AccountType.TRAINER );
+        activity.setTrainers(Arrays.asList(trainer));
+
+        try {
+            activityServiceImpl.create(activity);
+            Assert.fail("Deve cair no catch, pois falhou");
+        } catch ( ValidationException e ){
+            Assert.assertEquals(e.getMessage(), "Atividade deve ter um nome");
+        }
+    }
 
     @Test
     public void name_is_mandatory( ){
@@ -93,7 +111,21 @@ public class ActivityUnitTests {
     }
 
     @Test
-    public void trainer_is_mandatory( ){
+    public void account_is_mandatory( ){
+        Activity activity = new Activity( );
+        activity.setName( "PF" );
+        activity.setDescription( "Preparador Físico" );
+
+        try {
+            activityServiceImpl.create(activity);
+            Assert.fail("Deve cair no catch, pois falhou");
+        } catch ( ValidationException e ){
+            Assert.assertEquals(e.getMessage(), "Atividade deve ter pelo menos um treinador");
+        }
+    }
+    
+    @Test
+    public void account_is_trainer( ){
         Activity activity = new Activity( );
         Account trainer = new Account( );
         activity.setName( "PF" );
@@ -109,6 +141,5 @@ public class ActivityUnitTests {
             Assert.assertEquals(e.getMessage(), "Usuário atrelado a atividade deve ser um treinador");
         }
     }
-
 
 }
