@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: abc-academia-deployment
+  labels:
+    app: abc-academia
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: abc-academia
+  template:
+    metadata:
+      labels:
+        app: abc-academia
+    spec:
+      containers:
+      - name: abc-academia-db
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "academia"
+        - name: MYSQL_DATABASE
+          value: "academia"
+        - name: MYSQL_USER
+          value: "academia"
+        - name: MYSQL_PASSWORD
+          value: "academia"
+        image: mysql:5.7.21
+        ports:
+        - containerPort: 3306
+      - name: abc-academia-client
+        image: brunoklein99/academia-client-web
+        ports:
+        - containerPort: 80
+      - name: abc-academia-api
+        image: brunoklein99/academia-api
+        ports:
+        - containerPort: 8080
